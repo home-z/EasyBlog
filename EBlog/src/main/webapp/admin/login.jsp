@@ -13,72 +13,48 @@
 </style>
 <script type="text/javascript" src="${jsPath}/jquery-1.7.2.min.js"></script>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						$("#btnLogin").attr({
-							"disabled" : "disabled"
-						});//禁用登录按钮
-						$("#txtUserCode")
-								.blur(
-										function() {
-											if ($("#txtUserCode").val() == "") {
-												$("#exMsg").html(
-														"用户名不能为空，请重新输入用户名！");
-												$("#btnLogin").attr({
-													"disabled" : "disabled"
-												});//禁用登录按钮
-											} else {
-												$("#exMsg").html("");
-												$("#btnLogin").removeAttr(
-														"disabled");//将按钮可用
-												//参数，这里是一个json语句
-												var param = {
-													"usercode" : $(
-															"#txtUserCode")
-															.val()
-												};
-												$
-														.ajax({
-															type : 'GET',
-															contentType : 'application/json',
-															url : '${ctxPath}/Login/isExist.do',
-															dataType : 'json',
-															data : param,
-															success : function(
-																	data) {
-																if (data
-																		&& data.success == "false") {
-																	$("#exMsg")
-																			.html(
-																					"用户名为："
-																							+ $(
-																									"#txtUserCode")
-																									.val()
-																							+ "的用户不存在，请检查用户名！");
-																	$(
-																			"#btnLogin")
-																			.attr(
-																					{
-																						"disabled" : "disabled"
-																					});//禁用登录按钮
-																} else {
-																	$("#exMsg")
-																			.html(
-																					"");
-																	$(
-																			"#btnLogin")
-																			.removeAttr(
-																					"disabled");//将按钮可用
-																}
-															},
-															error : function() {
-																alert("error");
-															}
-														});
-											}
-										});
-					});
+	$(document).ready(function() {
+	    $("#btnLogin").attr({
+	        "disabled": "disabled"
+	    }); //禁用登录按钮
+	    $("#txtUserCode").blur(function() {
+	        if ($("#txtUserCode").val() == "") {
+	            $("#exMsg").html("用户名不能为空，请重新输入用户名！");
+	            $("#btnLogin").attr({
+	                "disabled": "disabled"
+	            }); //禁用登录按钮
+	        } else {
+	            $("#exMsg").html("");
+	            $("#btnLogin").removeAttr("disabled"); //将按钮可用
+	            //参数，这里是一个json语句
+	            var param = {
+	                "usercode": $("#txtUserCode").val()
+	            };
+	            $.ajax({
+	                type: 'GET',
+	                contentType: 'application/json',
+	                url: '${ctxPath}/Login/isExist.do',
+	                dataType: 'json',
+	                data: param,
+	                success: function(data) {
+	                    if (data && data.success == "false") {
+	                        $("#exMsg").html("用户名为：" + $("#txtUserCode").val() + "的用户不存在，请检查用户名！");
+	                        $("#btnLogin").attr({
+	                            "disabled": "disabled"
+	                        }); //禁用登录按钮
+	                    } else {
+	                        $("#exMsg").html("");
+	                        $("#btnLogin").removeAttr("disabled"); //将按钮可用
+	                    }
+	                },
+	                error: function() {
+	                    alert("error");
+	                }
+	            });
+	        }
+	    });
+	});
+		
 	//按下回车键
 	document.onkeypress = function(e) {
 		e = e || event;
@@ -94,14 +70,14 @@
 	}
 </script>
 </head>
-<body>
+<body style="background-color: #EEF2F5;">
 	<br />
 	<br />
 	<br />
 	<br />
 	<br />
 	<br />
-	<table width="620" border="0" align="center" cellpadding="0" cellspacing="0" style="border: 5px solid #5590E8;">
+	<table width="620" border="0" align="center" cellpadding="0" cellspacing="0" style="border: 5px solid #5590E8;background-color: #FEFEFE;">
 		<tbody>
 			<tr>
 				<td align="center"><br>
@@ -129,11 +105,11 @@
 											<td align="center">
 												<table cellspacing="0" cellpadding="5" border="0">
 													<tr>
-														<td height="25" valign="top">用户名： <input style="width: 150px;" tabindex="1" maxlength="22" size="22" name="userCode" id="txtUserCode">
+														<td height="25" valign="top">用户名： <input style="width: 200px;height:25px;border:1px solid #D5CECE;" tabindex="1" maxlength="22" size="25" name="userCode" id="txtUserCode">
 														</td>
 													</tr>
 													<tr>
-														<td valign="bottom" height="12">密&nbsp;&nbsp; 码： <input name="userPassWord" style="width: 150px;" type="password" tabindex="1" size="22" maxlength="22" id="txtPass">
+														<td valign="bottom" height="12">密&nbsp;&nbsp; 码： <input name="userPassWord" style="width: 200px;height:25px;border:1px solid #D5CECE;" type="password" tabindex="1" size="25" maxlength="22" id="txtPass">
 														</td>
 													</tr>
 													<tr>
