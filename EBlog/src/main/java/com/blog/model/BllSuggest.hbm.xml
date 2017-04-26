@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-4-2 12:37:59 by Hibernate Tools 5.2.1.Final -->
+<hibernate-mapping>
+    <class name="com.blog.model.BllSuggest" table="bll_suggest" catalog="blogsystem" optimistic-lock="version">
+        <id name="id" type="string">
+            <column name="ID" length="60" />
+            <generator class="assigned" />
+        </id>
+        <property name="user" type="string">
+            <column name="User" length="50">
+                <comment>
+                &#230;&#142;&#168;&#232;&#141;&#144;&#228;&#186;&#186;&#231;&#188;&#150;&#231;&#160;&#129;&#227;&#128;&#130;sys_users&#232;&#161;&#168;&#231;&#154;&#132;UserCode</comment>
+            </column>
+        </property>
+        <property name="articleId" type="string">
+            <column name="ArticleID" length="60">
+                <comment>
+                &#230;&#142;&#168;&#232;&#141;&#144;&#230;&#150;&#135;&#231;&#171;&#160;&#231;&#154;&#132;ID&#227;&#128;&#130;bll_article&#232;&#161;&#168;&#231;&#154;&#132;ID</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

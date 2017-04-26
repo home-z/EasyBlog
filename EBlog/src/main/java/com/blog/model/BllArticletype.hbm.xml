@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-4-2 12:37:59 by Hibernate Tools 5.2.1.Final -->
+<hibernate-mapping>
+    <class name="com.blog.model.BllArticletype" table="bll_articletype" catalog="blogsystem" optimistic-lock="version">
+        <id name="id" type="string">
+            <column name="ID" length="60" />
+            <generator class="assigned" />
+        </id>
+        <property name="typeName" type="string">
+            <column name="TypeName" length="50" />
+        </property>
+        <property name="description" type="string">
+            <column name="Description" length="50" />
+        </property>
+        <property name="userId" type="string">
+            <column name="UserID" length="60" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-4-2 12:37:59 by Hibernate Tools 5.2.1.Final -->
+<hibernate-mapping>
+    <class name="com.blog.model.BllFavuser" table="bll_favuser" catalog="blogsystem" optimistic-lock="version">
+        <id name="id" type="string">
+            <column name="ID" length="60" />
+            <generator class="assigned" />
+        </id>
+        <property name="user" type="string">
+            <column name="User" length="50">
+                <comment>
+                &#229;&#133;&#179;&#230;&#179;&#168;&#228;&#186;&#186;&#231;&#188;&#150;&#231;&#160;&#129;&#227;&#128;&#130;sys_users&#232;&#161;&#168;&#231;&#154;&#132;UserCode</comment>
+            </column>
+        </property>
+        <property name="favUser" type="string">
+            <column name="FavUser" length="60">
+                <comment>
+                &#232;&#162;&#171;&#229;&#133;&#179;&#230;&#179;&#168;&#231;&#154;&#132;&#228;&#186;&#186;&#227;&#128;&#130;sys_users&#232;&#161;&#168;&#231;&#154;&#132;UserCode</comment>
+            </column>
+        </property>
+        <property name="describle" type="string">
+            <column name="describle" length="500" />
+        </property>
+    </class>
+</hibernate-mapping>

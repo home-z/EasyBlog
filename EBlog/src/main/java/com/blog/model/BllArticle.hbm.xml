@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-4-2 12:37:59 by Hibernate Tools 5.2.1.Final -->
+<hibernate-mapping>
+    <class name="com.blog.model.BllArticle" table="bll_article" catalog="blogsystem" optimistic-lock="version">
+        <id name="id" type="string">
+            <column name="ID" length="60" />
+            <generator class="assigned" />
+        </id>
+        <property name="typeId" type="string">
+            <column name="TypeID" length="60" />
+        </property>
+        <property name="title" type="string">
+            <column name="Title" length="50" />
+        </property>
+        <property name="content" type="string">
+            <column name="Content" length="65535" />
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="CreateTime" length="19" />
+        </property>
+        <property name="createBy" type="string">
+            <column name="CreateBy" length="50" />
+        </property>
+        <property name="modifyTime" type="timestamp">
+            <column name="ModifyTime" length="19" />
+        </property>
+        <property name="comCount" type="java.lang.Integer">
+            <column name="ComCount">
+                <comment>&#230;&#150;&#135;&#231;&#171;&#160;&#232;&#175;&#132;&#232;&#174;&#186;&#230;&#157;&#161;&#230;&#149;&#176;</comment>
+            </column>
+        </property>
+        <property name="readCount" type="java.lang.Integer">
+            <column name="ReadCount" />
+        </property>
+        <property name="typeName" type="string">
+            <column name="TypeName" length="50" />
+        </property>
+        <property name="suggestCount" type="java.lang.Integer">
+            <column name="SuggestCount">
+                <comment>&#230;&#142;&#168;&#232;&#141;&#144;&#230;&#172;&#161;&#230;&#149;&#176;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

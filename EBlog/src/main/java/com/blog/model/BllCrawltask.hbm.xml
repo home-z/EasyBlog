@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-4-2 12:37:59 by Hibernate Tools 5.2.1.Final -->
+<hibernate-mapping>
+    <class name="com.blog.model.BllCrawltask" table="bll_crawltask" catalog="blogsystem" optimistic-lock="version">
+        <id name="id" type="string">
+            <column name="ID" length="60" />
+            <generator class="assigned" />
+        </id>
+        <property name="createBy" type="string">
+            <column name="CreateBy" length="45" />
+        </property>
+        <property name="crawlUrl" type="string">
+            <column name="CrawlURL" length="100" />
+        </property>
+        <property name="keyWords" type="string">
+            <column name="KeyWords" length="100" />
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="CreateTime" length="19" />
+        </property>
+        <property name="state" type="java.lang.Integer">
+            <column name="State">
+                <comment>
+                0&#239;&#188;&#154;&#229;&#136;&#155;&#229;&#187;&#186;&#239;&#188;&#155;1&#239;&#188;&#154;&#230;&#137;&#167;&#232;&#161;&#140;&#228;&#184;&#173;&#239;&#188;&#155;2&#239;&#188;&#154;&#230;&#137;&#167;&#232;&#161;&#140;&#230;&#136;&#144;&#229;&#138;&#159;&#239;&#188;&#155;3&#239;&#188;&#154;&#230;&#137;&#167;&#232;&#161;&#140;&#229;&#164;&#177;&#232;&#180;&#165;&#227;&#128;&#130;</comment>
+            </column>
+        </property>
+        <property name="finishTime" type="timestamp">
+            <column name="FinishTime" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>
