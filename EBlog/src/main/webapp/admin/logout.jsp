@@ -11,6 +11,6 @@
 		response.setHeader("refresh", "2;URL=../index.jsp");
 		session.invalidate();
 	%>
-	<h3>你已经退出后台管理，两秒钟回到登录页面！</h3>
+	<h3>你已经退出后台管理，两秒钟回到主页面！Bye!</h3>
 </body>
 </html>

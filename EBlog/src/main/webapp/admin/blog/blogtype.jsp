@@ -25,11 +25,12 @@
 	//检测是否已经登录
 	function checkLogin() {
 		<c:choose>
-		<c:when test="${empty Current_User}">
-		location.href = "${ctxPath}/admin/login.jsp";
-		</c:when>
+			<c:when test="${empty Current_User}">
+				location.href = "${ctxPath}/admin/login.jsp";
+			</c:when>
 		</c:choose>
 	}
+	
 	var editIndex = undefined;
 	function endEditing() {
 		if (editIndex == undefined) {
@@ -47,6 +48,7 @@
 			return false;
 		}
 	}
+	
 	function onClickRow(index) {
 		if (editIndex != index) {
 			if (endEditing()) {
@@ -58,6 +60,7 @@
 			}
 		}
 	}
+	
 	function append() {
 		if (endEditing()) {
 			$('#typeDataGrid').datagrid('appendRow', {
@@ -68,6 +71,7 @@
 					'beginEdit', editIndex);
 		}
 	}
+	
 	function removeit(index) {
 		if (editIndex == undefined) {
 			return;
@@ -76,6 +80,7 @@
 				'deleteRow', editIndex);
 		editIndex = undefined;
 	}
+	
 	function save() {
 		if (endEditing()) {
 			//新增的行
@@ -101,6 +106,7 @@
 					}
 				})
 			}
+			
 			//更新的行
 			var updateRow = $('#typeDataGrid')
 					.datagrid('getChanges', 'updated');
@@ -125,6 +131,7 @@
 					}
 				})
 			}
+			
 			//删除
 			var deleteRows = $('#typeDataGrid').datagrid('getChanges',
 					'deleted');
@@ -153,10 +160,12 @@
 			$('#typeDataGrid').datagrid('acceptChanges');
 		}
 	}
+	
 	function reject() {
 		$('#typeDataGrid').datagrid('rejectChanges');
 		editIndex = undefined;
 	}
+	
 	function pagerFilter(data) {
 		if (typeof data.length == 'number' && typeof data.splice == 'function') { // is array
 			data = {
@@ -186,13 +195,12 @@
 		data.rows = (data.originalRows.slice(start, end));
 		return data;
 	}
+	
 	$(document).ready(function() {
 		checkLogin();
 		$('#typeDataGrid').datagrid({
 			url : '${ctxPath}/BlogType/getBlogTypeListByUser.do',
 			singleSelect : true,
-			width : 700,
-			height : 300,
 			toolbar : '#tb',
 			onClickRow : onClickRow,
 			fitColumns : true,

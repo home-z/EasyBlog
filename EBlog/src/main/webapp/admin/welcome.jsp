@@ -6,6 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>欢迎</title>
 </head>
-<body>欢迎使用！
+<body>欢迎使用！这里使用echart展示
 </body>
 </html>
