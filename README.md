@@ -10,15 +10,15 @@
 >5. 使用kindeditor编辑器实现写博客功能等；
 >6. 自己写了爬虫，爬取其他网站信息加入到自己的博客中。通过博客网站登录，可以设置关键词，后台自动进行抓取。项目地址：https://github.com/yangtzeyufei/Crawler
 
-## **前台效果展示**
-### **1. 博客主页显示**
+### **一. 前台效果展示**
+#### **1. 博客主页显示**
 ![博客主页显示](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_%e9%a6%96%e9%a1%b5.png)
-### **2. 博客内容显示**
+#### **2. 博客内容显示**
 ![博客内容显示](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_%e6%96%87%e7%ab%a0%e5%86%85%e5%ae%b9.png)
-## **后台效果展示**
+
+## **二. 后台效果展示**
 ### **1. 登录**
 ![登录](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_%e7%99%bb%e5%bd%95.png)
-
 ### **2. 后台主页**
 ![后台主页](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_%e5%90%8e%e5%8f%b0%e4%b8%bb%e9%a1%b5.png)
 ### **3. 写博客功能**
@@ -28,10 +28,10 @@
 ### **5. 添加博客类别等等**
 ![博客类别](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_%e5%8d%9a%e5%ae%a2%e7%b1%bb%e5%88%ab%e7%ae%a1%e7%90%86.png)
 
-### **3. 爬虫**
+## **三. 爬虫**
 ![爬虫主页](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_Blog%20Crawler_005.png)
 
-### **Todo**
+## **Todo**
 >1. 整合ElasticSearch作为博客网站的搜索引擎；
 >2. 加强爬虫功能，目前仅能抓取博客园内容，后续实现能抓取任意网站内容；
 >3. 加强权限控制；
