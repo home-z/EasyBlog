@@ -1,6 +1,6 @@
 
-# 基于Springmvc+Hibernate+Spring+EasyUI+Mysql的多人博客系统
-## **欢迎访问我的博客园：http://www.cnblogs.com/yangtze-yufei/**
+## 基于Springmvc+Hibernate+Spring+EasyUI+Mysql的多人博客系统
+### **欢迎访问我的博客园：http://www.cnblogs.com/yangtze-yufei/**
 ## **项目介绍**
 
 >1. 使用Maven3+Spring3+Springmvc+Hibernate3架构；数据库使用Mysql；
