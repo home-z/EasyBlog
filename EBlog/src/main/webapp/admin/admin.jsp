@@ -20,7 +20,6 @@
 			$('#tabContainer').tabs('add',
 				{
 					title : title,
-					//href : url,
 					closable : true,
 					cache : false,
 					content : '<iframe name="'

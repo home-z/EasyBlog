@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +36,7 @@ import com.blog.utils.JsonHelper;
 @Controller
 @RequestMapping("/BlogInfo")
 public class BlogInfoController {
-	
+
 	private static Logger logger = Logger.getLogger(BlogInfoController.class);
 
 	@RequestMapping("/searchBlog")
@@ -157,6 +158,42 @@ public class BlogInfoController {
 		} else {
 			return JsonHelper.getSucessResult(false);
 		}
+	}
 
+	@RequestMapping("/getBlogStatistics")
+	@ResponseBody // 将返回值ResultInfo实体转化为json
+	public Map<String, Object> getBlogStatistics(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException {
+
+		String styleType = request.getParameter("styleType");
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+
+		StringBuffer strBlogPost = new StringBuffer();
+		strBlogPost.append("[");
+		String strPost = "";
+
+		// 调用DAL层
+		BlogDAL blogDAL = new BlogDAL();
+		ResultSet rs = blogDAL.getBlogStatistics(styleType, startDate, endDate);
+		while (rs.next()) {
+			strBlogPost.append("{");
+			strBlogPost.append("\"group\":");
+			strBlogPost.append("\"博客\",");
+			strBlogPost.append("\"name\":");
+			strBlogPost.append("\"" + rs.getString("postDate") + "\",");
+			strBlogPost.append("\"value\":");
+			strBlogPost.append("\"" + rs.getString("postCount") + "\"");
+			strBlogPost.append("},");
+		}
+		if (strBlogPost.length() > 1) {
+			strPost = strBlogPost.substring(0, strBlogPost.length() - 1);
+		} else {
+			strPost = strBlogPost.toString();
+		}
+
+		strPost = strPost + "]";
+
+		return JsonHelper.getModel(strPost);
 	}
 }

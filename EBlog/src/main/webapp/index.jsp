@@ -8,13 +8,33 @@
 <%@include file="/common/resinculde.jsp"%>
 <link href="${cssPath}/index.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
+#container {
+	
+}
+
 #articleInfo {
-	margin-left: 20px;
-	margin-right: 20px;
+	margin: 10px;
 	font-size: 15px;
 	color: #333347;
 	line-height: 18px;
 	margin-top: 5px;
+}
+
+#leftArticle {
+	width: 80%;
+	float: left;
+	margin: 5px;
+	border: 1px solid #D6D6D6;
+}
+
+#rightCategory {
+	float: left;
+	font-size: 15px;
+	color: #333347;
+	line-height: 15px;
+	margin: 5px;
+	width: 18%;
+	border: 1px solid #D6D6D6;
 }
 
 #postInfo {
@@ -26,21 +46,38 @@ hr {
 	color: #c0c0c0;
 }
 
-.aPageDisable
-{
-	background:#1428E6;
-	color:white;
-	text-decoration: none;
+#categoryLinks{
+	line-height: 25px;
+	margin-left: 20px;
 }
 
-#pageFilter a
-{
-	text-decoration: none;
-	padding:1px 3px 1px 3px;
-	border:1px solid #1BA1E2;
+#categoryLinks li{
+	list-style:none;
+}
+
+#rightCategory p{
+	margin: 5px;
 }
 </style>
 <script type="text/javascript">
+	//按照文章分类读取
+	function getCategory() {
+		$.ajax({
+			type : 'GET',
+			contentType : 'application/json',
+			url : '${ctxPath}/MainIndex/getCategory.do',
+			dataType : 'json',
+			success : function(data) {
+				if (data && data.success == "true") {
+					$('#categoryLinks').html(data.data);
+				}
+			},
+			error : function() {
+				alert("error");
+			}
+		});
+	}
+
 	//生成分页控件
 	function getPageFilter(action) {
 		$('#pageFilter').empty();//先清空分页信息，避免aPageChange方法中先获取到了上一次的元素
@@ -70,8 +107,7 @@ hr {
 			success : function(data) {
 				if (data && data.success == "true") {
 					var strAllArticle = "";
-					$.each(
-						data.data,
+					$.each(data.data,
 						function(i, item) {
 							strAllArticle += "<div>";
 							strAllArticle += "<a href='${ctxPath}/MainIndex/getDetailById.do?id="
@@ -164,16 +200,46 @@ hr {
 		});
 	}
 	
+	//点击分类
+	function getArticleType(typeid)
+	{
+		//生成分页
+	    getPageFilter("/MainIndex/getArticleByType.do?typeid="+typeid);//生成底部的分页
+	    aPageChange();
+		getArticle('${ctxPath}/MainIndex/getArticleByType.do?typeid='+typeid+'&page=1');
+	}
+	
+	//点击右侧分类，则增加对应分类菜单
+	function addTypeMenu(typeName,typeid) {
+		//该元素不存在，则创建
+		if($("#"+typeid+"").length <= 0) {
+			$("#divMenu ul").append("<li><a id=\""+typeid+"\" href='javascript:void(0);' onclick='getArticleType("+typeid+")''>"+typeName+"</a></li>");
+		}
+		
+		//触发click事件
+		$("#"+typeid+"").click();
+	}
+	
 	//页面首先加载全部
 	$(document).ready(function() {
 		getallArticle();
+		getCategory();
 	});
 </script>
 </head>
 <body>
 	<%@include file="/common/menu.jsp"%>
-	<div id="articleInfo"></div>
-	<div id="pageFilter"></div>
+	<div id="container">
+		<div id="leftArticle">
+			<div id="articleInfo"></div>
+			<div id="pageFilter"></div>
+		</div>
+		<div id="rightCategory">
+			<p>文章分类</p>
+			<hr style='border: 1px dotted #E4DDDD' />
+			<div id="categoryLinks"></div>
+		</div>
+	</div>
 	<%@include file="/common/footer.jsp"%>
 </body>
 </html>

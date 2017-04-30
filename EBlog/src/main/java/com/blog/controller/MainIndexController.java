@@ -1,5 +1,7 @@
 package com.blog.controller;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,29 +18,37 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.blog.model.BllArticle;
 import com.blog.model.BllCommont;
 import com.blog.utils.DateBindController;
+import com.blog.utils.DbAction;
 import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
 
 @Controller
 @RequestMapping("/MainIndex")
 public class MainIndexController extends DateBindController {
-	
+
 	private static Logger logger = Logger.getLogger(MainIndexController.class);
 
 	int pCount = 5;// 每页显示记录数目
 
-	// 读取某个文章的评论数
+	// 生成分页按钮
 	@RequestMapping("/getArticlePage")
 	@ResponseBody
 	public Map<String, Object> getArticlePage(HttpServletRequest request,
 			@RequestParam(value = "action", required = true) String action) {
-		logger.info("查询");
 
 		// 获取程序部署路径，使用字符串${ctxPath}，传到前台还是${ctxPath}，不能获取路径
 		// String url = request.getContextPath() +
 		// "/MainIndex/getallArticle.do";
 		String url = request.getContextPath() + action;
-		int toalCount = (int) HibernateUtils.queryOne("select count(*) from bll_article");// 总数
+		String strSql = "select count(*) from bll_article ";
+
+		boolean isType = false;// 判断是否是点击了分类，分类则带有类别参数
+		if (url.contains("typeid=")) {
+			strSql = "select count(*) from bll_article where typeid=" + url.split("=")[1];
+			isType = true;
+		}
+
+		int toalCount = (int) HibernateUtils.queryOne(strSql);// 总数
 		int page = (toalCount % pCount == 0) ? (toalCount / pCount) : (toalCount / pCount + 1);// 总页数
 		StringBuffer strBPageHtml = new StringBuffer();
 		strBPageHtml.append("<p>");
@@ -54,7 +64,12 @@ public class MainIndexController extends DateBindController {
 
 			strBPageHtml.append(" onclick=\"getArticle('");
 			strBPageHtml.append(url);
-			strBPageHtml.append("?page=");
+			if (isType) {
+				strBPageHtml.append("&page=");
+			} else {
+				strBPageHtml.append("?page=");
+			}
+
 			strBPageHtml.append(i);
 			strBPageHtml.append("')\">");
 			strBPageHtml.append(i);
@@ -63,6 +78,57 @@ public class MainIndexController extends DateBindController {
 		strBPageHtml.append("</p>");
 
 		return JsonHelper.getModel(strBPageHtml.toString());
+	}
+
+	// 获取分类
+	@RequestMapping("/getCategory")
+	@ResponseBody
+	public Map<String, Object> getCategory(HttpServletRequest request) throws SQLException {
+
+		String strSql = "select b.id typeid,b.typename,count(typeid) countn from bll_article a right join bll_articletype b on a.typeid=b.id group by b.id,b.typename order by countn desc";
+
+		StringBuffer strBCategory = new StringBuffer();
+		strBCategory.append("<ul>");
+
+		ResultSet rs = DbAction.getQuery(strSql);
+		while (rs.next()) {
+			strBCategory.append("<li><a onClick='addTypeMenu(\"");
+			strBCategory.append(rs.getString("typename"));
+			strBCategory.append("\",\"");
+			strBCategory.append(rs.getString("typeid"));
+			strBCategory.append("\")");
+			strBCategory.append("' href=\"#\" >");
+			strBCategory.append(rs.getString("typename"));
+			strBCategory.append("(");
+			strBCategory.append(rs.getString("countn"));
+			strBCategory.append(")");
+			strBCategory.append("</a></li>");
+		}
+
+		strBCategory.append("</ul>");
+
+		return JsonHelper.getModel(strBCategory.toString());
+	}
+
+	// 按照文章分类读取该分类下的文章
+	@RequestMapping("/getArticleByType")
+	@ResponseBody
+	public Map<String, Object> getArticleByType(Model model,
+			@RequestParam(value = "typeid", required = true) String typeid,
+			@RequestParam(value = "page", required = true) String page) {
+		int pageNum = 1;// 当前页
+		if (!page.isEmpty() && page != "") {
+			pageNum = Integer.parseInt(page);
+		}
+		String pageSql = " limit " + (pageNum - 1) * pCount + "," + pCount;
+
+		List<BllArticle> list = HibernateUtils.queryListParam(BllArticle.class,
+				"select * from bll_article where typeid=" + typeid + pageSql);
+
+		List<BllArticle> newList = removeArtilceHtml(list);
+		model.addAttribute("dto", newList);
+
+		return JsonHelper.getModelMap(newList);
 	}
 
 	/*

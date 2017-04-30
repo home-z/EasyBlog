@@ -8,26 +8,31 @@
 	//获取已经登录的用户名称
 	function getCurrentUserName() {
 		<c:choose>
-		<c:when test="${empty Current_User}">
-		$("#loginInfo").html("<a href='${ctxPath}/Login/loginpage.do'>登录</a>");
-		</c:when>
-		<c:otherwise>
-		$("#loginInfo").html("<a href='${ctxPath}/admin/admin.jsp'>${Current_User.userName}</a> <a href='${ctxPath}/admin/logout.jsp'>注销</a>");
-		</c:otherwise>
+			<c:when test="${empty Current_User}">
+				$("#loginInfo").html("<a href='${ctxPath}/Login/loginpage.do'>登录</a>");
+			</c:when>
+			<c:otherwise>
+				$("#loginInfo").html("<a href='${ctxPath}/admin/admin.jsp'>${Current_User.userName}</a> <a href='${ctxPath}/admin/logout.jsp'>注销</a>");
+			</c:otherwise>
 		</c:choose>
 	}
+	
 	$(document).ready(function() {
 		getCurrentUserName();
-		//点击菜单，加载背景
-		var subNav_active = $(".adv_active");
+		
+		//点击菜单，加载背景	
 		var subNav_change = function(target) {
+			var subNav_active = $(".adv_active");
 			subNav_active.removeClass("adv_active");
 			target.parent().addClass("adv_active");
 			subNav_active = target.parent();
 		};
-		$("#divMenu a").click(function() {
-			subNav_change($(this));
-		});
+		
+		//动态绑定现在和将来新增的元素事件
+		 $("#divMenu a").live("click","a", function() {
+			 subNav_change($(this));
+		 });
+		
 		//页面加载完之后，计算菜单栏到页面顶部的实际距离
 		var divMenu = document.getElementById("topMenu");
 		divOffsetTop = divMenu.offsetTop - 5;//因为设置了margin-top=5
@@ -67,14 +72,10 @@
 
 	<div id="divMenu">
 		<ul>
-			<!--<li class="adv_active"><a href="javascript:void(0);" onclick="getArticle('${ctxPath}/MainIndex/getallArticle.do?page=1')">首页</a></li>
-			  <li><a href="javascript:void(0);" onclick="getArticle('${ctxPath}/MainIndex/getArticleRead.do')">热读</a></li>
-			  <li><a href="javascript:void(0);" onclick="getArticle('${ctxPath}/MainIndex/getArticleCommit.do')">热评</a></li>
-			  -->
-			<li class="adv_active"><a href="javascript:void(0);" onclick="getallArticle()">首页</a></li>
-			<li><a href="javascript:void(0);" onclick="getArticleRead()">热读</a></li>
-			<li><a href="javascript:void(0);" onclick="getArticleSuggest()">推荐</a></li>
-			<li><a href="javascript:void(0);" onclick="getArticleCommit()">热评</a></li>
+			<li class="adv_active"><a id="allArticle" href="javascript:void(0);" onclick="getallArticle()">首页</a></li>
+			<li><a id="articleRead" href="javascript:void(0);" onclick="getArticleRead()">热读</a></li>
+			<li><a id="articleSuggest" href="javascript:void(0);" onclick="getArticleSuggest()">推荐</a></li>
+			<li><a id="articleCommit" href="javascript:void(0);" onclick="getArticleCommit()">热评</a></li>
 		</ul>
 	</div>
 

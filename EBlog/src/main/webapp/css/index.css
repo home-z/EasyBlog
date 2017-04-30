@@ -62,14 +62,16 @@
 #divMenu ul li {
 	display: block;
 	float: left;
-	width: 80px;
+	/*width: 80px;*/
 }
 
 #divMenu ul li a {
 	text-decoration: none;
 	color: White;
 	display: block;
-	padding-left: 23px;
+	padding-left:20px;
+	padding-right:20px;
+	/*padding-left: 23px;*/
 }
 
 #divMenu ul li a:hover {
@@ -79,4 +81,23 @@
 .adv_active {
 	background-color: #e70;
 	color: #fff;
+}
+
+
+.aPageDisable
+{
+	background:#1428E6;
+	color:white;
+	text-decoration: none;
+}
+
+#pageFilter{
+	margin: 10px;
+}
+
+#pageFilter a
+{
+	text-decoration: none;
+	padding:1px 3px 1px 3px;
+	border:1px solid #1BA1E2;
 }
