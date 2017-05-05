@@ -31,7 +31,7 @@ public class JsonHelper {
 	}
 
 	public static <E> Map<String, Object> getModelMapforGrid(List<E> list) {
-		Map<String, Object> modelMap = new HashMap<String, Object>(3);
+		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", list.size());
 		modelMap.put("rows", list);
 		return modelMap;

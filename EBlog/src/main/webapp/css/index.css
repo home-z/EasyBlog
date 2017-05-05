@@ -21,17 +21,18 @@
 #midSearch input {
 	width: 400px;
 	height: 30px;
-	font-size: 16px;
+	font-size: 15px;
 	border: 1px solid #4791FF;
 }
 
-#midSearch span {
+#midSearch span a{
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-top: 8px;
 	padding-bottom: 7px;
 	background: #3385FF;
 	color: white;
+	text-decoration: none;
 }
 
 #rightLogin {

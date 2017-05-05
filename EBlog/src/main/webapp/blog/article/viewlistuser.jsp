@@ -8,6 +8,17 @@
 <%@include file="/common/resinculde.jsp"%>
 <link href="${cssPath}/index.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
+#top {
+	border: 1px solid #D8DFEA;
+	margin: 5px;
+}
+
+#logTitle {
+	font-size: 25px;
+	color: #E33E06;
+	width: 900px;
+}
+
 #articleInfo {
 	margin-left: 20px;
 	font-size: 16px;
@@ -25,7 +36,16 @@ hr {
 </style>
 </head>
 <body>
-	<%@include file="/common/menu.jsp"%>
+	<!-- 	应该指向具体某人的博客内容，而不是所有的博客内容都共用这一个页面。或者显示每个人自己设置的页面
+	TODO -->
+	<div id="top">
+		<table width="100%">
+			<tr>
+				<td><img src="${imgPath}/log.jpg"></td>
+				<td><div id="logTitle">博客世界</div></td>
+			</tr>
+		</table>
+	</div>
 	<div id="articleInfo">
 		<c:forEach items="${dto}" var="item">
 			<a href="${ctxPath}/MainIndex/getDetailById.do?id=${item.id}" target="_blank">${item.title}</a>

@@ -60,6 +60,7 @@ hr {
 }
 </style>
 <script type="text/javascript">
+
 	//按照文章分类读取
 	function getCategory() {
 		$.ajax({
@@ -218,6 +219,59 @@ hr {
 		
 		//触发click事件
 		$("#"+typeid+"").click();
+	}
+	
+	//搜索
+	function searchKeyword() {
+		var keyword=$("#txtKeyword").val();
+		if (keyword!="") {
+			//显示查询菜单
+			if($("#searchMenu").length <= 0) {
+				$("#divMenu ul").append("<li><a id='searchMenu' href='javascript:void(0);'>搜索</a></li>");
+			}
+			
+			$("#searchMenu").click();//只是为了加上选中样式而进行一次点击
+			getSearchBlog(keyword);
+		}
+		else {
+			alert("请输入关键词！");
+		}
+	}
+	
+	//点击搜索
+	function getSearchBlog(keyword) {
+		var param = {
+				keyword : keyword
+			};
+	     $.ajax({
+				type : 'POST',
+				dataType : "json",
+				url : "${ctxPath}/BlogSearch/searchBlog.do",
+				data : $.param(param),
+				success : function(data) {
+					if (data && data.total != 0) {
+						var strSearchArticle = "";
+						$.each(data.rows,
+							function(i, item) {
+							strSearchArticle += "<div>";
+							strSearchArticle += "<a href='${ctxPath}/MainIndex/getDetailById.do?id="
+							strSearchArticle += item.id
+							strSearchArticle += "' target='_blank'>";
+							strSearchArticle += item.title;
+							strSearchArticle += "</a>";
+							strSearchArticle += "<p>";
+							strSearchArticle += item.content;
+							strSearchArticle += "</p>";
+							strSearchArticle += "</div>";
+							strSearchArticle += "<hr style='border: 1px dotted #E4DDDD' />"; 
+							});
+						$('#articleInfo').html(strSearchArticle);
+					}
+				},
+				error : function() {
+					alert('error');
+				}
+			});
 	}
 	
 	//页面首先加载全部
