@@ -14,7 +14,7 @@
 
 ### **一. 前台效果展示**
 #### **1. 博客主页显示**
-![博客主页显示](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_%e9%a6%96%e9%a1%b5.png)
+![博客主页显示](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_newindex.png)
 #### **2. 博客内容显示**
 ![博客内容显示](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_%e6%96%87%e7%ab%a0%e5%86%85%e5%ae%b9.png)
 #### **3. 全文检索**
