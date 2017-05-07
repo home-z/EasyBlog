@@ -1,6 +1,7 @@
 
-## 基于Springmvc+Hibernate+Spring+EasyUI+Mysql的多人博客系统
-#### **欢迎访问我的博客园：http://www.cnblogs.com/yangtze-yufei/**
+## 多人博客系统
+#### 基于Springmvc、Hibernate、Spring、EasyUI、Mysql、ElasticSearch实现
+
 ### **项目介绍**
 
 >1. 使用Maven3+Spring3+Springmvc+Hibernate3架构；数据库使用Mysql；
@@ -9,12 +10,15 @@
 >4. 使用ECharts作为统计图展现，并且自己封装了Echarts，使得方便快捷使用。项目地址：https://github.com/yangtzeyufei/MyEcharts；
 >5. 使用kindeditor编辑器实现写博客功能等；
 >6. 自己写了爬虫，爬取其他网站信息加入到自己的博客中。通过博客网站登录，可以设置关键词，后台自动进行抓取。项目地址：https://github.com/yangtzeyufei/Crawler
+>7. 使用ElasticSearch实现全文检索。可以实现标题和文章内容关键词搜索。MySQL中博客和ElasticSearch中同步。
 
 ### **一. 前台效果展示**
 #### **1. 博客主页显示**
 ![博客主页显示](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_%e9%a6%96%e9%a1%b5.png)
 #### **2. 博客内容显示**
 ![博客内容显示](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_%e6%96%87%e7%ab%a0%e5%86%85%e5%ae%b9.png)
+#### **3. 全文检索**
+![全文检索显示](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_%e5%85%a8%e6%96%87%e6%a3%80%e7%b4%a2.png)
 
 ### **二. 后台效果展示**
 #### **1. 登录**
@@ -32,10 +36,12 @@
 ![爬虫主页](http://images.cnblogs.com/cnblogs_com/yangtze-yufei/860899/o_Blog%20Crawler_005.png)
 
 ### **Todo**
->1. 整合ElasticSearch作为博客网站的搜索引擎；
+>1. 加强和优化ElasticSearch作为博客网站的搜索引擎；
 >2. 加强爬虫功能，目前仅能抓取博客园内容，后续实现能抓取任意网站内容；
 >3. 加强权限控制；
 >4. 加强图表统计功能。
 
 
 欢迎大家star，follow。
+
+#### **欢迎访问我的博客园：http://www.cnblogs.com/yangtze-yufei/**

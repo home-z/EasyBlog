@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -30,6 +31,7 @@ import com.blog.model.BllArticle;
 import com.blog.model.BllCommont;
 import com.blog.model.SysUsers;
 import com.blog.utils.CoreConsts;
+import com.blog.utils.ElasticSearchUtils;
 import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
 
@@ -118,10 +120,16 @@ public class BlogInfoController {
 			article.setCreateBy(currentUser.getUserCode());
 			article.setCreateTime(new Date());// new Date()为获取当前系统时间
 			article.setModifyTime(new Date());
+			article.setComCount(0);
+			article.setReadCount(0);
+			article.setSuggestCount(0);
 
 			article.setTypeName(request.getParameter("currenttypeName"));// 获取类别名称
 
 			if (HibernateUtils.add(article)) {
+				// 新增文章加入到elasticSearch中
+				ElasticSearchUtils.addDoc("bll_article", article.getId(), article, "getId", "getTitle", "getContent");
+
 				PrintWriter out = response.getWriter();
 				response.setContentType("text/html; charset=utf-8");
 
@@ -138,6 +146,13 @@ public class BlogInfoController {
 			article.setTypeName(request.getParameter("currenttypeName"));// 获取类别名称
 
 			if (HibernateUtils.update(article)) {
+				// 更新内容更新到elasticSearch中
+				Map<String, String> updateParam = new HashMap<String, String>();
+				updateParam.put("title", article.getTitle());
+				updateParam.put("content", article.getContent());
+
+				ElasticSearchUtils.updateDoc("bll_article", article.getId(), updateParam);
+
 				PrintWriter out = response.getWriter();
 				response.setContentType("text/html; charset=utf-8");
 
@@ -154,6 +169,9 @@ public class BlogInfoController {
 		String toDeleteId = request.getParameter("vblogid");
 
 		if (HibernateUtils.delete(HibernateUtils.findById(BllArticle.class, toDeleteId))) {
+			// 同时删除elasticSearch中记录
+			ElasticSearchUtils.deleteDoc("bll_article", toDeleteId);
+
 			return JsonHelper.getSucessResult(true);
 		} else {
 			return JsonHelper.getSucessResult(false);

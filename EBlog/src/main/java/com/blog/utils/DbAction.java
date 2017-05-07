@@ -12,7 +12,7 @@ import java.util.Properties;
  *
  */
 public class DbAction {
-	
+
 	private static String dbDriverClass = null;// 数据库驱动
 	private static String dbUrl = null;// 数据库地址
 	private static String userName = null;// 用户名

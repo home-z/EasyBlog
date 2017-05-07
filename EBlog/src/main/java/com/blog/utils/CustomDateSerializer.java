@@ -10,10 +10,8 @@ import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
 
 /**
- * 自定义返回JSON 数据格中日期格式化处理,
- * 通过json传输,Java的Date类型的数据自动转成了时间戳
- * javabean对应属性的方法添加注解：@JsonSerialize(using
- * =CustomDateSerializer.class)
+ * 自定义返回JSON 数据格中日期格式化处理, 通过json传输,Java的Date类型的数据自动转成了时间戳
+ * javabean对应属性的方法添加注解：@JsonSerialize(using =CustomDateSerializer.class)
  * 
  * @author Administrator
  * 

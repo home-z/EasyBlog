@@ -28,6 +28,8 @@
 
 #postInfo {
 	color: #9D9095;
+	font-size: 12px;
+	margin-top: 5px;
 }
 
 hr {

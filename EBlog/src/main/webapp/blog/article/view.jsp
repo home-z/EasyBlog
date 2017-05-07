@@ -37,7 +37,8 @@
 
 #postInfo {
 	color: #9D9095;
-	float: right;
+	font-size: 12px;
+	margin-top: 5px;
 }
 </style>
 </head>

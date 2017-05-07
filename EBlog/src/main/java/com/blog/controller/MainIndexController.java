@@ -1,5 +1,6 @@
 package com.blog.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -28,7 +30,7 @@ public class MainIndexController extends DateBindController {
 
 	private static Logger logger = Logger.getLogger(MainIndexController.class);
 
-	int pCount = 5;// 每页显示记录数目
+	int pCount = 15;// 每页显示记录数目
 
 	// 生成分页按钮
 	@RequestMapping("/getArticlePage")

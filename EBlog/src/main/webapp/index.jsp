@@ -39,7 +39,8 @@
 
 #postInfo {
 	color: #9D9095;
-	font-size: 13px;
+	font-size: 12px;
+	margin-top: 5px;
 }
 
 hr {
@@ -112,8 +113,8 @@ hr {
 						function(i, item) {
 							strAllArticle += "<div>";
 							strAllArticle += "<a href='${ctxPath}/MainIndex/getDetailById.do?id="
-									+ item.id
-									+ "' target='_blank'>";
+							strAllArticle += item.id
+							strAllArticle += "' target='_blank'>";
 							strAllArticle += item.title;
 							strAllArticle += "</a>";
 							strAllArticle += "<p>";
@@ -121,17 +122,18 @@ hr {
 							strAllArticle += "</p>";
 							strAllArticle += "<p id='postInfo'>";
 							strAllArticle += "<a style='text-decoration:none' href='${ctxPath}/MainIndex/getArticleByCreateBy.do?user="
-									+ item.createBy
-									+ "' target='_blank'>"
-									+ item.createBy
-									+ "</a>" + "发布于"
+							strAllArticle += item.createBy
+							strAllArticle += "' target='_blank'>"
+							strAllArticle += item.createBy
+							strAllArticle += "</a>"
+							strAllArticle += "发布于"
 							strAllArticle += item.createTime;
 							strAllArticle += "&nbsp;阅读("
-									+ item.readCount + ")";
+							strAllArticle += item.readCount + ")";
 							strAllArticle += "&nbsp;推荐("
-									+ item.suggestCount + ")";
+							strAllArticle += item.suggestCount + ")";
 							strAllArticle += "&nbsp;评论("
-									+ item.comCount + ")";
+							strAllArticle += item.comCount + ")";
 							strAllArticle += "</p>";
 							strAllArticle += "</div>";
 							strAllArticle += "<hr style='border: 1px dotted #E4DDDD' />";
@@ -262,10 +264,27 @@ hr {
 							strSearchArticle += "<p>";
 							strSearchArticle += item.content;
 							strSearchArticle += "</p>";
+							strSearchArticle += "<p id='postInfo'>";
+							strSearchArticle += "<a style='text-decoration:none' href='${ctxPath}/MainIndex/getArticleByCreateBy.do?user="
+							strSearchArticle += item.createBy
+							strSearchArticle += "' target='_blank'>"
+							strSearchArticle += item.createBy
+							strSearchArticle += "</a>"
+							strSearchArticle += "发布于"
+							strSearchArticle += item.createTime;
+							strSearchArticle += "&nbsp;阅读("
+							strSearchArticle += item.readCount + ")";
+							strSearchArticle += "&nbsp;推荐("
+							strSearchArticle += item.suggestCount + ")";
+							strSearchArticle += "&nbsp;评论("
+							strSearchArticle += item.comCount + ")";
+							strSearchArticle += "</p>";
 							strSearchArticle += "</div>";
-							strSearchArticle += "<hr style='border: 1px dotted #E4DDDD' />"; 
+							strSearchArticle += "<hr style='border: 1px dotted #E4DDDD' />";
 							});
 						$('#articleInfo').html(strSearchArticle);
+						//TODO实现查询分页
+						$('#pageFilter').html("");
 					}
 				},
 				error : function() {

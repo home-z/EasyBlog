@@ -1,6 +1,7 @@
 package com.blog.data;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,7 @@ import com.blog.utils.HibernateUtils;
  */
 public class BlogSearchDAL {
 
-	// 将mysql中的博客导入到elasticSearch中
+	// 将mysql中的博客导入到eulasticSearch中
 	public static void dumpBlogToES() throws Exception {
 		String strSql = "select * from bll_article";
 
@@ -33,7 +34,7 @@ public class BlogSearchDAL {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		/*
 		 * try { dumpBlogToES(); } catch (Exception e) { // TODO Auto-generated
 		 * catch block e.printStackTrace(); }
@@ -70,8 +71,21 @@ public class BlogSearchDAL {
 		shouldMap.put("title", "测试");
 		shouldMap.put("content", "测试");
 
-		//String strResult = ElasticSearchUtils.multiOrSearchDocHigh("bll_article", shouldMap);
-		//System.out.println(strResult);
+		Map<String, Object> mapResutl = ElasticSearchUtils.multiOrSearchDocHigh("bll_article", shouldMap, 0, 10);
+
+		@SuppressWarnings("unchecked")
+		List<Map<String, Object>> list = (List<Map<String, Object>>) mapResutl.get("rows");
+		for (Map<String, Object> mapRow : list) {
+			String articleId = (String) mapRow.get("id");
+			ResultSet rs = BlogDAL.getPostInfo(articleId);
+			while (rs.next()) {
+				System.out.println(rs.getString("CreateTime"));
+				mapRow.put("createTime", rs.getString("CreateTime"));
+				mapRow.put("readCount", rs.getString("ReadCount"));
+				mapRow.put("suggestCount", rs.getString("SuggestCount"));
+				mapRow.put("comCount", rs.getString("ComCount"));
+			}
+		}
 
 	}
 

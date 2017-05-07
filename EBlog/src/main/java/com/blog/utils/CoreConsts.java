@@ -9,7 +9,7 @@ import javax.servlet.ServletContext;
  *
  */
 public class CoreConsts {
-	
+
 	/**
 	 * 语言包：：：仅默认三种
 	 * 
