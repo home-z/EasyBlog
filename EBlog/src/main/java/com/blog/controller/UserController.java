@@ -212,6 +212,7 @@ public class UserController {
 	public void exportUser(HttpServletResponse response, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 		List<SysUsers> userList = userService.getUserListByUserId(userId);
+		
 		exportUser(userList, response);
 	}
 
@@ -266,9 +267,9 @@ public class UserController {
 			}
 		}
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String fileName = CoreConsts.Runtime.APP_ABSOLUTE_PATH + "download" + File.separator
-				+ dateFormat.format(new Date()) + "用户列表.xls";
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//		String fileName = CoreConsts.Runtime.APP_ABSOLUTE_PATH + "download" + File.separator
+//				+ dateFormat.format(new Date()) + "用户列表.xls";
 
 		try {
 			// // 文件先保存到服务器上，对于大文件夹，后续考虑后台线程下载
@@ -277,12 +278,28 @@ public class UserController {
 			// outputStream.close();
 			//
 			// download(fileName, response);
-			response.addHeader("Conten-Dispotion", "attachment:filename=" + new String(fileName.getBytes()));
-			response.setContentType("application/vnd.ms-excel;charset=gb2312");
+//			response.addHeader("Conten-Dispotion", "attachment:filename=" + new String(fileName.getBytes()));
+//			response.setContentType("application/vnd.ms-excel;charset=gb2312");
+//
+//			OutputStream outputStream = response.getOutputStream();
+//			wb.write(outputStream);
+//			outputStream.close();
+			
+			// 4.获取响应输出流，并将Excel文件写入响应输出流中
+			OutputStream out = response.getOutputStream(); // 获取响应输出流
+			response.reset(); // 重置请求响应
 
-			OutputStream outputStream = response.getOutputStream();
-			wb.write(outputStream);
-			outputStream.close();
+			// 设置文件名
+			String fileNameString = "用户.xls";
+			String fileName = new String(fileNameString.getBytes("GBK"), "iso-8859-1");
+
+			response.setHeader("Content-Disposition", "attachment;filename=" + fileName); // 设置请求响应头
+			response.setContentType("application/msexcel; charset=UTF-8"); // 设置内容类型及编码格式
+
+			wb.write(out); // 将文件写入输出流
+			out.flush(); // 执行清空缓存区
+			response.flushBuffer();// 执行清空缓存区
+			out.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();

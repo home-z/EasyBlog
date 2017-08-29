@@ -171,7 +171,9 @@
 				}
 				nextall.each(function(i,n){
 					var t=$('a:eq(0) span',$(n)).text();
-					$('#tabs').tabs('close',t);
+					if(t != '欢迎') {
+						$('#tabContainer').tabs('close',t);
+					}
 				});
 				return false;
 			});
@@ -185,7 +187,9 @@
 				}
 				prevall.each(function(i,n){
 					var t=$('a:eq(0) span',$(n)).text();
-					$('#tabs').tabs('close',t);
+					if(t != '欢迎') {
+						$('#tabContainer').tabs('close',t);
+					}
 				});
 				return false;
 			});
@@ -230,9 +234,9 @@
 						<a style="color: #fff; text-decoration: none" href="${ctxPath}/Login/logout.do">退出登录</a>
 						<span style="color: #E6EAD5;">切换皮肤：</span>
 						<select id="uiSkinNav" class="easyui-combobox" style="width:100px;">
-        					<option value="metro-blue">Blue</option>
-       				 		<option value="metro-green">Green</option>
-        					<option value="metro-red">Red</option>
+        					<option value="metro-blue">蓝色</option>
+       				 		<option value="metro-green">绿色</option>
+        					<option value="metro-red">红色</option>
     					</select>
 					</td>
 				</tr>
