@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.blog.model.SysMenu" table="sys_menu" catalog="blogsystem" optimistic-lock="version">
+		<id name="id" type="java.lang.Integer">
+			<column name="ID"  />
+		</id>
+		<property name="menuName" type="string">
+			<column name="MenuName" length="50" />
+		</property>
+		<property name="uRL" type="string">
+			<column name="URL" length="100" />
+		</property>
+		<property name="parentID" type="java.lang.Integer">
+			<column name="ParentID" />
+		</property>
+	</class>
+</hibernate-mapping>

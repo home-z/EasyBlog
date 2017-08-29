@@ -2,10 +2,11 @@
 <%@include file="/common/context.jsp"%>
 <html>
 <head>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>欢迎</title>
-<%@include file="/common/resinculde.jsp"%>
+	<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>欢迎</title>
+	<%@include file="/common/resinculde.jsp"%>
+	<%@include file="/common/checklogin.jsp"%>
 </head>
 <body>
 	<div style="padding: 10px;">

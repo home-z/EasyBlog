@@ -68,6 +68,7 @@ public class ElasticSearchUtilsImp {
 	 */
 	private static TransportClient getClient() {
 		Settings settings = Settings.builder().put("cluster.name", cluster_name).build();// 设置集群名称
+		
 		@SuppressWarnings("unchecked")
 		TransportClient client = new PreBuiltTransportClient(settings);// 创建client
 		try {

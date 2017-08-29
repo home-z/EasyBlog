@@ -20,5 +20,9 @@
         <mapping resource="com/blog/model/BllFavarticle.hbm.xml"/>
         <mapping resource="com/blog/model/BllFavuser.hbm.xml"/>
         <mapping resource="com/blog/model/BllPageinfo.hbm.xml"/>
+        <mapping resource="com/blog/model/SysMenu.hbm.xml"/>
+        <mapping resource="com/blog/model/SysRole.hbm.xml"/>
+        <mapping resource="com/blog/model/SysUserRole.hbm.xml"/>
+        <mapping resource="com/blog/model/SysRoleAuth.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

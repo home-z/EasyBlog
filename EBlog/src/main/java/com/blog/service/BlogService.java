@@ -1,4 +1,4 @@
-package com.blog.data;
+package com.blog.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,14 +9,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.blog.dao.BlogDAO;
 import com.blog.model.BllArticle;
+import com.blog.model.BllCommont;
 import com.blog.utils.DbAction;
 import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
 
 /*操作Blog类
  */
-public class BlogDAL {
+@Service
+public class BlogService {
+
+	@Autowired
+	private BlogDAO blogDAO;
 
 	/**
 	 * 查询文章
@@ -24,53 +33,12 @@ public class BlogDAL {
 	 * @throws ParseException
 	 */
 	public List<BllArticle> searchBlog(String vblogType, String vTitle, String vstartDate, String vendDate,
-			String vContent, String currentUserCode) throws SQLException, ParseException {
-		List<BllArticle> lstBlogs = new ArrayList<BllArticle>();
-
-		// 读取数据库
-		StringBuilder strBulder = new StringBuilder();
-		strBulder.append("SELECT * FROM bll_article b where ");
-
-		if (vblogType != "") {
-			strBulder.append(" b.TypeID = '");
-			strBulder.append(vblogType);
-			strBulder.append("' and ");
-		}
-
-		if (vTitle != "") {
-			strBulder.append(" b.Title like '%");
-			strBulder.append(vTitle);
-			strBulder.append("%' and ");
-		}
-		if (vstartDate != "") {
-			strBulder.append(" b.CreateTime >= date_format('");
-			strBulder.append(vstartDate);
-			strBulder.append(" 00:00:00"); // 提供更加精确的时间查找
-			strBulder.append("', '%Y-%m-%d %T') and ");
-		}
-		if (vendDate != "") {
-			strBulder.append(" b.CreateTime <= date_format('");
-			strBulder.append(vendDate);
-			strBulder.append(" 23:59:59"); // 提供更加精确的时间查找
-			strBulder.append("', '%Y-%m-%d %T') and ");
-		}
-		if (vContent != "") {
-			strBulder.append(" b.Content like '%");
-			strBulder.append(vContent);
-			strBulder.append("%' and ");
-		}
-
-		// 按照用户查询
-		strBulder.append(" CreateBy ='");
-		strBulder.append(currentUserCode);
-		strBulder.append("'");
-		lstBlogs = HibernateUtils.queryListParam(BllArticle.class, strBulder.toString(), null);
-
-		return lstBlogs;
+			String vContent, String currentUserCode) {
+		return blogDAO.searchBlog(vblogType, vTitle, vstartDate, vendDate, vContent, currentUserCode);
 	}
 
 	/**
-	 * 根据文章id，获取文章发布信息
+	 * 根据文章id，获取文章发布信息 TODO，这是给es搜索用的，待优化
 	 * 
 	 * @param articleID 文章id
 	 * @return
@@ -93,53 +61,15 @@ public class BlogDAL {
 	 * @return
 	 */
 	public ResultSet getBlogStatistics(String styleType, String startDate, String endDate) {
-		// TODO
-		/*
-		 * <option value="0">按天统计</option> <option value="1">按月统计</option>
-		 * <option value="2">按年统计</option>
-		 */
+		return blogDAO.getBlogStatistics(styleType, startDate, endDate);
+	}
 
-		// 按天统计
-		// select date_format(createtime,'%Y-%m-%d') postDate,count(id)
-		// postCount from bll_article
-		// where createtime>= date_format('2016-06-10 00:00:00', '%Y-%m-%d %T')
-		// and createtime<= date_format('2016-08-10 23:59:59', '%Y-%m-%d %T')
-		// group by date_format(createtime,'%Y-%m-%d')
-
-		// 按月统计
-		// select date_format(createtime,'%Y-%m') postDate,count(id) postCount
-		// from bll_article
-		// where createtime>= date_format('2016-06-10 00:00:00', '%Y-%m-%d %T')
-		// and createtime<= date_format('2016-08-10 23:59:59', '%Y-%m-%d %T')
-		// group by date_format(createtime,'%Y-%m')
-
-		// 按年统计
-		// select date_format(createtime,'%Y') postDate,count(id) postCount from
-		// bll_article
-		// where createtime>= date_format('2016-06-10 00:00:00', '%Y-%m-%d %T')
-		// and createtime<= date_format('2016-08-10 23:59:59', '%Y-%m-%d %T')
-		// group by date_format(createtime,'%Y')
-
-		String strSql = " select date_formatstyleType postDate,count(id) postCount from bll_article where createtime>= date_format('"
-				+ startDate + " 00:00:00', '%Y-%m-%d %T') and createtime<= date_format('" + endDate
-				+ " 23:59:59', '%Y-%m-%d %T') group by date_formatstyleType";
-		switch (styleType) {
-		case "0":
-			strSql = strSql.replace("date_formatstyleType", "date_format(createtime,'%Y-%m-%d')");
-			break;
-		case "1":
-			strSql = strSql.replace("date_formatstyleType", "date_format(createtime,'%Y-%m')");
-			break;
-		case "2":
-			strSql = strSql.replace("date_formatstyleType", "date_format(createtime,'%Y')");
-			break;
-		default:
-			strSql = strSql.replace("date_formatstyleType", "date_format(createtime,'%Y-%m-%d')");
-			break;
-		}
-
-		ResultSet rs = DbAction.getQuery(strSql);
-
-		return rs;
+	/**
+	 * 读取该文章的评论
+	 * @param articleID 文章id
+	 * @return
+	 */
+	public List<BllCommont> getDetailById(String articleID) {
+		return blogDAO.getDetailById(articleID);
 	}
 }

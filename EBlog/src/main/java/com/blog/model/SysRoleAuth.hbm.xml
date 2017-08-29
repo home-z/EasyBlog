@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.blog.model.SysRoleAuth" table="sys_roleauth" catalog="blogsystem" optimistic-lock="version">
+		<id name="id" type="string">
+			<column name="ID" length="60" />
+		</id>
+		<property name="roleId" type="java.lang.Integer">
+			<column name="RoleId" />
+		</property>
+		<property name="menuId" type="java.lang.Integer">
+			<column name="MenuId" />
+		</property>
+	</class>
+</hibernate-mapping>

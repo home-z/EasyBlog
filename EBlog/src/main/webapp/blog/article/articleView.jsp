@@ -3,44 +3,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>${artdto.title}-${artdto.createBy}-博客世界</title>
-<%@include file="/common/resinculde.jsp"%>
-<link href="${cssPath}/index.css" rel="stylesheet" type="text/css" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<style type="text/css">
-#top {
-	border: 1px solid #D8DFEA;
-	margin: 5px;
-}
-
-#logTitle {
-	font-size: 25px;
-	color: #E33E06;
-	width:900px;
-}
-
-#content {
-	margin-left: 20px;
-	margin-right: 20px;
-}
-
-#articleInfo {
-	font-size: 16px;
-	color: #333347;
-	line-height: 20px;
-}
-
-#title {
-	font-size: 24px;
-	line-height: 30px;
-}
-
-#postInfo {
-	color: #9D9095;
-	font-size: 12px;
-	margin-top: 5px;
-}
-</style>
+	<title>${artdto.title}-${artdto.createBy}-博客世界</title>
+	<%@include file="/common/resinculde.jsp"%>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link href="${cssPath}/articleView.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<!-- 	应该指向具体某人的博客内容，而不是所有的博客内容都共用这一个页面。或者显示每个人自己设置的页面

@@ -19,23 +19,22 @@ import org.hibernate.cfg.Configuration;
  */
 @SuppressWarnings("deprecation")
 public class HibernateUtils {
-	
-	private static SessionFactory sessionFactory;
+
+	private static SessionFactory sessionFactory;// 1、创建SessionFactory
 
 	static {
-		Configuration cfg = new Configuration().configure();// 读取配置文件
-		sessionFactory = cfg.buildSessionFactory();// 创建sessionfactory工厂
+		Configuration cfg = new Configuration().configure();// 2、读取配置文件
+		sessionFactory = cfg.buildSessionFactory();// 3、初始化sessionfactory工厂
 	}
 
 	public static Session getSession() {
-		return sessionFactory.openSession();// 创建并打开session
+		return sessionFactory.openSession();// 4、创建并打开session
 	}
 
 	/**
 	 * 新增
 	 * 
-	 * @param obj
-	 *            实体
+	 * @param obj 实体
 	 * @return 是否新增成功
 	 */
 	public static boolean add(Object obj) {
@@ -64,8 +63,7 @@ public class HibernateUtils {
 	/**
 	 * 更新
 	 * 
-	 * @param obj
-	 *            实体
+	 * @param obj 实体
 	 * @return 是否更新成功
 	 */
 	public static boolean update(Object obj) {
@@ -94,8 +92,7 @@ public class HibernateUtils {
 	/**
 	 * 删除
 	 * 
-	 * @param obj
-	 *            实体
+	 * @param obj 实体
 	 * @return 是否删除成功
 	 */
 	public static boolean delete(Object obj) {
@@ -124,10 +121,8 @@ public class HibernateUtils {
 	/**
 	 * 根据主键，查找数据
 	 * 
-	 * @param clazz
-	 *            实体名称
-	 * @param id
-	 *            实体id
+	 * @param clazz 实体名称
+	 * @param id 实体id，为hibernate文件中标注的为id的字段
 	 * @return 实体
 	 */
 	public static Object findById(Class clazz, Serializable id) {
@@ -149,12 +144,9 @@ public class HibernateUtils {
 	/**
 	 * 根据查询某个实体集合
 	 * 
-	 * @param clazz
-	 *            实体
-	 * @param sql
-	 *            sql语句
-	 * @param param
-	 *            不定参数
+	 * @param clazz 实体
+	 * @param sql sql语句
+	 * @param param 不定参数
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -183,8 +175,7 @@ public class HibernateUtils {
 	/**
 	 * 返回数据个数
 	 * 
-	 * @param sql
-	 *            sql语句
+	 * @param sql sql语句
 	 * @param pras
 	 * @return
 	 */
@@ -205,4 +196,25 @@ public class HibernateUtils {
 		}
 		return count;
 	}
+
+	/**
+	 * 执行update、delete类型sql语句
+	 * @param sql
+	 * @return
+	 */
+	public static boolean executeSql(String sql) {
+		boolean result = false;
+		Session session = getSession();
+		Transaction tx = session.beginTransaction();
+		Query query = session.createSQLQuery(sql);
+		int ret = query.executeUpdate();
+		if (ret > 0) {
+			result = true;
+		}
+		tx.commit();
+
+		return result;
+
+	}
+
 }

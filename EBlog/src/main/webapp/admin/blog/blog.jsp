@@ -2,15 +2,16 @@
 <%@include file="/common/context.jsp"%>
 <html>
 <head>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>文章内容管理</title>
-<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
-<link href="${jsPath}/jquery-easyui/themes/metro-blue/easyui.css" rel="stylesheet" type="text/css" />
-<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${jsPath}/jquery-1.7.2.min.js"></script>
-<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-<script src="${jsPath}/jquery-easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
+	<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>文章内容管理</title>
+	<%@include file="/common/resinculde.jsp"%>
+	<%@include file="/common/checklogin.jsp"%>
+	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
+	<link href="${jsPath}/jquery-easyui/themes/metro-blue/easyui.css" rel="stylesheet" type="text/css" />
+	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
+	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
+	<script src="${jsPath}/jquery-easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
 </head>
 <body>
 	<p>
@@ -55,6 +56,7 @@
 	function showSearchWin() {
 		$('#blogSearchWin').window('open');
 	}
+	
 	function myformatter(date) {
 		var y = date.getFullYear();
 		var m = date.getMonth() + 1;
@@ -62,6 +64,7 @@
 		return y + '-' + (m < 10 ? ('0' + m) : m) + '-'
 				+ (d < 10 ? ('0' + d) : d);
 	}
+	
 	function myparser(s) {
 		if (!s)
 			return new Date();
@@ -75,19 +78,17 @@
 			return new Date();
 		}
 	}
-	/* 	//解码及转换成链接
-	 function decodeValue(value, row, index) {
-	 return s = "<a href=\"bloginfo.jsp?blogid=" + row.BlogID + "\">"
-	 + decodeURI(value) + "</a>";
-	 } */
+
 	//解码及转换成链接
 	function decodeValue(value, row, index) {
 		return s = "<a href=\"${ctxPath}/BlogInfo/edit.do?blogid=" + row.BlogID
 				+ "\">" + decodeURI(value) + "</a>";
 	}
+	
 	function decodeTypeName(value, rec) {
 		return decodeURI(value);
 	}
+	
 	//查询
 	function search() {
 		$('#blogListDataGrid').datagrid('load', {
@@ -98,6 +99,7 @@
 			vContent : encodeURI($("#txtContent").val())
 		});
 	}
+	
 	//重置
 	function reset() {
 		$("#comblogType").combobox('setValue', '');
@@ -106,6 +108,7 @@
 		$('#endDate').datebox('setValue', "");
 		$("#txtContent").val("");
 	}
+	
 	//检测是否已经登录
 	function checkLogin() {
 		<c:choose>
@@ -114,6 +117,7 @@
 		</c:when>
 		</c:choose>
 	}
+	
 	function pagerFilter(data) {
 		if (typeof data.length == 'number' && typeof data.splice == 'function') { // is array
 			data = {
@@ -143,6 +147,7 @@
 		data.rows = (data.originalRows.slice(start, end));
 		return data;
 	}
+	
 	$(document).ready(function() {
 		checkLogin();
 		$('#blogListDataGrid').datagrid({
@@ -173,10 +178,12 @@
 				formatter : decodeTypeName
 			} ] ]
 		});
+		
 		$('#btnSearch').click(function() {
 			search();
 			$('#blogSearchWin').window('close');
 		});
+		
 		$('#btnReset').click(function() {
 			reset();
 		});

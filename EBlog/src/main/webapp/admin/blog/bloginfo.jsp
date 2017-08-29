@@ -2,20 +2,21 @@
 <%@include file="/common/context.jsp"%>
 <html>
 <head>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>文章新建/编辑</title>
-<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
-<link href="${jsPath}/jquery-easyui/themes/metro-blue/easyui.css" rel="stylesheet" type="text/css" />
-<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${jsPath}/jquery-1.7.2.min.js"></script>
-<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-<script src="${jsPath}/jquery-easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
-<link href="${jsPath}/kindeditor/themes/default/default.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="${jsPath}/kindeditor/plugins/code/prettify.css" />
-<script src="${jsPath}/kindeditor/kindeditor-min.js" type="text/javascript"></script>
-<script src="${jsPath}/kindeditor/lang/zh_CN.js" type="text/javascript"></script>
-<script src="${jsPath}/kindeditor/plugins/code/prettify.js"></script>
+	<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>文章新建/编辑</title>
+	<%@include file="/common/resinculde.jsp"%>
+	<%@include file="/common/checklogin.jsp"%>
+	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
+	<link href="${jsPath}/jquery-easyui/themes/metro-blue/easyui.css" rel="stylesheet" type="text/css" />
+	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
+	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
+	<script src="${jsPath}/jquery-easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
+	<link href="${jsPath}/kindeditor/themes/default/default.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="${jsPath}/kindeditor/plugins/code/prettify.css" />
+	<script src="${jsPath}/kindeditor/kindeditor-min.js" type="text/javascript"></script>
+	<script src="${jsPath}/kindeditor/lang/zh_CN.js" type="text/javascript"></script>
+	<script src="${jsPath}/kindeditor/plugins/code/prettify.js"></script>
 <style scoped="scoped">
 .tb {
 	width: 100%;

@@ -1,4 +1,4 @@
-package com.blog.data;
+package com.blog.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ import com.blog.utils.HibernateUtils;
  * @date：2017年5月4日 下午8:05:37
  * @description：博客搜索操作类，主要是导入已经有的数据库数据到ElasticSearch中
  */
-public class BlogSearchDAL {
+public class BlogSearchService {
 
 	// 将mysql中的博客导入到eulasticSearch中
 	public static void dumpBlogToES() throws Exception {
@@ -77,7 +77,7 @@ public class BlogSearchDAL {
 		List<Map<String, Object>> list = (List<Map<String, Object>>) mapResutl.get("rows");
 		for (Map<String, Object> mapRow : list) {
 			String articleId = (String) mapRow.get("id");
-			ResultSet rs = BlogDAL.getPostInfo(articleId);
+			ResultSet rs = BlogService.getPostInfo(articleId);
 			while (rs.next()) {
 				System.out.println(rs.getString("CreateTime"));
 				mapRow.put("createTime", rs.getString("CreateTime"));

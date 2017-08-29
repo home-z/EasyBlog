@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.blog.model.BllArticletype;
 import com.blog.model.BllFavuser;
 import com.blog.model.SysUsers;
+import com.blog.service.MyFavoriteUserService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
@@ -23,15 +25,17 @@ import com.blog.utils.JsonHelper;
 @Controller
 @RequestMapping("/FavoriteUser")
 public class MyFavoriteUser {
-	
+
+	@Autowired
+	private MyFavoriteUserService myFavoriteArticleService;
+
 	@RequestMapping("/getMyFavoriteUser")
 	@ResponseBody
 	public Map<String, Object> getMyFavoriteUser(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		// 获取当前登录的用户
 		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllFavuser> list = HibernateUtils.queryListParam(BllFavuser.class,
-				"select * from bll_favuser where user='" + currentUser.getUserCode() + "'");
+		List<BllFavuser> list = myFavoriteArticleService.getMyFavoriteUser(currentUser.getUserCode());
 
 		return JsonHelper.getModelMapforGrid(list);
 	}

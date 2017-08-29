@@ -3,7 +3,7 @@ package com.blog.utils;
 import javax.servlet.ServletContext;
 
 /**
- * 系统用到的常量
+ * 系统用到的常量标识名称，用于缓存等
  * 
  * @author tim
  *
@@ -16,14 +16,15 @@ public class CoreConsts {
 	 * @author tim
 	 * 
 	 */
-	public static class LANGS {
+	public static class Langs {
 		public static final String zh_CN = "zh_CN";
 		public static final String zh_TW = "zh_TW";
 		public static final String en_US = "en_US";
 	}
+	
 
 	/**
-	 * 运行时的一些常量
+	 * 运行时的一些常量，在用户登录时赋值
 	 * 
 	 * @author tim
 	 * 
@@ -40,6 +41,7 @@ public class CoreConsts {
 		public static ServletContext SERVLETCONTEXT;
 	}
 
+	
 	/**
 	 * 执行环境的key
 	 * 
@@ -53,6 +55,11 @@ public class CoreConsts {
 		public static final String CURRENT_USER = "Current_User";
 
 		/**
+		 * 当前登录用户的菜单
+		 */
+		public static final String CURRENT_MENU = "Current_MenuList";
+
+		/**
 		 * HttpSession
 		 */
 		public static final String CURRENT_SESSION = "Current_Session";
@@ -61,5 +68,15 @@ public class CoreConsts {
 		 * HttpServletRequest
 		 */
 		public static final String CURRENT_REQUEST = "Current_Request";
+
+		/**
+		 * 每页数量
+		 */
+		public static final int PAGESIZE = 10;
+
+		/**
+		 * 相似度阈值
+		 */
+		public static final double SIMILARTY = 60d;
 	}
 }

@@ -36,5 +36,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="/opt/apache-tomcat-7.0.69/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="/opt/apache-tomcat-7.0.69/lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/poi-3.7-20101029.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

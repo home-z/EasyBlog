@@ -1,6 +1,5 @@
 package com.blog.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.blog.model.BllArticle;
 import com.blog.model.BllCommont;
+import com.blog.service.MainIndexService;
+import com.blog.utils.CoreConsts;
 import com.blog.utils.DateBindController;
-import com.blog.utils.DbAction;
 import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
 
@@ -30,7 +30,11 @@ public class MainIndexController extends DateBindController {
 
 	private static Logger logger = Logger.getLogger(MainIndexController.class);
 
-	int pCount = 15;// 每页显示记录数目
+	//spring注解，表示需要自动装配，根据在spingmvc-confog.xml中配置的包，根据类型找对应的bean，bean需要用@注解
+	@Autowired
+	private MainIndexService mainIndexService;
+
+	int pCount = CoreConsts.ExecuteContextKeys.PAGESIZE;// 每页显示记录数目
 
 	// 生成分页按钮
 	@RequestMapping("/getArticlePage")
@@ -38,20 +42,13 @@ public class MainIndexController extends DateBindController {
 	public Map<String, Object> getArticlePage(HttpServletRequest request,
 			@RequestParam(value = "action", required = true) String action) {
 
-		// 获取程序部署路径，使用字符串${ctxPath}，传到前台还是${ctxPath}，不能获取路径
-		// String url = request.getContextPath() +
-		// "/MainIndex/getallArticle.do";
 		String url = request.getContextPath() + action;
-		String strSql = "select count(*) from bll_article ";
+		boolean isType = url.contains("typeid=") ? true : false;// 判断是否是点击了分类，分类则url带有类别参数
 
-		boolean isType = false;// 判断是否是点击了分类，分类则带有类别参数
-		if (url.contains("typeid=")) {
-			strSql = "select count(*) from bll_article where typeid=" + url.split("=")[1];
-			isType = true;
-		}
-
-		int toalCount = (int) HibernateUtils.queryOne(strSql);// 总数
+		int toalCount = mainIndexService.getArticlePage(url);// 总数
 		int page = (toalCount % pCount == 0) ? (toalCount / pCount) : (toalCount / pCount + 1);// 总页数
+
+		// 拼接分页html
 		StringBuffer strBPageHtml = new StringBuffer();
 		strBPageHtml.append("<p>");
 		strBPageHtml.append("共");
@@ -86,13 +83,10 @@ public class MainIndexController extends DateBindController {
 	@RequestMapping("/getCategory")
 	@ResponseBody
 	public Map<String, Object> getCategory(HttpServletRequest request) throws SQLException {
-
-		String strSql = "select b.id typeid,b.typename,count(typeid) countn from bll_article a right join bll_articletype b on a.typeid=b.id group by b.id,b.typename order by countn desc";
-
 		StringBuffer strBCategory = new StringBuffer();
 		strBCategory.append("<ul>");
 
-		ResultSet rs = DbAction.getQuery(strSql);
+		ResultSet rs = mainIndexService.getCategory();
 		while (rs.next()) {
 			strBCategory.append("<li><a onClick='addTypeMenu(\"");
 			strBCategory.append(rs.getString("typename"));
@@ -118,47 +112,19 @@ public class MainIndexController extends DateBindController {
 	public Map<String, Object> getArticleByType(Model model,
 			@RequestParam(value = "typeid", required = true) String typeid,
 			@RequestParam(value = "page", required = true) String page) {
-		int pageNum = 1;// 当前页
-		if (!page.isEmpty() && page != "") {
-			pageNum = Integer.parseInt(page);
-		}
-		String pageSql = " limit " + (pageNum - 1) * pCount + "," + pCount;
 
-		List<BllArticle> list = HibernateUtils.queryListParam(BllArticle.class,
-				"select * from bll_article where typeid=" + typeid + pageSql);
-
-		List<BllArticle> newList = removeArtilceHtml(list);
+		List<BllArticle> newList = removeArtilceHtml(mainIndexService.getArticleByType(typeid, page));
 		model.addAttribute("dto", newList);
 
 		return JsonHelper.getModelMap(newList);
 	}
 
-	/*
-	 * // 读取所有的文章，按照时间先后顺序排列
-	 * 
-	 * @RequestMapping("/getallArticle")
-	 * 
-	 * @ResponseBody public Map<String, Object> getallArticleList() {
-	 * List<BllArticle> list = HibernateUtils.queryListParam(BllArticle.class,
-	 * "select * from bll_article order by CreateTime desc"); List<BllArticle>
-	 * newList = removeArtilceHtml(list); return
-	 * JsonHelper.getModelMap(newList); }
-	 */
-
 	// 分页读取文章，按照时间先后顺序排列
 	@RequestMapping("/getallArticle")
 	@ResponseBody
 	public Map<String, Object> getallArticleList(@RequestParam(value = "page", required = true) String page) {
-		int pageNum = 1;// 当前页
-		if (!page.isEmpty() && page != "") {
-			pageNum = Integer.parseInt(page);
-		}
-		String pageSql = " limit " + (pageNum - 1) * pCount + "," + pCount;
+		List<BllArticle> newList = removeArtilceHtml(mainIndexService.getArticleBy(0, page));
 
-		List<BllArticle> list = HibernateUtils.queryListParam(BllArticle.class,
-				"select * from bll_article order by CreateTime desc" + pageSql);
-
-		List<BllArticle> newList = removeArtilceHtml(list);
 		return JsonHelper.getModelMap(newList);
 	}
 
@@ -166,16 +132,8 @@ public class MainIndexController extends DateBindController {
 	@RequestMapping("/getArticleRead")
 	@ResponseBody
 	public Map<String, Object> getArticleRead(@RequestParam(value = "page", required = true) String page) {
-		int pageNum = 1;// 当前页
-		if (!page.isEmpty() && page != "") {
-			pageNum = Integer.parseInt(page);
-		}
-		String pageSql = " limit " + (pageNum - 1) * pCount + "," + pCount;
+		List<BllArticle> newList = removeArtilceHtml(mainIndexService.getArticleBy(1, page));
 
-		List<BllArticle> list = HibernateUtils.queryListParam(BllArticle.class,
-				"select * from bll_article order by ReadCount desc" + pageSql);
-
-		List<BllArticle> newList = removeArtilceHtml(list);
 		return JsonHelper.getModelMap(newList);
 	}
 
@@ -183,16 +141,8 @@ public class MainIndexController extends DateBindController {
 	@RequestMapping("/getArticleCommit")
 	@ResponseBody
 	public Map<String, Object> getArticleCommit(@RequestParam(value = "page", required = true) String page) {
-		int pageNum = 1;// 当前页
-		if (!page.isEmpty() && page != "") {
-			pageNum = Integer.parseInt(page);
-		}
-		String pageSql = " limit " + (pageNum - 1) * pCount + "," + pCount;
+		List<BllArticle> newList = removeArtilceHtml(mainIndexService.getArticleBy(2, page));
 
-		List<BllArticle> list = HibernateUtils.queryListParam(BllArticle.class,
-				"select * from bll_article order by ComCount desc" + pageSql);
-
-		List<BllArticle> newList = removeArtilceHtml(list);
 		return JsonHelper.getModelMap(newList);
 	}
 
@@ -200,16 +150,8 @@ public class MainIndexController extends DateBindController {
 	@RequestMapping("/getArticleSuggest")
 	@ResponseBody
 	public Map<String, Object> getArticleSuggest(@RequestParam(value = "page", required = true) String page) {
-		int pageNum = 1;// 当前页
-		if (!page.isEmpty() && page != "") {
-			pageNum = Integer.parseInt(page);
-		}
-		String pageSql = " limit " + (pageNum - 1) * pCount + "," + pCount;
+		List<BllArticle> newList = removeArtilceHtml(mainIndexService.getArticleBy(3, page));
 
-		List<BllArticle> list = HibernateUtils.queryListParam(BllArticle.class,
-				"select * from bll_article order by SuggestCount desc" + pageSql);
-
-		List<BllArticle> newList = removeArtilceHtml(list);
 		return JsonHelper.getModelMap(newList);
 	}
 
@@ -217,7 +159,7 @@ public class MainIndexController extends DateBindController {
 	@RequestMapping("/getSingleComm")
 	@ResponseBody
 	public Map<String, Object> getSingleComm(String id) {
-		int count = (int) HibernateUtils.queryOne("select count(*) from bll_commont where ArticleID='" + id + "'");
+		int count = mainIndexService.getSingleComm(id);
 
 		return JsonHelper.getModel(count);
 	}
@@ -230,23 +172,19 @@ public class MainIndexController extends DateBindController {
 		model.addAttribute("artdto", article);
 
 		// 读取该文章的评论
-		List<BllCommont> comList = HibernateUtils.queryListParam(BllCommont.class,
-				"select * from bll_commont where ArticleID='" + id + "' order by comtime asc");
+		List<BllCommont> comList = mainIndexService.getDetailById(id);
 		model.addAttribute("comList", comList);
 
-		return "blog/article/view";
+		return "blog/article/articleView";// 跳转到该用户文章浏览页
 	}
 
 	// 读取该用户的所有博客
 	@RequestMapping("/getArticleByCreateBy")
 	public String getArticleByCreateBy(Model model, @RequestParam(value = "user", required = true) String user) {
-		List<BllArticle> list = HibernateUtils.queryListParam(BllArticle.class,
-				"select * from bll_article where createBy='" + user + "' order by CreateTime desc");
-
-		List<BllArticle> newList = removeArtilceHtml(list);
+		List<BllArticle> newList = removeArtilceHtml(mainIndexService.getArticleByCreateBy(user));
 		model.addAttribute("dto", newList);
 
-		return "blog/article/viewlistuser";
+		return "blog/article/articleViewlistuser";// 跳转到该用户页面，显示该用户所有文章
 	}
 
 	/**
@@ -270,6 +208,7 @@ public class MainIndexController extends DateBindController {
 		} else {
 			return articles;
 		}
+
 		return newarticle;
 	}
 }

@@ -1,4 +1,7 @@
 package com.blog.model;
+
+import java.util.Date;
+
 // Generated 2017-4-2 12:37:59 by Hibernate Tools 5.2.1.Final
 
 /**
@@ -6,11 +9,17 @@ package com.blog.model;
  */
 public class SysUsers implements java.io.Serializable {
 
-	private String userCode;
 	private String id;
+	private String userCode;
 	private String userPassword;
 	private String userName;
 	private String email;
+	private String photoPath;
+	private String photoFingerPrint;
+	private Date createTime;
+	private Date modifiedTime;
+	private String creator;
+	private String modifiedtor;
 
 	public SysUsers() {
 	}
@@ -67,4 +76,51 @@ public class SysUsers implements java.io.Serializable {
 		this.email = email;
 	}
 
+	public String getPhotoPath() {
+		return photoPath;
+	}
+
+	public void setPhotoPath(String photoPath) {
+		this.photoPath = photoPath;
+	}
+
+	public String getPhotoFingerPrint() {
+		return photoFingerPrint;
+	}
+
+	public void setPhotoFingerPrint(String photoFingerPrint) {
+		this.photoFingerPrint = photoFingerPrint;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getModifiedTime() {
+		return modifiedTime;
+	}
+
+	public void setModifiedTime(Date modifiedTime) {
+		this.modifiedTime = modifiedTime;
+	}
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
+	public String getModifiedtor() {
+		return modifiedtor;
+	}
+
+	public void setModifiedtor(String modifiedtor) {
+		this.modifiedtor = modifiedtor;
+	}
 }

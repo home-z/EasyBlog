@@ -20,16 +20,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.data.BlogDAL;
 import com.blog.model.BllArticle;
 import com.blog.model.BllCommont;
 import com.blog.model.SysUsers;
+import com.blog.service.BlogService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.ElasticSearchUtils;
 import com.blog.utils.HibernateUtils;
@@ -40,6 +41,10 @@ import com.blog.utils.JsonHelper;
 public class BlogInfoController {
 
 	private static Logger logger = Logger.getLogger(BlogInfoController.class);
+
+	// 调用DAL层
+	@Autowired
+	private BlogService blogService;
 
 	@RequestMapping("/searchBlog")
 	@ResponseBody // 将返回值ResultInfo实体转化为json
@@ -54,17 +59,9 @@ public class BlogInfoController {
 		String vendDate = request.getParameter("vendDate") == null ? "" : request.getParameter("vendDate");
 		String vContent = request.getParameter("vContent") == null ? "" : request.getParameter("vContent");
 
-		// 调用DAL层
-		BlogDAL blogDAL = new BlogDAL();
-
 		List<BllArticle> blogs = new ArrayList<BllArticle>();
-		try {
-			blogs = blogDAL.searchBlog(vblogType, URLDecoder.decode(vTitle, "UTF-8"), vstartDate, vendDate,
-					URLDecoder.decode(vContent, "UTF-8"), currentUser.getUserCode());
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
+		blogs = blogService.searchBlog(vblogType, URLDecoder.decode(vTitle, "UTF-8"), vstartDate, vendDate,
+				URLDecoder.decode(vContent, "UTF-8"), currentUser.getUserCode());
 
 		// 拼接Json字符串
 		PrintWriter out = response.getWriter();
@@ -100,9 +97,7 @@ public class BlogInfoController {
 		model.addAttribute("artdto", article);
 
 		// 读取该文章的评论
-		List<BllCommont> comList = HibernateUtils.queryListParam(BllCommont.class,
-				"select * from bll_commont where ArticleID='" + blogid + "' order by comtime asc");
-		model.addAttribute("comList", comList);
+		List<BllCommont> comList = blogService.getDetailById(blogid);
 
 		return "admin/blog/bloginfo";
 	}
@@ -192,8 +187,7 @@ public class BlogInfoController {
 		String strPost = "";
 
 		// 调用DAL层
-		BlogDAL blogDAL = new BlogDAL();
-		ResultSet rs = blogDAL.getBlogStatistics(styleType, startDate, endDate);
+		ResultSet rs = blogService.getBlogStatistics(styleType, startDate, endDate);
 		while (rs.next()) {
 			strBlogPost.append("{");
 			strBlogPost.append("\"group\":");

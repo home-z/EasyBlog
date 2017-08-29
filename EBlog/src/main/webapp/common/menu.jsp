@@ -1,21 +1,19 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="/WEB-INF/tld/c.tld"%>
 <link href="${cssPath}/gotoTop.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${jsPath}/gotoTop.js"></script>
+<script type="text/javascript" src="${jsPath}/tools/gotoTop.js"></script>
 <script type="text/javascript">
 	// 定义菜单栏离页面顶部的距离，默认为100    
 	var divOffsetTop = 100;
 	//获取已经登录的用户名称
 	function getCurrentUserName() {
 		<c:choose>
-		<c:when test="${empty Current_User}">
-		$("#loginInfo").html("<a href='${ctxPath}/Login/loginpage.do'>登录</a>");
-		</c:when>
-		<c:otherwise>
-		$("#loginInfo")
-				.html(
-						"<a href='${ctxPath}/admin/admin.jsp'>${Current_User.userName}</a> <a href='${ctxPath}/admin/logout.jsp'>注销</a>");
-		</c:otherwise>
+			<c:when test="${empty Current_User}">
+				$("#loginInfo").html("<a href='${ctxPath}/Login/loginpage.do'>登录</a>");//未登录情况
+			</c:when>
+			<c:otherwise>
+				$("#loginInfo").html("<a href='${ctxPath}/admin/admin.jsp'>${Current_User.userName}</a> <a href='${ctxPath}/Login/logout.do'>注销</a>");
+			</c:otherwise>
 		</c:choose>
 	}
 
@@ -74,10 +72,10 @@
 
 	<div id="divMenu">
 		<ul>
-			<li class="adv_active"><a id="allArticle" href="javascript:void(0);" onclick="getallArticle()">首页</a></li>
-			<li><a id="articleRead" href="javascript:void(0);" onclick="getArticleRead()">热读</a></li>
-			<li><a id="articleSuggest" href="javascript:void(0);" onclick="getArticleSuggest()">推荐</a></li>
-			<li><a id="articleCommit" href="javascript:void(0);" onclick="getArticleCommit()">热评</a></li>
+			<li class="adv_active"><a id="allArticle" href="javascript:void(0);" onclick="getArticleByMenu('getallArticle')">首页</a></li>
+			<li><a id="articleRead" href="javascript:void(0);" onclick="getArticleByMenu('getArticleRead')">热读</a></li>
+			<li><a id="articleSuggest" href="javascript:void(0);" onclick="getArticleByMenu('getArticleSuggest')">推荐</a></li>
+			<li><a id="articleCommit" href="javascript:void(0);" onclick="getArticleByMenu('getArticleCommit')">热评</a></li>
 		</ul>
 	</div>
 

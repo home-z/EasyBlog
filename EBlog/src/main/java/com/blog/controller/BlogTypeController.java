@@ -7,12 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.blog.model.BllArticletype;
 import com.blog.model.SysUsers;
+import com.blog.service.BlogService;
+import com.blog.service.BlogTypeService;
 import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
 
@@ -25,6 +28,9 @@ import com.blog.utils.CoreConsts;
 @RequestMapping("/BlogType")
 public class BlogTypeController {
 
+	@Autowired
+	private BlogTypeService blogTypeService;
+
 	/**
 	 * 获取用户下的博客分类
 	 * 
@@ -36,8 +42,7 @@ public class BlogTypeController {
 	public void getBlogTypeByUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 获取当前登录的用户
 		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllArticletype> list = HibernateUtils.queryListParam(BllArticletype.class,
-				"select * from bll_articletype where userid='" + currentUser.getId() + "'");
+		List<BllArticletype> typeList =blogTypeService.getTypeListByUser(currentUser.getId());
 
 		// 拼接Json字符串
 		PrintWriter out = response.getWriter();
@@ -45,7 +50,7 @@ public class BlogTypeController {
 
 		strOut.append("[");
 
-		for (BllArticletype blogtype : list) {
+		for (BllArticletype blogtype : typeList) {
 			strOut.append("{");
 			strOut.append("\"id\":\"" + blogtype.getId() + "\",");
 			strOut.append("\"text\":\"" + blogtype.getTypeName().toString() + "\"");
@@ -64,10 +69,9 @@ public class BlogTypeController {
 	public Map<String, Object> getBlogTypeListByUser(HttpServletRequest request) {
 		// 获取当前登录的用户
 		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllArticletype> list = HibernateUtils.queryListParam(BllArticletype.class,
-				"select * from bll_articletype where userid='" + currentUser.getId() + "'");
+		List<BllArticletype> typeList =blogTypeService.getTypeListByUser(currentUser.getId());
 
-		return JsonHelper.getModelMapforGrid(list);
+		return JsonHelper.getModelMapforGrid(typeList);
 	}
 
 	@RequestMapping("/addBlogType")

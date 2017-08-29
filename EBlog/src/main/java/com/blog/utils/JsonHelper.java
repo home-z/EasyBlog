@@ -61,6 +61,24 @@ public class JsonHelper {
 
 		return modelMap;
 	}
+	
+	/**
+	 * 返回是否成功结果以及详细信息
+	 * 
+	 * @param isSucess
+	 * @return
+	 */
+	public static Map<String, String> getSucessResult(boolean isSucess,String content) {
+		Map<String, String> modelMap = new HashMap<String, String>(2);
+		if (isSucess) {
+			modelMap.put("success", "true");
+		} else {
+			modelMap.put("success", "false");
+		}
+		modelMap.put("content", content);
+
+		return modelMap;
+	}
 
 	/**
 	 * 将string转换成listBean
