@@ -9,10 +9,10 @@
 	function getCurrentUserName() {
 		<c:choose>
 			<c:when test="${empty Current_User}">
-				$("#loginInfo").html("<a href='${ctxPath}/Login/loginpage.do'>登录</a>");//未登录情况
+				$("#loginInfo").html("<a href='${ctxPath}/Login/loginpage.do'><spring:message code='login'/></a>");//未登录情况
 			</c:when>
 			<c:otherwise>
-				$("#loginInfo").html("<a href='${ctxPath}/admin/admin.jsp'>${Current_User.userName}</a> <a href='${ctxPath}/Login/logout.do'>注销</a>");
+				$("#loginInfo").html("<a href='${ctxPath}/admin/admin.jsp'>${Current_User.userName}</a> <a href='${ctxPath}/Login/logout.do'><spring:message code='logout'/></a>");
 			</c:otherwise>
 		</c:choose>
 	}
@@ -60,22 +60,34 @@
 	<div id="top">
 		<table width="100%">
 			<tr>
-				<td><img src="${imgPath}/log.jpg"></td>
-				<td><div id="logTitle">博客世界</div></td>
-				<td><div id="midSearch">
-						<input type="text" id="txtKeyword" /> <span><a id="btnSearch" href="#" onclick="searchKeyword()">搜索一下</a></span>
-					</div></td>
-				<td style="text-align: right"><span id="loginInfo"></span>&nbsp; <a href="admin/register.jsp">注册</a></td>
+				<td>
+					<img src="${imgPath}/log.jpg">
+				</td>
+				<td>
+					<div id="logTitle"><spring:message code="blogworld"/></div>
+				</td>
+				<td>
+					<div id="midSearch">
+						<input type="text" id="txtKeyword" /> <span><a id="btnSearch" href="#" onclick="searchKeyword()"><spring:message code="search"/></a></span>
+					</div>
+				</td>
+				<td style="text-align: right">
+					<a href="${ctxPath}/Global/changeLang.do?from=index&langType=zh" >简体中文</a> 
+                    <a href="${ctxPath}/Global/changeLang.do?from=index&langType=en" >English</a>
+                 </td>
+				<td style="text-align: right">
+					<span id="loginInfo"></span>&nbsp; <a href="admin/register.jsp"><spring:message code="register"/></a>
+				</td>
 			</tr>
 		</table>
 	</div>
 
 	<div id="divMenu">
 		<ul>
-			<li class="adv_active"><a id="allArticle" href="javascript:void(0);" onclick="getArticleByMenu('getallArticle')">首页</a></li>
-			<li><a id="articleRead" href="javascript:void(0);" onclick="getArticleByMenu('getArticleRead')">热读</a></li>
-			<li><a id="articleSuggest" href="javascript:void(0);" onclick="getArticleByMenu('getArticleSuggest')">推荐</a></li>
-			<li><a id="articleCommit" href="javascript:void(0);" onclick="getArticleByMenu('getArticleCommit')">热评</a></li>
+			<li class="adv_active"><a id="allArticle" href="javascript:void(0);" onclick="getArticleByMenu('getallArticle')"><spring:message code="index"/></a></li>
+			<li><a id="articleRead" href="javascript:void(0);" onclick="getArticleByMenu('getArticleRead')"><spring:message code="hotread"/></a></li>
+			<li><a id="articleSuggest" href="javascript:void(0);" onclick="getArticleByMenu('getArticleSuggest')"><spring:message code="suggest"/></a></li>
+			<li><a id="articleCommit" href="javascript:void(0);" onclick="getArticleByMenu('getArticleCommit')"><spring:message code="hotcommit"/></a></li>
 		</ul>
 	</div>
 

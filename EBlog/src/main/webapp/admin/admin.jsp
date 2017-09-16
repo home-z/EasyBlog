@@ -1,17 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="/WEB-INF/tld/spring.tld" prefix="spring" %>
 <%@include file="/common/context.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>博客世界-后台管理</title>
+	<title><spring:message code="blogworld"/>-<spring:message code="management"/></title>
 	<%@include file="/common/resinculde.jsp"%>
 	<%@include file="/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link href="${jsPath}/jquery-easyui/themes/metro-blue/easyui.css" rel="stylesheet" type="text/css"  id="swicth-style" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
+	<script src="${jsPath}/jquery-easyui/local/easyui-lang-${sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']}.js" type="text/javascript"></script>
 	<script src="${jsPath}/tools/jquery.cookie.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//点击菜单，打开页面，以tab形式打开。如果已经打开，则选中该tab
@@ -106,7 +107,7 @@
 		}
 		
 		//绑定右键菜单事件
-		function tabCloseEven() {
+		function tabCloseEvent() {
 			//刷新
 			$('#mm-tabupdate').click(function(){
 				var currTab = $('#tabContainer').tabs('getSelected');
@@ -132,7 +133,7 @@
 			$('#mm-tabcloseall').click(function(){
 				$('.tabs-inner span').each(function(i,n){
 					var t = $(n).text();
-					if(t != '欢迎') {
+					if(t != '<spring:message code="welcome"/>') {
 						$('#tabContainer').tabs('close',t);
 					}
 				});
@@ -145,7 +146,7 @@
 				if(prevall.length>0){
 					prevall.each(function(i,n){
 						var t=$('a:eq(0) span',$(n)).text();
-						if(t != '欢迎') {
+						if(t != '<spring:message code="welcome"/>') {
 							$('#tabContainer').tabs('close',t);
 						}
 					});
@@ -154,7 +155,7 @@
 				if(nextall.length>0) {
 					nextall.each(function(i,n){
 						var t=$('a:eq(0) span',$(n)).text();
-						if(t != '欢迎') {
+						if(t != '<spring:message code="welcome"/>') {
 							$('#tabContainer').tabs('close',t);
 						}
 					});
@@ -166,12 +167,12 @@
 			$('#mm-tabcloseright').click(function(){
 				var nextall = $('.tabs-selected').nextAll();
 				if(nextall.length==0){
-					alert('后边没有啦~~');
+					alert('<spring:message code="theend"/>');
 					return false;
 				}
 				nextall.each(function(i,n){
 					var t=$('a:eq(0) span',$(n)).text();
-					if(t != '欢迎') {
+					if(t != '<spring:message code="welcome"/>') {
 						$('#tabContainer').tabs('close',t);
 					}
 				});
@@ -182,12 +183,12 @@
 			$('#mm-tabcloseleft').click(function(){
 				var prevall = $('.tabs-selected').prevAll();
 				if(prevall.length==0){
-					alert('到头了，前边没有啦~~');
+					alert('<spring:message code="theend"/>');
 					return false;
 				}
 				prevall.each(function(i,n){
 					var t=$('a:eq(0) span',$(n)).text();
-					if(t != '欢迎') {
+					if(t != '<spring:message code="welcome"/>') {
 						$('#tabContainer').tabs('close',t);
 					}
 				});
@@ -195,8 +196,16 @@
 			});
 		}
 		
+	    //语言切换
+	    //调用控制器，修改session中存放的语种，重新刷新页面，回到起始页
+	    //各个页面加载语言根据session中记录语种
+		function changeLang(lang) {
+ 			location.href = "${ctxPath}/Global/changeLang.do?from=admin&langType="+lang;
+ 			$.removeCookie('easyuiTheme');
+		}
+		
 		$(document).ready(function() {
-			tabCloseEven();
+			tabCloseEvent();
 			
 			//切换皮肤
 			var themes = {
@@ -204,12 +213,12 @@
 					'metro-green' : '${jsPath}/jquery-easyui/themes/metro-green/easyui.css',
 					'metro-red' : '${jsPath}/jquery-easyui/themes/metro-red/easyui.css'
 				};
-			
-			$.cookie('easyuiTheme','metro-blue');//主题记录在cookie中，默认为metro-blue
+
 			$('#uiSkinNav').combobox({
 				onSelect: function(rec){
+					$.removeCookie('easyuiTheme');
 					var theme = rec.value;
-					$.cookie('easyuiTheme',theme);//主题记录在cookie中，其他新增加的页面读取cookie，加载样式
+					$.cookie('easyuiTheme',theme);//主题记录在cookie中，其他新增加的页面读取cookie，加载样式。加载时判断为null,则加载默认为metro-blue
 					
 					$('#swicth-style').attr('href', themes[theme]);//当前页面换皮肤
 					$('#swicth-style',$("iframe").contents()).attr('href', themes[theme]);//设置当前其他子页面主题
@@ -224,26 +233,28 @@
 			<table cellpadding="0" cellspacing="0" style="width: 100%;">
 				<tr>
 					<td style="height: 35px;width: 25%;">
-						<span style="color: #EFD33E; font-size: 20px; font-weight: bold; text-decoration: none">博客世界-后台管理</span> 
-						<span style="color: #fff; font-size: 16px;">技术改变世界！</span>
+						<span style="color: #EFD33E; font-size: 20px; font-weight: bold; text-decoration: none"><spring:message code="blogworld"/>-<spring:message code="management"/></span> 
+						<span style="color: #fff; font-size: 16px;"><spring:message code="technology"/></span>
 					</td>
-					<td style="height: 35px;width: 40%;"></td>
+					<td style="height: 35px;width: 30%;"></td>
 					<td style="font-size: 14px;width: 60%;">
-						<span style="color: #E6EAD5;"  id="currentuser">欢迎您：${Current_User.userName}</span> 
-						<a style="color: #fff; text-decoration: none" href="${ctxPath}/index.jsp">返回主页</a> 
-						<a style="color: #fff; text-decoration: none" href="${ctxPath}/Login/logout.do">退出登录</a>
-						<span style="color: #E6EAD5;">切换皮肤：</span>
+						<span style="color: #E6EAD5;"  id="currentuser"><spring:message code="welcomeyou"/>：${Current_User.userName}</span> 
+						<a style="color: #fff; text-decoration: none" href="${ctxPath}/index.jsp"><spring:message code="index"/></a> 
+						<a style="color: #fff; text-decoration: none" href="${ctxPath}/Login/logout.do"><spring:message code="logout"/></a>
+						<span style="color: #E6EAD5;"><spring:message code="changeTheme"/>：</span>
 						<select id="uiSkinNav" class="easyui-combobox" style="width:100px;">
-        					<option value="metro-blue">蓝色</option>
-       				 		<option value="metro-green">绿色</option>
-        					<option value="metro-red">红色</option>
+        					<option value="metro-blue"><spring:message code="blue"/></option>
+       				 		<option value="metro-green"><spring:message code="green"/></option>
+        					<option value="metro-red"><spring:message code="red"/></option>
     					</select>
+    				    <a style="color: #fff; text-decoration: none" href="#" onclick="changeLang('zh')" >简体中文</a> 
+                        <a style="color: #fff; text-decoration: none" href="#" onclick="changeLang('en')" >English</a>
 					</td>
 				</tr>
 			</table>
 		</div>
 	</div>
-	<div  region="west" split="true" title="菜单" style="width: 150px; padding: 5px;">
+	<div  region="west" split="true" title="<spring:message code="menu"/>" style="width: 150px; padding: 5px;">
 		<ul id="menus" class="easyui-tree">
 			<c:forEach items="${Current_MenuList}" var="menu">
 				<li iconCls="icon-base"><span>${menu.root.menuName}</span>
@@ -260,26 +271,26 @@
 	</div>
 	<div region="center">
 		<div id="tabContainer" class="easyui-tabs" fit="true" border="false" plain="true">
-			<div title="欢迎" href="${ctxPath}/admin/welcome.jsp"></div>
+			<div title="<spring:message code="welcome"/>" href="${ctxPath}/admin/welcome.jsp"></div>
 		</div>
 	</div>
 	<div region="south" style="overflow: hidden;">
 		<table style="font-size: 12px; width: 100%;">
 			<tr>
-				<td style="width: 50%;"><span id="status">就绪</span></td>
-				<td style="width: 50%;"><span style="width: 100px; margin: 0 auto 0 auto;">版权所有：Tim</span></td>
+				<td style="width: 50%;"><span id="status"><spring:message code="prepared"/></span></td>
+				<td style="width: 50%;"><span style="width: 100px; margin: 0 auto 0 auto;"><spring:message code="rightAll"/>：Tim</span></td>
 			</tr>
 		</table>
 	</div>
 	
 	<div id="mm" class="easyui-menu cs-tab-menu">
-		<div id="mm-tabupdate">刷新</div>
+		<div id="mm-tabupdate"><spring:message code="refresh"/></div>
 		<div class="menu-sep"></div>
-		<div id="mm-tabclose">关闭</div>
-		<div id="mm-tabcloseother">关闭其他</div>
-		<div id="mm-tabcloseall">关闭全部</div>
-		<div id="mm-tabcloseleft">关闭左侧全部</div>
-		<div id="mm-tabcloseright">关闭右侧全部</div>
+		<div id="mm-tabclose"><spring:message code="close"/></div>
+		<div id="mm-tabcloseother"><spring:message code="closeOthers"/></div>
+		<div id="mm-tabcloseall"><spring:message code="closeAll"/></div>
+		<div id="mm-tabcloseleft"><spring:message code="closeLeft"/></div>
+		<div id="mm-tabcloseright"><spring:message code="closeRight"/></div>
 	</div>
 </body>
 </html>

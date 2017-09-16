@@ -1,8 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="/WEB-INF/tld/spring.tld" prefix="spring" %>
 <%@include file="/common/context.jsp"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>系统用户管理</title>
 	<%@include file="/common/resinculde.jsp"%>
@@ -10,14 +11,14 @@
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
+	<script src="${jsPath}/jquery-easyui/local/easyui-lang-${sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']}.js" type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
  id="swicth-style" />
 </head>
 <body>
 	<div style="height: 100%; width: 100%;">
 		<div id="tb" style="height: auto">
-			<a href="usersEdit.jsp" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteUser()">刪除</a> <a href="javascript:void(0)" class="easyui-linkbutton"
+			<a href="usersEdit.jsp" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"><spring:message code="add"/></a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteUser()">刪除</a> <a href="javascript:void(0)" class="easyui-linkbutton"
 				data-options="iconCls:'icon-search',plain:true" onclick="showSearchWin()">查找</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-downlevel',plain:true" onclick="exportUser()">导出</a>
 		</div>
 		<table id="usersDataGrid"></table>
@@ -118,37 +119,16 @@
 			for (var i = 0; i < checkedRows.length; i++) {
 				selectedIds.push(checkedRows[i].id);//获取用户id
 			}
-			//调用导出
-			var param = {
-				"userId" : selectedIds.join(",")
-			//数组转字符串，以“,”分割
-			};
-			$.ajax({
-				type : 'POST',
-				contentType : 'application/json',
-				url : '${ctxPath}/User/exportUser.do',
-				dataType : 'json',
-				data : param,
-				error : function() {
-					$.messager.alert("错误", "导出用户发生网络异常！", "error");
-				}
-			})
+			
+			//调用导出。用户id以“,”分割
+			window.location.href="${ctxPath}/User/exportUser.do?userId=" + selectedIds.join(",");
 		} else {
 			$.messager.confirm('确认', '未选择要导出的记录，则会导出全部记录。确定导出全部记录？',
 					function(r) {
 						if (r) {
-							$.ajax({
-								type : 'GET',
-								contentType : 'application/json',
-								url : '${ctxPath}/User/exportAllUser.do',
-								dataType : 'json',
-								data : param,
-								error : function() {
-									$.messager.alert("错误", "导出用户发生网络异常！","error");
-								}
-							})
+							window.location.href="${ctxPath}/User/exportAllUser.do";
 						}
-					});
+			});
 		}
 	}
 
@@ -203,7 +183,7 @@
 							checkbox : true,
 						},
 						{
-							field : 'userName',
+							field : 'userCode',
 							title : '用户名',
 							width : 100,
 							align : 'center',
@@ -211,13 +191,13 @@
 								return "<a href='${ctxPath}/User/editUser.do?userId="
 										+ row.id
 										+ "'>"
-										+ row.userName
+										+ row.userCode
 										+ "</a>";
 							}
 						},
 						{
-							field : 'userCode',
-							title : '登录名',
+							field : 'userName',
+							title : '姓名',
 							width : 100,
 							align : 'center'
 						},

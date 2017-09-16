@@ -12,7 +12,7 @@
  id="swicth-style" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
+	<script src="${jsPath}/jquery-easyui/local/easyui-lang-zh_CN.js" type="text/javascript"></script>
 	<link href="${jsPath}/kindeditor/themes/default/default.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="${jsPath}/kindeditor/plugins/code/prettify.css" />
 	<script src="${jsPath}/kindeditor/kindeditor-min.js" type="text/javascript"></script>

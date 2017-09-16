@@ -1,4 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ taglib uri="/WEB-INF/tld/spring.tld" prefix="spring" %>
 <%@include file="/common/context.jsp"%>
 <html>
 <head>
@@ -10,19 +11,46 @@
 </head>
 <body>
 	<div style="padding: 10px;">
-		<span>开始日期：</span> <input id="txtStartDate" class="easyui-datebox" style="width: 100%;"> <span>结束日期：</span> <input id="txtEndDate" class="easyui-datebox" style="width: 100%;"> <span>统计方式：</span> <select id="styleStatistics" class="easyui-combobox" panelheight="auto"
+		<span><spring:message code="beginDate"/>：</span> 
+		<input id="txtStartDate" class="easyui-datebox" style="width: 100%;" data-options="formatter:myformatter,parser:myparser"></input> 
+		<span><spring:message code="endDate"/>：</span> 
+		<input id="txtEndDate" class="easyui-datebox" style="width: 100%;" data-options="formatter:myformatter,parser:myparser"></input>
+		<script type="text/javascript">
+			//设置日期返回格式
+			function myformatter(date){
+				var y = date.getFullYear();
+				var m = date.getMonth()+1;
+				var d = date.getDate();
+				return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+			}
+			
+			function myparser(s){
+				if (!s) return new Date();
+				var ss = (s.split('-'));
+				var y = parseInt(ss[0],10);
+				var m = parseInt(ss[1],10);
+				var d = parseInt(ss[2],10);
+				if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+					return new Date(y,m-1,d);
+				} else {
+					return new Date();
+				}
+			}
+	</script>
+		<span><spring:message code="staticStyle"/>：</span> 
+		<select id="styleStatistics" class="easyui-combobox" panelheight="auto"
 			style="width: 100px;">
-			<option value="0">按天统计</option>
-			<option value="1">按月统计</option>
-			<option value="2">按年统计</option>
-		</select> <a id="btnSum" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">统计</a>
+			<option value="0"><spring:message code="staticDay"/></option>
+			<option value="1"><spring:message code="staticMonth"/></option>
+			<option value="2"><spring:message code="staticYear"/></option>
+		</select> 
+		<a id="btnSum" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'"><spring:message code="static"/></a>
 		<div id="blogPost" style="height: 400px"></div>
 	</div>
 	<script src="${jsPath}/MyECharts/resource/ECharts/echarts.js" type="text/javascript"></script>
 	<script src="${jsPath}/MyECharts/resource/MyECharts.js" type="text/javascript"></script>
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//生成统计图
 		function getPost() {
@@ -47,12 +75,11 @@
 				data : $.param(param),
 				url : '${ctxPath}/BlogInfo/getBlogStatistics.do',
 				success : function(data, textStatus) {
-					var opt1 = MyECharts.ChartOptionTemplates.Bar('博客发表数量','篇', eval(data.data));
+					var opt1 = MyECharts.ChartOptionTemplates.Bar('<spring:message code="blogCount"/>','<spring:message code="blogpage"/>', eval(data.data));
 					MyECharts.RenderChart(opt1, 'blogPost');
 				},
 				error : function(XmlHttpRequest, textStatus, errorThrown) {
-					$.messager.alert('My Title', 'Here is a error message!',
-							'error');
+					$.messager.alert('<spring:message code="error"/>', '<spring:message code="errorStatic"/>','error');
 				}
 			});
 		}
@@ -67,7 +94,7 @@
 			var d = curr_time.getDate();
 			return y + '-' + (m < 10 ? ('0' + m) : m) + '-'+ (d < 10 ? ('0' + d) : d);
 		}
-
+		
 		function getEndDate() {
 			var curr_time = new Date();
 			var y = curr_time.getFullYear();

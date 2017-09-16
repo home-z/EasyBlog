@@ -12,7 +12,7 @@
  id="swicth-style" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
+	<script src="${jsPath}/jquery-easyui/local/easyui-lang-zh_CN.js" type="text/javascript"></script>
 	<title>用户编辑</title>
 </head>
 <body>
@@ -27,8 +27,8 @@
 		<input id="userId" type="hidden" name="id" value="${userDTO.id}" />
 		<table cellpadding="5">
 			<tr>
-				<td>登录名:</td>
-				<td><input id="userCode" class="easyui-validatebox tb" type="text" name="userCode" data-options="required:true,validateOnCreate:false,validateOnBlur:true" value="${userDTO.userCode}"></input></td>
+				<td>用户名:</td>
+				<td><input id="userCode" <c:choose><c:when test="${not empty userDTO}">disabled="disabled" </c:when></c:choose> class="easyui-validatebox tb" type="text" name="userCode" data-options="required:true,validateOnCreate:false,validateOnBlur:true" value="${userDTO.userCode}"></input></td>
 			</tr>
 			<tr>
 				<td>密码:</td>
@@ -39,7 +39,7 @@
 				<td><input id="userPasswordConfirm" class="easyui-validatebox tb" type="password" data-options="required:true,validateOnCreate:false,validateOnBlur:true" validType="equals['#userPassword']" value="${userDTO.userPassword}"></input></td>
 			</tr>
 			<tr>
-				<td>用户名称:</td>
+				<td>姓名:</td>
 				<td><input id="userName" class="easyui-validatebox" type="text" name="userName" data-options="required:true,validateOnCreate:false,validateOnBlur:true" value="${userDTO.userName}"></input></td>
 			</tr>
 			<tr>
@@ -111,6 +111,16 @@
 
 	//保存
 	function save() {
+		//id为0、1的账号为系统预置账号，不能修改
+		var userId = $("#userId").val();
+		if (userId == "0" || userId == "1") {
+			$.messager.alert('提醒', '不能修改系统预置用户！');
+			return;
+		} else if (userId == $("#currentUserId").val()) {
+			$.messager.alert('提醒', '不能修改当前登录用户！');
+			return;
+		}
+		
 		var passInput = validInput();
 		if (passInput) {
 			var params = new FormData($("#userForm")[0]);//使用FormData接收数据
@@ -173,6 +183,7 @@
 							} else {
 								$.messager.alert("失败", "用户删除失败！");
 							}
+							
 							location.href = "${ctxPath}/admin/system/users.jsp";
 						},
 						error : function() {

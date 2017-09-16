@@ -1,17 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="/WEB-INF/tld/spring.tld" prefix="spring" %>
 <%@include file="/common/context.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>博客世界-登录</title>
+	<title><spring:message code="blogworld"/>-<spring:message code="login"/></title>
 	<link href="${cssPath}/login.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="${jsPath}/tools/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="${jsPath}/tools/common.js"></script>
 	<script type="text/javascript" src="${jsPath}/view/login.js"></script>
+	<script type="text/javascript">
+		//外部引入的js不能直接使用标签，页面先读取所有的资源，外部js中再使用
+		var localResource={
+				'errorUserCodeMust':'<spring:message code="errorUserCodeMust"/>',
+				'errorUserNotExist':'<spring:message code="errorUserNotExist"/>',
+				'errorVerfiUserExist':'<spring:message code="errorVerfiUserExist"/>',
+				'loginSuccess':'<spring:message code="loginSuccess"/>',
+				'loginFail':'<spring:message code="loginFail"/>',
+				'errorLogin':'<spring:message code="errorLogin"/>',
+				'errorPasswordMust':'<spring:message code="errorPasswordMust"/>'
+		};
+	</script>
 </head>
 <body style="background-color: #EEF2F5;">
-    <a style="float: right;" href="../admin/loginByPhoto.jsp">使用头像登录</a>
+    <a style="float: right;" href="../admin/loginByPhoto.jsp"><spring:message code="loginByPhoto"/></a>
 	<br />
 	<br />
 	<br />
@@ -30,9 +43,9 @@
 										<tr>
 										    <td><img style="float: right;" src="${imgPath}/log.jpg"></td>
 											<td width="230" height="40" align="center" valign="top">
-												<p id="logTitle" style="height: 10px; width: 230px; font-size: 25px;color:#E33E06;">博客世界管理-登录</p>
+												<p id="logTitle" style="height: 10px; width: 230px; font-size: 25px;color:#E33E06;"><spring:message code="blogworld"/>-<spring:message code="login"/></p>
 											</td>
-											<td align="right" valign="top"><a href="${ctxPath}/admin/register.jsp">立即注册</a><a href="${ctxPath}/index.jsp">回到主页</a></td>
+											<td align="right" valign="top"><a href="${ctxPath}/admin/register.jsp"><spring:message code="registNow"/></a>&nbsp;&nbsp;<a href="${ctxPath}/index.jsp"><spring:message code="goToIndex"/></a></td>
 										</tr>
 									</tbody>
 								</table>
@@ -47,17 +60,17 @@
 											<td align="center">
 												<table cellspacing="0" cellpadding="5" border="0">
 													<tr>
-														<td height="25" valign="top">用户名： <input tabindex="1" maxlength="22" size="25" name="userCode" id="txtUserCode" />
+														<td height="25" valign="top"><spring:message code="userCode"/>： <input tabindex="1" maxlength="22" size="25" name="userCode" id="txtUserCode" />
 														</td>
 													</tr>
 													<tr>
-														<td valign="bottom" height="12">密&nbsp;&nbsp; 码： <input name="userPassWord" type="password" tabindex="1" size="25" maxlength="22" id="txtPass" />
+														<td valign="bottom" height="12"><spring:message code="password"/>： <input name="userPassWord" type="password" tabindex="1" size="25" maxlength="22" id="txtPass" />
 														</td>
 													</tr>
 													<tr>
 														<td>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
-														<input type="button" id="btnCancel" onClick="cancel();" value="取消" /> 
-														<input type="button" id="btnLogin" value="登录" />
+														<input type="button" id="btnCancel" onClick="cancel();" value="<spring:message code="cancel"/>" /> 
+														<input type="button" id="btnLogin" value="<spring:message code="login"/>" />
 														</td>
 													</tr>
 												</table>
@@ -71,7 +84,7 @@
 							<td>
 								<table width="100%" border="0" cellspacing="0" cellpadding="0">
 									<tr>
-										<td height="70" align="center">版权所有：Tim©2017</td>
+										<td height="70" align="center"><spring:message code="rightAll"/>：Tim©2017</td>
 									</tr>
 								</table>
 							</td>

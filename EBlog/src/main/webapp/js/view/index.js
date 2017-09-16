@@ -2,7 +2,7 @@
  * 首页js 2017-07-08
  */
 
-// 按照文章分类读取
+// 读取文章分类
 function getCategory() {
 	$.ajax({
 		type : 'GET',
@@ -13,11 +13,11 @@ function getCategory() {
 			if (data && data.success == "true") {
 				$('#categoryLinks').html(data.data);
 			} else {
-				alert("读取文章分类出错！");
+				alert(localResource["errorReadBlogType"]);
 			}
 		},
 		error : function() {
-			alert("读取文章分类发生网络异常！");
+			alert(localResource["netErrorReadBlogType"]);
 		}
 	});
 }
@@ -25,6 +25,7 @@ function getCategory() {
 // 生成分页控件
 function getPageFilter(action) {
 	$('#pageFilter').empty();// 先清空分页信息，避免aPageChange方法中先获取到了上一次的元素
+	$('#pageFilter').html();
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
@@ -34,16 +35,16 @@ function getPageFilter(action) {
 			if (data && data.success == "true") {
 				$('#pageFilter').html(data.data);
 			} else {
-				alert("读取分页信息出错！");
+				alert(localResource["errorReadPage"]);
 			}
 		},
 		error : function() {
-			alert("读取分页信息发生网络异常！");
+			alert(localResource["netErrorReadPage"]);
 		}
 	});
 }
 
-// 根据传递的url，取不同的结果，显示在页面
+// 根据传递的url，取不同的文章分类结果，显示在页面
 function getArticle(url) {
 	$.ajax({
 		type : 'GET',
@@ -52,52 +53,19 @@ function getArticle(url) {
 		dataType : 'json',
 		success : function(data) {
 			if (data && data.success == "true") {
-				var strAllArticle = "";
-				$.each(data.data, function(i, item) {
-					strAllArticle += "<div>";
-					strAllArticle += "<a href='" + getContextPath() + "/MainIndex/getDetailById.do?id=";
-					strAllArticle += item.id;
-					strAllArticle += "' target='_blank'>";
-					strAllArticle += item.title;
-					strAllArticle += "</a>";
-					strAllArticle += "<p>";
-					strAllArticle += item.content;
-					strAllArticle += "</p>";
-					strAllArticle += "<p id='postInfo'>";
-					strAllArticle += "<a style='text-decoration:none' href='" + getContextPath() + "/MainIndex/getArticleByCreateBy.do?user=";
-					strAllArticle += item.createBy;
-					strAllArticle += "' target='_blank'>";
-					strAllArticle += item.createBy;
-					strAllArticle += "</a>";
-					strAllArticle += "发布于";
-					strAllArticle += item.createTime;
-					strAllArticle += "&nbsp;阅读(";
-					strAllArticle += item.readCount + ")";
-					strAllArticle += "&nbsp;推荐(";
-					strAllArticle += item.suggestCount + ")";
-					strAllArticle += "&nbsp;评论(";
-					strAllArticle += item.comCount + ")";
-					strAllArticle += "</p>";
-					strAllArticle += "</div>";
-					strAllArticle += "<hr id='articleSplit'/>";
-				});
+				var strAllArticle=appendArticle(data.data);
 				$('#articleInfo').html(strAllArticle);
 			}
 		},
 		error : function() {
-			alert("读取文章信息发生网络异常！");
+			alert(localResource["netErrorReadBlog"]);
 		}
 	});
 }
 
-/**
- * menu.jsp页面中点击菜单，调用对应控制器方法，生成分页即内容
- * 
- * @param method
- *            调用的控制器方法 首页：getallArticle； 热读：getArticleRead； 热评：getArticleCommit；
- *            推荐：getArticleSuggest；
- * @returns
- */
+//页面中点击菜单，调用对应控制器方法，生成分页即内容
+//调用的控制器方法 
+//首页：getallArticle； 热读：getArticleRead； 热评：getArticleCommit；推荐：getArticleSuggest；
 function getArticleByMenu(method) {
 	getPageFilter("/MainIndex/" + method + ".do");// 生成底部的分页
 	aPageChange();// 分页切换
@@ -134,8 +102,7 @@ function getArticleType(typeid) {
 function addTypeMenu(typeName, typeid) {
 	// 该元素不存在，则创建
 	if ($("#" + typeid + "").length <= 0) {
-		$("#divMenu ul").append(
-						"<li><a id=\""
+		$("#divMenu ul").append("<li><a id=\""
 								+ typeid
 								+ "\" href='javascript:void(0);' onclick='getArticleType("
 								+ typeid + ")''>" + typeName + "</a></li>");
@@ -145,24 +112,23 @@ function addTypeMenu(typeName, typeid) {
 	$("#" + typeid + "").click();
 }
 
-// 搜索
+// 搜索方法
 function searchKeyword() {
 	var keyword = $("#txtKeyword").val();
 	if (keyword != "") {
 		// 显示查询菜单
 		if ($("#searchMenu").length <= 0) {
-			$("#divMenu ul").append(
-							"<li><a id='searchMenu' href='javascript:void(0);'>搜索</a></li>");
+			$("#divMenu ul").append("<li><a id='searchMenu' href='javascript:void(0);'>"+localResource["search"]+"</a></li>");
 		}
 
 		$("#searchMenu").click();// 只是为了加上选中样式而进行一次点击
 		getSearchBlog(keyword);
 	} else {
-		alert("请输入关键词！");
+		alert(localResource["inputKeyWord"]);
 	}
 }
 
-// 点击搜索
+// 调用搜索
 function getSearchBlog(keyword) {
 	var param = {
 		keyword : keyword
@@ -174,53 +140,57 @@ function getSearchBlog(keyword) {
 		data : $.param(param),
 		success : function(data) {
 			if (data && data.total != 0) {
-				var strSearchArticle = "";
-				$.each(
-					data.rows,
-					function(i, item) {
-						strSearchArticle += "<div>";
-						strSearchArticle += "<a href='"
-								+ getContextPath()
-								+ "/MainIndex/getDetailById.do?id=";
-						strSearchArticle += item.id;
-						strSearchArticle += "' target='_blank'>";
-						strSearchArticle += item.title;
-						strSearchArticle += "</a>";
-						strSearchArticle += "<p>";
-						strSearchArticle += item.content;
-						strSearchArticle += "</p>";
-						strSearchArticle += "<p id='postInfo'>";
-						strSearchArticle += "<a style='text-decoration:none' href='"
-								+ getContextPath()
-								+ "/MainIndex/getArticleByCreateBy.do?user=";
-						strSearchArticle += item.createBy;
-						strSearchArticle += "' target='_blank'>";
-						strSearchArticle += item.createBy;
-						strSearchArticle += "</a>";
-						strSearchArticle += "发布于";
-						strSearchArticle += item.createTime;
-						strSearchArticle += "&nbsp;阅读("
-						strSearchArticle += item.readCount
-								+ ")";
-						strSearchArticle += "&nbsp;推荐(";
-						strSearchArticle += item.suggestCount
-								+ ")";
-						strSearchArticle += "&nbsp;评论(";
-						strSearchArticle += item.comCount
-								+ ")";
-						strSearchArticle += "</p>";
-						strSearchArticle += "</div>";
-						strSearchArticle += "<hr id='articleSplit' />";
-					});
+				var strSearchArticle = appendArticle(data.rows);
 				$('#articleInfo').html(strSearchArticle);
+				
 				// TODO实现查询分页
 				$('#pageFilter').html("");
 			}
 		},
 		error : function() {
-			alert('搜索出现网络错误！');
+			alert(localResource["netErrorSearch"]);
 		}
 	});
+}
+
+//根据数据拼接文章内容
+function appendArticle(dataSource) {
+	var strAllArticle = "";
+	$.each(dataSource, function(i, item) {
+		strAllArticle += "<div>";
+		strAllArticle += "<a href='" + getContextPath() + "/MainIndex/getDetailById.do?id=";
+		strAllArticle += item.id;
+		strAllArticle += "' target='_blank'>";
+		strAllArticle += item.title;
+		strAllArticle += "</a>";
+		strAllArticle += "<p>";
+		strAllArticle += item.content;
+		strAllArticle += "</p>";
+		strAllArticle += "<p id='postInfo'>";
+		strAllArticle += "<a style='text-decoration:none' href='" + getContextPath() + "/MainIndex/getArticleByCreateBy.do?user=";
+		strAllArticle += item.createBy;
+		strAllArticle += "' target='_blank'>";
+		strAllArticle += item.createBy;
+		strAllArticle += "</a>";
+		strAllArticle += "&nbsp;";
+		strAllArticle += localResource["postat"];
+		strAllArticle += "&nbsp;";
+		strAllArticle += item.createTime;
+		strAllArticle += "&nbsp;";
+		strAllArticle += localResource["read"];
+		strAllArticle += "("+item.readCount + ")";
+		strAllArticle += "&nbsp;";
+		strAllArticle += localResource["suggest"];
+		strAllArticle += "("+ item.suggestCount + ")";
+		strAllArticle += "&nbsp;";
+		strAllArticle += localResource["commit"];
+		strAllArticle += "("+ item.comCount + ")";
+		strAllArticle += "</p>";
+		strAllArticle += "</div>";
+		strAllArticle += "<hr id='articleSplit'/>";
+	});
+	
+	return strAllArticle;
 }
 
 // 页面首先加载全部

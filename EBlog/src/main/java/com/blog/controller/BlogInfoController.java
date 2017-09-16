@@ -26,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.RequestContext;
 
 import com.blog.model.BllArticle;
 import com.blog.model.BllCommont;
@@ -178,6 +179,8 @@ public class BlogInfoController {
 	public Map<String, Object> getBlogStatistics(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException {
 
+	    RequestContext requestContext = new RequestContext(request);//读取多语资源
+		
 		String styleType = request.getParameter("styleType");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
@@ -191,7 +194,9 @@ public class BlogInfoController {
 		while (rs.next()) {
 			strBlogPost.append("{");
 			strBlogPost.append("\"group\":");
-			strBlogPost.append("\"博客\",");
+			strBlogPost.append("\"");
+			strBlogPost.append(requestContext.getMessage("blog"));
+			strBlogPost.append("\",");
 			strBlogPost.append("\"name\":");
 			strBlogPost.append("\"" + rs.getString("postDate") + "\",");
 			strBlogPost.append("\"value\":");

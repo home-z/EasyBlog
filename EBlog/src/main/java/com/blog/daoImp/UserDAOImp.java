@@ -9,14 +9,13 @@ import org.springframework.stereotype.Repository;
 import com.blog.dao.UserDAO;
 import com.blog.model.SysUsers;
 import com.blog.utils.HibernateUtils;
-import com.blog.utils.JsonHelper;
 import com.blog.utils.MD5;
 import com.blog.vo.UserSearchParams;
 
 /**
  * @author：Tim
  * @date：2017年7月29日 下午9:12:20
- * @description：TODO
+ * @description：用户数据库操作实现类
  */
 @Repository
 public class UserDAOImp implements UserDAO {
@@ -136,7 +135,9 @@ public class UserDAOImp implements UserDAO {
 			strBuilder.append(userSearchParams.getEmail());
 			strBuilder.append("%'");
 		}
-		lstSysUsers = HibernateUtils.queryListParam(SysUsers.class, strBuilder.toString(), null);
+
+		strBuilder.append(" order by createtime desc ");
+		lstSysUsers = HibernateUtils.queryListParam(SysUsers.class, strBuilder.toString());
 
 		return lstSysUsers;
 	}

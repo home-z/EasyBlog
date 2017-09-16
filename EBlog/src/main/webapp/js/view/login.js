@@ -5,7 +5,7 @@
 $(document).ready(function() {
 	$("#txtUserCode").blur(function() {
 		if ($("#txtUserCode").val() == "") {
-			$("#exMsg").html("用户名不能为空！");
+			$("#exMsg").html(localResource["errorUserCodeMust"]);
 		} else {
 			$("#exMsg").html("");
 			// 参数，这里是一个json语句
@@ -20,13 +20,13 @@ $(document).ready(function() {
 				data : param,
 				success : function(data) {
 					if (data && data.success == "false") {
-						$("#exMsg").html($("#txtUserCode").val() + "用户不存在！");
+						$("#exMsg").html($("#txtUserCode").val() +'&nbsp;'+ localResource["errorUserNotExist"]);
 					} else {
 						$("#exMsg").html("");
 					}
 				},
 				error : function() {
-					$("#exMsg").html("判断用户是否存在发生错误！");
+					$("#exMsg").html(localResource["errorVerfiUserExist"]);
 				}
 			});
 		}
@@ -55,14 +55,14 @@ $(document).ready(function() {
 				dataType : 'json',
 				success : function(data) {
 					if (data && data.success == "true") {
-						$("#exMsg").html($("#txtUserCode").val() + "登录成功！");
+						$("#exMsg").html($("#txtUserCode").val() +'&nbsp;'+ localResource["loginSuccess"]);
 						window.location.href = "../admin/admin.jsp";// 跳转到管理页
 					} else {
-						$("#exMsg").html("登录失败，用户名或者密码错误！");
+						$("#exMsg").html(localResource["loginFail"]);
 					}
 				},
 				error : function() {
-					$("#exMsg").html("登录出现网络错误！");
+					$("#exMsg").html(localResource["errorLogin"]);
 				}
 			});
 		}
@@ -74,12 +74,12 @@ function checkForm() {
 	var username = $("#txtUserCode").val();
 	var password = $("#txtPass").val();
 	if (username == null || username == "") {
-		$("#exMsg").html("用户名不能为空！");
+		$("#exMsg").html(localResource["errorUserCodeMust"]);
 		return false;
 	}
 
 	if (password == null || password == "") {
-		$("#exMsg").html("密码不能为空！");
+		$("#exMsg").html(localResource["errorPasswordMust"]);
 		return false;
 	}
 

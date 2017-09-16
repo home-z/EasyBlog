@@ -1,17 +1,12 @@
 package com.blog.service;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.UserDAO;
 import com.blog.model.SysUsers;
-import com.blog.utils.HibernateUtils;
-import com.blog.utils.JsonHelper;
-import com.blog.utils.MD5;
 import com.blog.vo.UserSearchParams;
 
 /**

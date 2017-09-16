@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="/WEB-INF/tld/spring.tld" prefix="spring" %>
 <%@include file="/common/context.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>${artdto.title}-${artdto.createBy}-博客世界</title>
+	<title>${artdto.title}-${artdto.createBy}-<spring:message code="blogworld"/></title>
 	<%@include file="/common/resinculde.jsp"%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="${cssPath}/articleView.css" rel="stylesheet" type="text/css" />
@@ -15,7 +16,7 @@
 		<table width="100%">
 			<tr>
 				<td><img src="${imgPath}/log.jpg"></td>
-				<td><div id="logTitle">博客世界</div></td>
+				<td><div id="logTitle"><spring:message code="blogworld"/></div></td>
 			</tr>
 		</table>
 	</div>
@@ -23,14 +24,14 @@
 		<div id="articleInfo">
 			<p id="title">${artdto.title}</p>
 			<p>${artdto.content}</p>
-			<p id="postInfo">${artdto.createBy}发布于${artdto.createTime}</p>
+			<p id="postInfo">${artdto.createBy}&nbsp;<spring:message code="postat"/>&nbsp;${artdto.createTime}</p>
 			<br />
 		</div>
-		<p>评论列表</p>
+		<p><spring:message code="commitList"/></p>
 		<hr style="border: 1px dotted #CCC3C3" />
 		<div id="comDiv">
 			<c:forEach items="${comList}" var="item" varStatus="status">
-				<p>#${status.count}楼&nbsp;${item.comTime}&nbsp;${item.person}</p>
+				<p>#${status.count}<spring:message code="floor"/>&nbsp;${item.comTime}&nbsp;${item.person}</p>
 				<p>${item.comContent}</p>
 				<hr style="border: 1px dotted #E4DDDD" />
 			</c:forEach>

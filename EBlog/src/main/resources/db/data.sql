@@ -1,13 +1,13 @@
 -- 系统预置数据
 
 -- 用户（密码：123456）
-insert into sys_users (id,usercode,userpassword,username) values ('0','admin','e10adc3949ba59abbe56e057f20f883e','系统管理员');
-insert into sys_users (id,usercode,userpassword,username) values ('1','demo','e10adc3949ba59abbe56e057f20f883e','博客使用人');
+insert into sys_users (id,usercode,userpassword,username,'CreateTime','Creator') values ('0','admin','e10adc3949ba59abbe56e057f20f883e','系统管理员',now(),'admin');
+insert into sys_users (id,usercode,userpassword,username,'CreateTime','Creator') values ('1','demo','e10adc3949ba59abbe56e057f20f883e','博客使用人',now(),'admin');
 
 
 -- 角色
-INSERT INTO 'blogsystem'.'sys_role' ('ID','RoleName') VALUES (0,'系统管理员');
-INSERT INTO 'blogsystem'.'sys_role' ('ID','RoleName') VALUES (1,'博客使用人');
+INSERT INTO 'blogsystem'.'sys_role' ('ID','RoleName','CreateTime','Creator','Remark') VALUES (0,'系统管理员',now(),'admin','系统预置角色');
+INSERT INTO 'blogsystem'.'sys_role' ('ID','RoleName','CreateTime','Creator','Remark') VALUES (1,'博客使用人',now(),'admin','系统预置角色');
 
 
 -- 用户角色

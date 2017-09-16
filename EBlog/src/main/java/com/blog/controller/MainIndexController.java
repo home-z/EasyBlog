@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.RequestContext;
 
 import com.blog.model.BllArticle;
 import com.blog.model.BllCommont;
@@ -41,6 +42,8 @@ public class MainIndexController extends DateBindController {
 	@ResponseBody
 	public Map<String, Object> getArticlePage(HttpServletRequest request,
 			@RequestParam(value = "action", required = true) String action) {
+		
+	    RequestContext requestContext = new RequestContext(request);//读取多语资源
 
 		String url = request.getContextPath() + action;
 		boolean isType = url.contains("typeid=") ? true : false;// 判断是否是点击了分类，分类则url带有类别参数
@@ -51,9 +54,15 @@ public class MainIndexController extends DateBindController {
 		// 拼接分页html
 		StringBuffer strBPageHtml = new StringBuffer();
 		strBPageHtml.append("<p>");
-		strBPageHtml.append("共");
+		strBPageHtml.append(requestContext.getMessage("all"));
 		strBPageHtml.append(page);
-		strBPageHtml.append("页&nbsp;");
+		if (toalCount>0) {
+			strBPageHtml.append(requestContext.getMessage("pages"));
+		}else {
+			strBPageHtml.append(requestContext.getMessage("page"));
+		}
+
+		strBPageHtml.append("&nbsp;");
 		for (int i = 1; i < page + 1; i++) {
 			if (i == 1) {
 				strBPageHtml.append("<a class='aPageDisable' href='javascript:void(0);'");
@@ -102,6 +111,8 @@ public class MainIndexController extends DateBindController {
 		}
 
 		strBCategory.append("</ul>");
+		
+		logger.debug("获取分类");
 
 		return JsonHelper.getModel(strBCategory.toString());
 	}

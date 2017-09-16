@@ -2,6 +2,7 @@ package com.blog.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,11 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.blog.vo.MenuTree;
 import com.blog.model.SysUsers;
@@ -81,6 +84,10 @@ public class LoginController {
 			// 根据用户角色，获取用户的权限菜单
 			List<MenuTree> menus = authService.getMenuTree(loginUser.getUserCode());
 			
+			//登录成功后会清除session，导致在首页选择的语言失效
+			//TODO，不能记录？还是使用默认的英文
+			Locale locale= (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+			
 			// 登录成功，则设置全局用户信息，在其他页面检测是否经过登录
 			HttpSession session = request.getSession();
 			response.setHeader("Pragma", "No-cache");// 清理缓存
@@ -89,8 +96,12 @@ public class LoginController {
 
 			session.setAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER, loginUser);// 放入当前登录的用户
 			session.setAttribute(CoreConsts.ExecuteContextKeys.CURRENT_MENU, menus);// 放入当前用户的菜单，登录后获取生成菜单
+			session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);//session中记录当前语言，供springmvc读取切换语言
+
+			// 变量赋值
 			CoreConsts.Runtime.APP_ABSOLUTE_PATH = request.getServletContext().getRealPath("/");// 存储绝对路径
 			CoreConsts.Runtime.SERVLETCONTEXT = request.getServletContext();// 存储执行环境
+			CoreConsts.Runtime.CURRENT_USERCODE = loginUser.getUserCode();// 当前登录用户用户名
 
 			return JsonHelper.getSucessResult(true);
 		} else {
@@ -107,6 +118,11 @@ public class LoginController {
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest request, HttpServletResponse response) {
 		request.getSession().invalidate();// 清除缓存
+
+		// 变量清空
+		CoreConsts.Runtime.APP_ABSOLUTE_PATH = null;// 存储绝对路径
+		CoreConsts.Runtime.SERVLETCONTEXT = null;// 存储执行环境
+		CoreConsts.Runtime.CURRENT_USERCODE = null;// 当前登录用户用户名
 
 		return "admin/login";// 回到登录页
 	}
