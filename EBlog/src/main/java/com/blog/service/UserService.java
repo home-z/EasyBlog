@@ -21,6 +21,15 @@ public class UserService {
 	private UserDAO userDAO;
 
 	/**
+	 * 根据用户id，获取用户对象
+	 * @param userId 用户id
+	 * @return
+	 */
+	public SysUsers getUserById(String userId) {
+		return userDAO.getUserById(userId);
+	}
+
+	/**
 	 * 搜索用户
 	 * @param userSearchParams
 	 * @return

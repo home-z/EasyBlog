@@ -61,7 +61,7 @@
 					for (var i = 0; i < checkedRows.length; i++) {
 						//id为0、1的账号为系统预置角色，不能删除
 						if (checkedRows[i].id == "0"|| checkedRows[i].id == "1") {
-							$.messager.alert('提醒', '不能删除系统预置角色！');
+							$.messager.alert('提醒', checkedRows[i].roleName + '为系统预置角色，不能删除！');
 							
 							return;
 						} else {
@@ -83,7 +83,7 @@
 							if (data && data.success == "true") {
 								$.messager.alert("成功", "角色删除成功！", "info");
 							} else {
-								$.messager.alert("失败", "角色删除失败！");
+								$.messager.alert("失败", data.content);
 							}
 							
 							$('#rolesDataGrid').datagrid('reload');//重新刷新

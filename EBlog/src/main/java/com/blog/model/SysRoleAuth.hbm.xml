@@ -7,8 +7,8 @@
 		<id name="id" type="string">
 			<column name="ID" length="60" />
 		</id>
-		<property name="roleId" type="java.lang.Integer">
-			<column name="RoleId" />
+		<property name="roleId" type="string">
+			<column name="RoleId" length="60" />
 		</property>
 		<property name="menuId" type="java.lang.Integer">
 			<column name="MenuId" />

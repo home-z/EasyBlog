@@ -17,7 +17,7 @@ import com.blog.vo.RoleSearchParams;
 
 @Service
 public class RoleService {
-	
+
 	@Autowired
 	private RoleDAO roleDAO;
 
@@ -36,9 +36,17 @@ public class RoleService {
 	public boolean updateRole(SysRole role) {
 		return roleDAO.updateRole(role);
 	}
-	
+
 	public boolean isRoleNameExist(String roleName) {
 		return roleDAO.isRoleNameExist(roleName);
+	}
+
+	public int getCountByRoleId(String roleId) {
+		return roleDAO.getCountByRoleId(roleId);
+	}
+
+	public SysRole getSysRoleByRoleId(String roleId) {
+		return roleDAO.getSysRoleByRoleId(roleId);
 	}
 
 }

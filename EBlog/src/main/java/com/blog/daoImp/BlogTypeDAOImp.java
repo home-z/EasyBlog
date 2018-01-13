@@ -24,4 +24,45 @@ public class BlogTypeDAOImp implements BlogTypeDAO {
 		return typeList;
 	}
 
+	@Override
+	public boolean deleteBlogType(String blogTypeIds) {
+		String[] deleteidArray = blogTypeIds.split(",");
+
+		StringBuilder strSqlBlder = new StringBuilder();
+		strSqlBlder.append("delete from bll_articletype where id in (");
+
+		for (int i = 0; i < deleteidArray.length; i++) {
+			strSqlBlder.append("'");
+			strSqlBlder.append(deleteidArray[i]);
+			strSqlBlder.append("'");
+			strSqlBlder.append(",");
+		}
+		strSqlBlder.deleteCharAt(strSqlBlder.length() - 1);
+		strSqlBlder.append(")");
+
+		return HibernateUtils.executeSql(strSqlBlder.toString());
+	}
+
+	@Override
+	public int getBlogCountByType(String blogTypeId) {
+		String strSql = "select count(*) from bll_article where typeid='" + blogTypeId + "'";
+
+		return HibernateUtils.queryOne(strSql);
+	}
+
+	@Override
+	public BllArticletype getBlogTypeById(String blogTypeId) {
+		return (BllArticletype) HibernateUtils.findById(BllArticletype.class, blogTypeId);
+	}
+
+	@Override
+	public boolean addBlogType(BllArticletype articletype) {
+		return HibernateUtils.add(articletype);
+	}
+
+	@Override
+	public boolean updateBlogType(BllArticletype articletype) {
+		return HibernateUtils.update(articletype);
+	}
+
 }

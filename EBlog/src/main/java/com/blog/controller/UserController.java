@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.blog.model.SysUsers;
+import com.blog.service.BlogService;
 import com.blog.service.UserService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.HibernateUtils;
@@ -41,11 +42,14 @@ import com.blog.vo.UserSearchParams;
 @Controller
 @RequestMapping("/User")
 public class UserController {
-	
+
 	private static Logger logger = Logger.getLogger(UserController.class);
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private BlogService blogService;
 
 	/**
 	 * 搜索用户
@@ -199,8 +203,17 @@ public class UserController {
 	@ResponseBody
 	public Map<String, String> deleteUser(HttpServletResponse response, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
-		boolean result = userService.deleteUser(userId);
 
+		// 校验删除的用户中是否存在发表的博客，发表了博客，则不能删除
+		String[] userIds = userId.split(",");
+		for (int i = 0; i < userIds.length; i++) {
+			if (blogService.getCountByUserId(userIds[i]) > 0) {
+				SysUsers user = userService.getUserById(userIds[i]);
+				return JsonHelper.getSucessResult(false, user.getUserCode() + "有发表的博客，不能删除！");
+			}
+		}
+
+		boolean result = userService.deleteUser(userId);
 		return JsonHelper.getSucessResult(result);
 	}
 
@@ -215,6 +228,18 @@ public class UserController {
 		List<SysUsers> userList = userService.getUserListByUserId(userId);
 
 		exportUser(userList, response);
+	}
+
+	@RequestMapping("/isPostArticleByUserCode")
+	@ResponseBody
+	public Map<String, String> isPostArticleByUserCode(HttpServletResponse response, HttpServletRequest request) {
+		String userCode = request.getParameter("userCode");
+		int count = blogService.getCountByUserCode(userCode);
+		if (count > 0) {
+			return JsonHelper.getSucessResult(true);
+		} else {
+			return JsonHelper.getSucessResult(false);
+		}
 	}
 
 	/**

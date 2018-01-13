@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.blog.model.SysRole;
+import com.blog.model.SysUsers;
 import com.blog.service.RoleService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.HibernateUtils;
@@ -56,6 +57,15 @@ public class RoleController {
 	@ResponseBody
 	public Map<String, String> deleteRole(HttpServletResponse response, HttpServletRequest request) {
 		String roleId = request.getParameter("roleId");
+
+		String[] roleIds = roleId.split(",");
+		for (int i = 0; i < roleIds.length; i++) {
+			if (roleService.getCountByRoleId(roleIds[i]) > 0) {
+				SysRole role = roleService.getSysRoleByRoleId(roleIds[i]);
+				return JsonHelper.getSucessResult(false, role.getRoleName() + "存在用户，不能删除！");
+			}
+		}
+
 		boolean result = roleService.deleteRole(roleId);
 
 		return JsonHelper.getSucessResult(result);
@@ -99,7 +109,7 @@ public class RoleController {
 
 		return JsonHelper.getSucessResult(true, "修改角色成功！");
 	}
-	
+
 	@RequestMapping("/editRole")
 	public String getDetailByRoleId(Model model, @RequestParam(value = "roleId", required = true) String roleId) {
 		// 读取角色详细内容

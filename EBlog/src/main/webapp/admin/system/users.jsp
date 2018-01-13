@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/tld/spring.tld" prefix="spring" %>
+<%@ taglib uri="/WEB-INF/tld/fmt.tld" prefix="fmt" %>
 <%@include file="/common/context.jsp"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -11,13 +12,14 @@
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/local/easyui-lang-${sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']}.js" type="text/javascript"></script>
+	<script src="${jsPath}/jquery-easyui/local/easyui-lang-${sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']==null?'zh_CN':sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']}.js" type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
  id="swicth-style" />
 </head>
 <body>
 	<div style="height: 100%; width: 100%;">
 		<div id="tb" style="height: auto">
+		<!-- <fmt:message key="add"/> 尝试解决多语 -->
 			<a href="usersEdit.jsp" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"><spring:message code="add"/></a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteUser()">刪除</a> <a href="javascript:void(0)" class="easyui-linkbutton"
 				data-options="iconCls:'icon-search',plain:true" onclick="showSearchWin()">查找</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-downlevel',plain:true" onclick="exportUser()">导出</a>
 		</div>
@@ -26,11 +28,11 @@
 		<div id="searchUserWin" class="easyui-window" title="查找用户" data-options="modal:true,closed:true,iconCls:'icon-search',minimizable:false,maximizable:false,collapsible:false" style="width: 450px; height: 300px; padding: 10px 50px 20px 50px">
 			<table cellpadding="5">
 				<tr>
-					<td>登录名:</td>
+					<td>用户名:</td>
 					<td><input id="userCode" class="easyui-textbox" style="width: 230; height: 22px; border: 1px solid #95B8E7;" type="text" name="userCode"></input></td>
 				</tr>
 				<tr>
-					<td>用户名称:</td>
+					<td>姓名:</td>
 					<td><input id="userName" class="easyui-textbox" style="width: 230; height: 22px; border: 1px solid #95B8E7;" type="text" name="userName"></input></td>
 				</tr>
 				<tr>
@@ -95,12 +97,12 @@
 							if (data && data.success == "true") {
 								$.messager.alert("成功", "用户删除成功！", "info");
 							} else {
-								$.messager.alert("失败", "用户删除失败！");
+								$.messager.alert("失败", data.content);
 							}
 							$('#usersDataGrid').datagrid('reload');//重新刷新
 						},
 						error : function() {
-							$.messager.alert("错误", "删除用户发送网络异常！", "error");
+							$.messager.alert("错误", "删除用户发生网络异常！", "error");
 						}
 					})
 				}
@@ -109,6 +111,35 @@
 		} else {
 			$.messager.alert('提醒', '请选择需要删除的用户！', 'warning');
 		}
+	}
+	
+	//判断用户是否发表了文章
+	function isPostArticleByUserCode(userCode) {
+		var posted=false;
+		var param = {
+				"userCode" : userCode
+			};
+		$.ajax({
+			type : 'GET',
+			contentType : 'application/json',
+			url : '${ctxPath}/User/isPostArticleByUserCode.do',
+			dataType : 'json',
+			data : param,
+			success : function(data) {
+				if(data){
+					if (data.success == "true") {
+						posted = true;
+					} else {
+						posted = false;
+					}
+				}
+			},
+			error : function() {
+				$.messager.alert("错误", "判断用户是否发表了文章发生网络异常！", "error");
+			}
+		})
+		
+		return posted;
 	}
 
 	//导出用户到excel中

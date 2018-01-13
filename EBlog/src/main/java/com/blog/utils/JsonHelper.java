@@ -27,6 +27,7 @@ public class JsonHelper {
 		modelMap.put("total", list.size());
 		modelMap.put("data", list);
 		modelMap.put("success", "true");
+		
 		return modelMap;
 	}
 
@@ -34,6 +35,7 @@ public class JsonHelper {
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", list.size());
 		modelMap.put("rows", list);
+		
 		return modelMap;
 	}
 
@@ -42,6 +44,7 @@ public class JsonHelper {
 		modelMap.put("total", 1);
 		modelMap.put("data", model);
 		modelMap.put("success", "true");
+		
 		return modelMap;
 	}
 

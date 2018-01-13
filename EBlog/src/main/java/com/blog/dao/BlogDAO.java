@@ -40,4 +40,18 @@ public interface BlogDAO {
 	 * @return
 	 */
 	public List<BllCommont> getDetailById(String articleID);
+
+	/**
+	 * 根据用户编码，获取该用户下的文章数量
+	 * @param userCode 用户编码
+	 * @return
+	 */
+	public int getCountByUserCode(String userCode);
+
+	/**
+	 * 根据用户id，获取该用户下的文章数量
+	 * @param userId 用户id
+	 * @return
+	 */
+	public int getCountByUserId(String userId);
 }

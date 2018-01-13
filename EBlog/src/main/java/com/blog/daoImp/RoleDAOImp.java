@@ -78,4 +78,14 @@ public class RoleDAOImp implements RoleDAO {
 		return true;
 	}
 
+	@Override
+	public int getCountByRoleId(String roleId) {
+		return HibernateUtils.queryOne("select count(*) from sys_userrole where roleid='" + roleId + "'");
+	}
+
+	@Override
+	public SysRole getSysRoleByRoleId(String roleId) {
+		return (SysRole) HibernateUtils.findById(SysRole.class, roleId);
+	}
+
 }

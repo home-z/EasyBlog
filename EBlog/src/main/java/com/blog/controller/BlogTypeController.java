@@ -2,19 +2,19 @@ package com.blog.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.blog.model.BllArticletype;
 import com.blog.model.SysUsers;
-import com.blog.service.BlogService;
 import com.blog.service.BlogTypeService;
 import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
@@ -24,6 +24,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.blog.utils.CoreConsts;
 
+/**
+ * 博客类别管理
+ * @author tim
+ * @date 2018年1月13日-下午6:19:38
+ */
 @Controller
 @RequestMapping("/BlogType")
 public class BlogTypeController {
@@ -42,7 +47,7 @@ public class BlogTypeController {
 	public void getBlogTypeByUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 获取当前登录的用户
 		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllArticletype> typeList =blogTypeService.getTypeListByUser(currentUser.getId());
+		List<BllArticletype> typeList = blogTypeService.getTypeListByUser(currentUser.getId());
 
 		// 拼接Json字符串
 		PrintWriter out = response.getWriter();
@@ -69,62 +74,62 @@ public class BlogTypeController {
 	public Map<String, Object> getBlogTypeListByUser(HttpServletRequest request) {
 		// 获取当前登录的用户
 		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllArticletype> typeList =blogTypeService.getTypeListByUser(currentUser.getId());
+		List<BllArticletype> typeList = blogTypeService.getTypeListByUser(currentUser.getId());
 
 		return JsonHelper.getModelMapforGrid(typeList);
 	}
 
 	@RequestMapping("/addBlogType")
 	@ResponseBody
-	public Map<String, String> addBlogType(HttpServletResponse response, HttpServletRequest request)
-			throws UnsupportedEncodingException {
-		String getnewRowsJson = new String(request.getParameter("newRowsJson").getBytes("ISO-8859-1"), "UTF-8");
-
+	public Map<String, String> addBlogType(HttpServletResponse response, HttpServletRequest request) {
 		// 获取当前登录的用户
 		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 
-		List newBlogTypelst = JsonHelper.getListFromJsonArrStr(getnewRowsJson, BllArticletype.class);
+		BllArticletype articletype = new BllArticletype();
+		articletype.setId(UUID.randomUUID().toString());
+		articletype.setTypeName(request.getParameter("typeName"));
+		articletype.setDescription(request.getParameter("description"));
+		articletype.setUserId(currentUser.getId());
 
-		for (int i = 0; i < newBlogTypelst.size(); i++) {
-			BllArticletype articletype = (BllArticletype) newBlogTypelst.get(i);
-			articletype.setId(UUID.randomUUID().toString());
-			articletype.setUserId(currentUser.getId());
+		blogTypeService.addBlogType(articletype);
 
-			HibernateUtils.add(articletype);
-		}
+		return JsonHelper.getSucessResult(true, "保存成功！");
+	}
 
-		return JsonHelper.getSucessResult(true);
+	@RequestMapping("/editBlogType")
+	public String editBlogType(Model model, @RequestParam(value = "blogTypeId", required = true) String blogTypeId) {
+		BllArticletype articletype = (BllArticletype) HibernateUtils.findById(BllArticletype.class, blogTypeId);
+		model.addAttribute("blogTypeDTO", articletype);
+
+		return "admin/blog/blogTypeEdit";
 	}
 
 	@RequestMapping("/updateBlogType")
 	@ResponseBody
-	public Map<String, String> updateBlogType(HttpServletResponse response, HttpServletRequest request)
-			throws UnsupportedEncodingException {
-		String getupdateRowJson = new String(request.getParameter("updateRowJson").getBytes("ISO-8859-1"), "UTF-8");
-		List updateBlogTypelst = JsonHelper.getListFromJsonArrStr(getupdateRowJson, BllArticletype.class);
+	public Map<String, String> updateBlogType(HttpServletResponse response, HttpServletRequest request) {
+		BllArticletype articletype = (BllArticletype) HibernateUtils.findById(BllArticletype.class,
+				request.getParameter("id"));
+		articletype.setDescription(request.getParameter("description"));
 
-		for (int i = 0; i < updateBlogTypelst.size(); i++) {
-			BllArticletype articletype = (BllArticletype) updateBlogTypelst.get(i);
-
-			HibernateUtils.update(articletype);
-		}
+		blogTypeService.updateBlogType(articletype);
 
 		return JsonHelper.getSucessResult(true);
 	}
 
 	@RequestMapping("/deleteBlogType")
 	@ResponseBody
-	public Map<String, String> deleteBlogType(HttpServletResponse response, HttpServletRequest request)
-			throws UnsupportedEncodingException {
-		String getdeleteRowsJson = new String(request.getParameter("deleteRowsJson").getBytes("ISO-8859-1"), "UTF-8");
-		List deleteBlogTypelst = JsonHelper.getListFromJsonArrStr(getdeleteRowsJson, BllArticletype.class);
+	public Map<String, String> deleteBlogType(HttpServletResponse response, HttpServletRequest request) {
+		String blogTypeIds = request.getParameter("blogTypeIds");
 
-		for (int i = 0; i < deleteBlogTypelst.size(); i++) {
-			BllArticletype articletype = (BllArticletype) deleteBlogTypelst.get(i);
-
-			HibernateUtils.delete(articletype);
+		String[] blogTypeIdArray = blogTypeIds.split(",");
+		for (int i = 0; i < blogTypeIdArray.length; i++) {
+			if (blogTypeService.getBlogCountByType(blogTypeIdArray[i]) > 0) {
+				BllArticletype articletype = blogTypeService.getBlogTypeById(blogTypeIdArray[i]);
+				return JsonHelper.getSucessResult(false, articletype.getTypeName() + "下存在博客，不能删除！");
+			}
 		}
 
-		return JsonHelper.getSucessResult(true);
+		boolean result = blogTypeService.deleteBlogType(blogTypeIds);
+		return JsonHelper.getSucessResult(result);
 	}
 }

@@ -214,7 +214,6 @@ public class HibernateUtils {
 		tx.commit();
 
 		return result;
-
 	}
 
 }

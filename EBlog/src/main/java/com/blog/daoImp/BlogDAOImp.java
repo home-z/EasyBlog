@@ -101,4 +101,19 @@ public class BlogDAOImp implements BlogDAO {
 		return comList;
 	}
 
+	@Override
+	public int getCountByUserCode(String userCode) {
+		String strSql = "select count(*) from bll_article where createby='" + userCode + "'";
+
+		return HibernateUtils.queryOne(strSql);
+	}
+
+	@Override
+	public int getCountByUserId(String userId) {
+		String strSql = "select count(*) from bll_article b inner join sys_users u on b.createby=u.usercode where u.id='"
+				+ userId + "'";
+
+		return HibernateUtils.queryOne(strSql);
+	}
+
 }

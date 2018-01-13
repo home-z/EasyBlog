@@ -72,4 +72,23 @@ public class BlogService {
 	public List<BllCommont> getDetailById(String articleID) {
 		return blogDAO.getDetailById(articleID);
 	}
+
+	/**
+	 * 统计用户下文章数量
+	 * @param userCode 用户编码
+	 * @return
+	 */
+	public int getCountByUserCode(String userCode) {
+		return blogDAO.getCountByUserCode(userCode);
+	}
+
+	/**
+	 * 统计用户下文章数量
+	 * @param userId 用户id
+	 * @return
+	 */
+	public int getCountByUserId(String userId) {
+		return blogDAO.getCountByUserId(userId);
+	}
+
 }

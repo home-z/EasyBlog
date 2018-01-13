@@ -10,8 +10,8 @@
 		<property name="userCode" type="string">
 			<column name="UserCode" length="50" />
 		</property>
-		<property name="roleId" type="java.lang.Integer">
-			<column name="RoleId" />
+		<property name="roleId" type="string">
+			<column name="RoleId" length="60" />
 		</property>
 	</class>
 </hibernate-mapping>

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.MenuDAO;
+import com.blog.dao.RoleAuthDAO;
 import com.blog.vo.MenuTree;
 import com.blog.model.SysMenu;
 
@@ -23,9 +24,48 @@ public class AuthService {
 	@Autowired
 	private MenuDAO menuDAO;
 
+	@Autowired
+	private RoleAuthDAO roleAuthDAO;
+
+	public boolean deleteAuthByRoleId(String roleId) {
+		return roleAuthDAO.deleteAuthByRoleId(roleId);
+	}
+
+	public boolean addRoleAuths(String roleId, String authIds) {
+		return roleAuthDAO.addRoleAuths(roleId, authIds);
+	}
+
+	public List<SysMenu> getMenuByRoleId(String roleId) {
+		return menuDAO.getMenuByRoleId(roleId);
+	}
+
+	/**
+	 * 根据用户编码获取用户下权限菜单。登录成功后，获取用户菜单
+	 * @param userCode 用户编码
+	 * @return
+	 */
 	public List<MenuTree> getMenuTree(String userCode) {
 		List<SysMenu> menus = menuDAO.getMenuByUserCode(userCode);// 读取该用户下菜单
 
+		return getMenuTreeList(menus);
+	}
+
+	/**
+	 * 获取所有菜单
+	 * @return
+	 */
+	public List<MenuTree> getAllMenus() {
+		List<SysMenu> allMenus = menuDAO.getAllMenus();// 获取所有菜单
+
+		return getMenuTreeList(allMenus);
+	}
+
+	/**
+	 * 根据菜单列表，生成菜单级别列表
+	 * @param menus 菜单列表
+	 * @return
+	 */
+	private List<MenuTree> getMenuTreeList(List<SysMenu> menus) {
 		// 存储一级菜单
 		List<MenuTree> menuTrees = new ArrayList<MenuTree>();
 
@@ -49,4 +89,5 @@ public class AuthService {
 
 		return menuTrees;
 	}
+
 }

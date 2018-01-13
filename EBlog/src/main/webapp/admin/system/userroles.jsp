@@ -1,244 +1,228 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="/WEB-INF/tld/spring.tld" prefix="spring" %>
 <%@include file="/common/context.jsp"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>用户角色管理</title>
 	<%@include file="/common/resinculde.jsp"%>
 	<%@include file="/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
- id="swicth-style" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/local/easyui-lang-zh_CN.js" type="text/javascript"></script>
-<style scoped="scoped">
-.tb {
-	width: 100%;
-	margin: 0;
-	padding: 5px 4px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-}
-</style>
+	<script src="${jsPath}/jquery-easyui/local/easyui-lang-${sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']==null?'zh_CN':sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']}.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
+ id="swicth-style" />
 </head>
-<body>
-	<div style="height: 400px; width: 100%;">
+<body class="easyui-layout">
+	<input type="hidden" id="currentUserId" />
+	<div data-options="region:'north',border:false" style="height:25px;">
 		<div id="tb" style="height: auto">
-			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">新增</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">刪除</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="save()">保存</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">取消</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addRoleUser()">增加</a> 
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeRoleUser()">移除</a> 
 		</div>
+	</div>
+	<div data-options="region:'west',split:true" title="角色列表" style="width:200px;">
+		<table id="rolesDataGrid"></table>
+	</div>
+	<div data-options="region:'center',iconCls:'icon-man'" title="角色用户">
+		<table id="roleUsersDataGrid"></table>	
+	</div>
+	<div data-options="region:'east',iconCls:'icon-man',split:true" title="用户列表" style="width:300px;">
 		<table id="usersDataGrid"></table>
-		<div id="addUserWin" class="easyui-window" title="新增用户" data-options="modal:true,closed:true,iconCls:'icon-add'" style="width: 450px; height: 300px; padding: 10px 50px 20px 50px">
-			<form id="userForm" action="${ctxPath}/User/addUser.do" method="post">
-				<table cellpadding="5">
-					<tr>
-						<td>登录名:</td>
-						<td><input class="easyui-validatebox tb" type="text" name="userCode" data-options="required:true,validateOnCreate:false,validateOnBlur:true"></input></td>
-					</tr>
-					<tr>
-						<td>密码:</td>
-						<td><input id="userPassword" class="easyui-validatebox tb" type="password" name="userPassword" data-options="required:true,validateOnCreate:false,validateOnBlur:true"></input></td>
-					</tr>
-					<tr>
-						<td>确认密码:</td>
-						<td><input class="easyui-validatebox tb" type="password" data-options="required:true,validateOnCreate:false,validateOnBlur:true" validType="equals['#userPassword']"></input></td>
-					</tr>
-					<tr>
-						<td>用户名称:</td>
-						<td><input class="easyui-validatebox" type="text" name="userName" data-options="required:true,validateOnCreate:false,validateOnBlur:true"></input></td>
-					</tr>
-					<tr>
-						<td>邮箱:</td>
-						<td><input class="easyui-validatebox tb" type="text" name="email" data-options="required:true,validType:'email',validateOnCreate:false,validateOnBlur:true"></input></td>
-					</tr>
-				</table>
-			</form>
-			<div style="text-align: center; padding: 5px">
-				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">保存</a> <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
-			</div>
-		</div>
 	</div>
 </body>
 <script type="text/javascript">
 	//检测是否已经登录
 	function checkLogin() {
 		<c:choose>
-		<c:when test="${empty Current_User}">
-		location.href = "${ctxPath}/admin/login.jsp";
-		</c:when>
+			<c:when test="${empty Current_User}">
+				location.href = "${ctxPath}/admin/login.jsp";
+			</c:when>
 		</c:choose>
 	}
-	$.extend($.fn.validatebox.defaults.rules, {
-		equals : {
-			validator : function(value, param) {
-				return value == $(param[0]).val();
-			},
-			message : '两次密码不一致！'
-		}
-	});
-	function submitForm() {
-		$('#userForm').form('submit');
-	}
-	function clearForm() {
-		$('#userForm').form('clear');
-	}
 	
-	var editIndex = undefined;
-	function endEditing() {
-		if (editIndex == undefined) {
-			return true;
-		}
-		if ($('#usersDataGrid').datagrid('validateRow', editIndex)) {
-			var ed = $('#usersDataGrid').datagrid('getEditor', {
-				index : editIndex,
-				field : 'typeName'
-			});
-			$('#usersDataGrid').datagrid('endEdit', editIndex);
-			editIndex = undefined;
-			return true;
-		} else {
-			return false;
-		}
-	}
-	function onClickRow(index) {
-		if (editIndex != index) {
-			if (endEditing()) {
-				$('#usersDataGrid').datagrid('selectRow', index).datagrid(
-						'beginEdit', index);
-				editIndex = index;
-			} else {
-				$('#usersDataGrid').datagrid('selectRow', editIndex);
-			}
-		}
-	}
-	function append() {
-		$('#addUserWin').window('open');
-	}
-	function removeit(index) {
-		if (editIndex == undefined) {
+	//增加用户到角色中
+	function addRoleUser(){
+		var checkedRole = $('#rolesDataGrid').datagrid('getChecked');//获取选择的角色
+		if (checkedRole.length == 0) {
+			$.messager.alert('提醒', '请选择角色！');
+			
 			return;
 		}
-		$('#usersDataGrid').datagrid('cancelEdit', editIndex).datagrid(
-				'deleteRow', editIndex);
-		editIndex = undefined;
+		
+		var checkedUsers = $('#usersDataGrid').datagrid('getChecked');//获取选择的用户
+		if (checkedUsers.length==0) {
+			$.messager.alert('提醒', '请选择用户！');
+			
+			return;
+		}
+		
+		var selectedRoleId = checkedRole[0].id;//角色只能选择一个
+		var selectedUserCodes = [];//获取选择的用户编码
+		for (var i = 0; i < checkedUsers.length; i++) {
+			selectedUserCodes.push(checkedUsers[i].userCode);//获取用户编码
+		}
+		
+		//将选择的多个用户加入到一个角色中
+		var param = {
+				"roleId" : selectedRoleId,
+				"userCodes" : selectedUserCodes.join(",")
+			};
+		
+		$.ajax({
+			type : 'GET',
+			contentType : 'application/json',
+			url : '${ctxPath}/RoleUser/addRoleUser.do',
+			dataType : 'json',
+			data : param,
+			success : function(data) {
+				if (data && data.success == "true") {
+					$.messager.alert("成功", "新增用户成功！", "info");
+				} else {
+					$.messager.alert("失败",data.content);
+				}
+				
+				$('#roleUsersDataGrid').datagrid('reload');//重新刷新
+			},
+			error : function() {
+				$.messager.alert("错误", "增加用户发生网络异常！", "error");
+			}
+		})
 	}
-	function save() {
-		if (endEditing()) {
-			//更新的行
-			var updateRow = $('#usersDataGrid').datagrid('getChanges',
-					'updated');
-			if (updateRow.length > 0) {
-				var updateRowJson = JSON.stringify(updateRow);
+	
+	//从角色中移除用户
+	function removeRoleUser() {
+		var checkedRole = $('#rolesDataGrid').datagrid('getChecked');//获取选择的角色
+		if (checkedRole.length == 0) {
+			$.messager.alert('提醒', '请选择角色！');
+			
+			return;
+		}
+		
+		var checkedRoleUsers = $('#roleUsersDataGrid').datagrid('getChecked');//获取选择的用户
+		if (checkedRoleUsers.length==0) {
+			$.messager.alert('提醒', '请选择角色用户！');
+			
+			return;
+		}
+		$.messager.confirm('确认', '确定移除？', function(r) {
+			if (r) {
+				var selectedRoleId = checkedRole[0].id;//角色只能选择一个
+				var selectedRoleUserCodes = [];//获取选择的用户编码
+				for (var i = 0; i < checkedRoleUsers.length; i++) {
+					if ((selectedRoleId=="0" && checkedRoleUsers[i].id=="0")||(selectedRoleId=="1" && checkedRoleUsers[i].id=="1")) {
+						$.messager.alert('提醒', '不能移除系统预置账号！');
+						
+						return;
+					}else{
+						selectedRoleUserCodes.push(checkedRoleUsers[i].userCode);//获取用户编码
+					}
+				}
+				
+				//从选择的一个角色中，移除多个用户
 				var param = {
-					"updateRowJson" : updateRowJson
-				};
+						"roleId" : selectedRoleId,
+						"userCodes" : selectedRoleUserCodes.join(",")
+					};
+				
 				$.ajax({
 					type : 'GET',
 					contentType : 'application/json',
-					url : '${ctxPath}/User/updateUser.do',
+					url : '${ctxPath}/RoleUser/removeRoleUser.do',
 					dataType : 'json',
 					data : param,
 					success : function(data) {
 						if (data && data.success == "true") {
-							alert("更新成功！");
+							$.messager.alert("成功", "移除用户成功！", "info");
+						} else {
+							$.messager.alert("失败", "移除用户失败！");
 						}
+						
+						$('#roleUsersDataGrid').datagrid('reload');//重新刷新
 					},
 					error : function() {
-						alert("error");
+						$.messager.alert("错误", "移除用户发生网络异常！", "error");
 					}
-				})
-			}
-			//删除
-			var deleteRows = $('#usersDataGrid').datagrid('getChanges',
-					'deleted');
-			if (deleteRows.length > 0) {
-				var deleteRowsJson = JSON.stringify(deleteRows);
-				var param = {
-					"deleteRowsJson" : deleteRowsJson
-				};
-				$.ajax({
-					type : 'GET',
-					contentType : 'application/json',
-					url : '${ctxPath}/User/deleteUser.do',
-					dataType : 'json',
-					data : param,
-					success : function(data) {
-						if (data && data.success == "true") {
-							alert("删除成功！");
-						}
-					},
-					error : function() {
-						alert("error");
-					}
-				})
-			}
-			//界面上接受，避免刷新
-			$('#usersDataGrid').datagrid('acceptChanges');
-		}
-	}
-	function reject() {
-		$('#usersDataGrid').datagrid('rejectChanges');
-		editIndex = undefined;
-	}
-	function pagerFilter(data) {
-		if (typeof data.length == 'number' && typeof data.splice == 'function') { // is array
-			data = {
-				total : data.length,
-				rows : data
-			}
-		}
-		var dg = $(this);
-		var opts = dg.datagrid('options');
-		var pager = dg.datagrid('getPager');
-		pager.pagination({
-			onSelectPage : function(pageNum, pageSize) {
-				opts.pageNumber = pageNum;
-				opts.pageSize = pageSize;
-				pager.pagination('refresh', {
-					pageNumber : pageNum,
-					pageSize : pageSize
 				});
-				dg.datagrid('loadData', data);
-			}
-		});
-		if (!data.originalRows) {
-			data.originalRows = (data.rows);
-		}
-		var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
-		var end = start + parseInt(opts.pageSize);
-		data.rows = (data.originalRows.slice(start, end));
-		return data;
+			}});
 	}
-	$(document).ready(function() {
-		checkLogin();
-		$('#usersDataGrid').datagrid({
-			url : '${ctxPath}/User/index.do',
-			singleSelect : true,
-			toolbar : '#tb',
-			onClickRow : onClickRow,
+	
+	//加载选中角色下用户列表
+	function getRoleUsers(roleId) {
+		$('#roleUsersDataGrid').datagrid({
+			url : '${ctxPath}/RoleUser/getRoleUser.do?roleId=' + roleId,
 			rownumbers : true,
-			pagination : true,
 			fitColumns : true,
 			fit : true,
-			pageSize : 10,
-			loadFilter : pagerFilter,
-			columns : [ [ {
-				field : 'userCode',
-				title : '登录名',
-				width : 200
-			}, {
-				field : 'userName',
-				title : '用户名称',
-				width : 300,
-				editor : 'text'
-			}, {
-				field : 'email',
-				title : '邮箱',
-				width : 300,
-				editor : 'text'
-			} ] ]
+			columns : [[
+					{
+						checkbox : true,
+					},
+					{
+						field : 'userCode',
+						title : '用户名',
+						width : 100,
+						align : 'center'
+					},
+					{
+						field : 'userName',
+						title : '姓名',
+						width : 100,
+						align : 'center'
+					}]]
 		});
+	}
+	
+	$(document).ready(
+		function() {
+			checkLogin();
+			//加载角色列表
+			$('#rolesDataGrid').datagrid({
+				url : '${ctxPath}/Role/searchRole.do',
+				rownumbers : true,
+				fitColumns : true,
+				fit : true,
+				singleSelect : true,
+				columns : [[
+					    {
+							field : 'roleName',
+							title : '角色名称',
+							width : 100,
+							align : 'center',
+							formatter : function(value, row,index) {
+								return "<a href='#'>" + row.roleName + "</a>";
+							}
+						}]],
+				onClickRow: function(rowIndex, rowData){
+					getRoleUsers(rowData.id);
+				}
+			});
+			
+			//加载用户列表
+			$('#usersDataGrid').datagrid({
+				url : '${ctxPath}/User/searchUser.do',
+				rownumbers : true,
+				fitColumns : true,
+				fit : true,
+				columns : [[
+						{
+							checkbox : true,
+						},
+						{
+							field : 'userCode',
+							title : '用户名',
+							width : 100,
+							align : 'center'
+						},
+						{
+							field : 'userName',
+							title : '姓名',
+							width : 100,
+							align : 'center'
+						}]]
+			});
 	});
 </script>
 </html>

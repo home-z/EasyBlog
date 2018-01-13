@@ -9,6 +9,7 @@ import java.util.Date;
  */
 public class SysUsers implements java.io.Serializable {
 
+	//id和usercode都是唯一的，id是主键。看实际情况决定使用哪个
 	private String id;
 	private String userCode;
 	private String userPassword;
@@ -21,19 +22,12 @@ public class SysUsers implements java.io.Serializable {
 	private String creator;
 	private String modifiedtor;
 
-	public SysUsers() {
+	public String getId() {
+		return this.id;
 	}
 
-	public SysUsers(String userCode) {
-		this.userCode = userCode;
-	}
-
-	public SysUsers(String userCode, String id, String userPassword, String userName, String email) {
-		this.userCode = userCode;
+	public void setId(String id) {
 		this.id = id;
-		this.userPassword = userPassword;
-		this.userName = userName;
-		this.email = email;
 	}
 
 	public String getUserCode() {
@@ -42,14 +36,6 @@ public class SysUsers implements java.io.Serializable {
 
 	public void setUserCode(String userCode) {
 		this.userCode = userCode;
-	}
-
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getUserPassword() {

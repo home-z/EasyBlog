@@ -364,6 +364,10 @@
     background: url('icons/getimg.png') no-repeat center center;
 }
 
+.icon-man {
+    background: url('icons/man.png') no-repeat center center;
+}
+
 /*------π§æﬂœ‰-----------*/
 .icon-btnSelect {
     background: url('../../../Images/tools/Select.png') no-repeat center center;

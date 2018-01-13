@@ -8,7 +8,7 @@ package com.blog.model;
 public class SysUserRole implements java.io.Serializable {
 	private String id;
 	private String userCode;
-	private int roleId;
+	private String roleId;
 
 	public String getId() {
 		return id;
@@ -26,11 +26,11 @@ public class SysUserRole implements java.io.Serializable {
 		this.userCode = userCode;
 	}
 
-	public int getRoleId() {
+	public String getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(int roleId) {
+	public void setRoleId(String roleId) {
 		this.roleId = roleId;
 	}
 

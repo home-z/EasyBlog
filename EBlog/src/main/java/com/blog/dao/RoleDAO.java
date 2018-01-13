@@ -8,7 +8,7 @@ import com.blog.vo.RoleSearchParams;
 /**
  * @author：Tim
  * @date：2017年7月30日 下午10:41:06
- * @description：TODO
+ * @description：角色处理
  */
 public interface RoleDAO {
 
@@ -46,5 +46,19 @@ public interface RoleDAO {
 	 * @return
 	 */
 	public boolean updateRole(SysRole role);
+
+	/**
+	 * 获取角色下用户数量
+	 * @param roleId 角色id
+	 * @return
+	 */
+	public int getCountByRoleId(String roleId);
 	
+	/**
+	 * 通过角色id，获取角色对象
+	 * @param roleId 角色id
+	 * @return
+	 */
+	public SysRole getSysRoleByRoleId(String roleId);
+
 }

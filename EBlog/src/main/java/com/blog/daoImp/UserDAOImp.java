@@ -142,4 +142,9 @@ public class UserDAOImp implements UserDAO {
 		return lstSysUsers;
 	}
 
+	@Override
+	public SysUsers getUserById(String userId) {
+		return (SysUsers) HibernateUtils.findById(SysUsers.class, userId);
+	}
+
 }

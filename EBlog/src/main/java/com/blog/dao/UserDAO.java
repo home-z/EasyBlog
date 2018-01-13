@@ -13,6 +13,13 @@ import com.blog.vo.UserSearchParams;
 public interface UserDAO {
 
 	/**
+	 * 根据用户id，获取用户信息
+	 * @param userId 用户id
+	 * @return
+	 */
+	public SysUsers getUserById(String userId);
+
+	/**
 	 * 根据条件搜索用户
 	 * @param userSearchParams 搜索用户参数
 	 * @return
