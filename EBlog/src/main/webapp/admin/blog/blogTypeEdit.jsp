@@ -68,8 +68,6 @@
 				} else {
 					strUrl = '${ctxPath}/BlogType/addBlogType.do';
 				}
-
-				console.log(params);
 				
 				$.ajax({
 					type : 'POST',

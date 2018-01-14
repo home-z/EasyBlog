@@ -1,7 +1,6 @@
 package com.blog.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,7 +22,7 @@ import com.blog.utils.JsonHelper;
 
 @Controller
 @RequestMapping("/FavoriteArticle")
-public class MyFavoriteArticle {
+public class MyFavoriteArticleController {
 
 	@Autowired
 	private MyFavoriteArticleService myFavoriteArticleService;
@@ -41,19 +40,44 @@ public class MyFavoriteArticle {
 
 	@RequestMapping("/addMyFavoriteArticle")
 	@ResponseBody
-	public void addMyFavoriteArticle(HttpServletRequest request, HttpServletResponse response, BllFavarticle favArticle)
+	public Map<String, String> addMyFavoriteArticle(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		// 获取当前登录的用户
 		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 
+		BllFavarticle favArticle = new BllFavarticle();
+
 		favArticle.setId(UUID.randomUUID().toString());
 		favArticle.setUser(currentUser.getUserCode());
-		HibernateUtils.add(favArticle);
+		favArticle.setArticleTitle(request.getParameter("articleTitle"));
+		favArticle.setArticleUrl(request.getParameter("articleUrl"));
+		favArticle.setDescrible(request.getParameter("describle"));
 
-		PrintWriter out = response.getWriter();
-		response.setContentType("text/html; charset=utf-8");
+		myFavoriteArticleService.addMyFavoriteArticle(favArticle);
 
-		out.print("<script>alert('关注文章新增成功！');history.back();</script>");
-		out.close();
+		return JsonHelper.getSucessResult(true, "保存成功！");
+	}
+
+	@RequestMapping("/updateMyFavoriteArticle")
+	@ResponseBody
+	public Map<String, String> updateMyFavoriteArticle(HttpServletResponse response, HttpServletRequest request) {
+		BllFavarticle favArticle = (BllFavarticle) HibernateUtils.findById(BllFavarticle.class,
+				request.getParameter("id"));
+		favArticle.setArticleTitle(request.getParameter("articleTitle"));
+		favArticle.setArticleUrl(request.getParameter("articleUrl"));
+		favArticle.setDescrible(request.getParameter("describle"));
+
+		myFavoriteArticleService.updateMyFavoriteArticle(favArticle);
+
+		return JsonHelper.getSucessResult(true, "修改成功！");
+	}
+
+	@RequestMapping("/deleteMyFavoriteArticle")
+	@ResponseBody
+	public Map<String, String> deleteMyFavoriteArticle(HttpServletResponse response, HttpServletRequest request) {
+		String favArticleIdIds = request.getParameter("favArticleIdIds");
+
+		boolean result = myFavoriteArticleService.deleteMyFavoriteArticle(favArticleIdIds);
+		return JsonHelper.getSucessResult(result);
 	}
 }

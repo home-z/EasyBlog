@@ -24,4 +24,33 @@ public class MyFavoriteUserDAOImp implements MyFavoriteUserDAO {
 		return list;
 	}
 
+	@Override
+	public boolean addMyFavoriteUser(BllFavuser myFavoriteUser) {
+		return HibernateUtils.add(myFavoriteUser);
+	}
+
+	@Override
+	public boolean updateMyFavoriteUser(BllFavuser myFavoriteUser) {
+		return HibernateUtils.update(myFavoriteUser);
+	}
+
+	@Override
+	public boolean deleteMyFavoriteUser(String favUserIds) {
+		String[] deleteidArray = favUserIds.split(",");
+
+		StringBuilder strSqlBlder = new StringBuilder();
+		strSqlBlder.append("delete from bll_favuser where id in (");
+
+		for (int i = 0; i < deleteidArray.length; i++) {
+			strSqlBlder.append("'");
+			strSqlBlder.append(deleteidArray[i]);
+			strSqlBlder.append("'");
+			strSqlBlder.append(",");
+		}
+		strSqlBlder.deleteCharAt(strSqlBlder.length() - 1);
+		strSqlBlder.append(")");
+
+		return HibernateUtils.executeSql(strSqlBlder.toString());
+	}
+
 }

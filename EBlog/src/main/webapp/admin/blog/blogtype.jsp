@@ -110,25 +110,26 @@
 				columns : [ [ 
 					{
 						checkbox : true,
-					},{
-					field : 'typeName',
-					title : '类别名称',
-					width : 300,
-					align : 'center',
-					editor : 'text',
-					formatter : function(value, row,index) {
-						return "<a href='${ctxPath}/BlogType/editBlogType.do?blogTypeId="
+					},
+					{
+						field : 'typeName',
+						title : '类别名称',
+						width : 300,
+						align : 'center',
+						editor : 'text',
+						formatter : function(value, row,index) {
+							return "<a href='${ctxPath}/BlogType/editBlogType.do?blogTypeId="
 								+ row.id
 								+ "'>"
 								+ row.typeName
 								+ "</a>";
 					}
-					}, {
+					}, 
+					{
 						field : 'description',
 						title : '描述',
 						width : 300,
-						align : 'center',
-						editor : 'text'
+						align : 'center'
 					} ] ]
 			});
 		});

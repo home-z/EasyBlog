@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.MyFavoriteArticleDAO;
+import com.blog.model.BllArticletype;
 import com.blog.model.BllFavarticle;
 import com.blog.utils.HibernateUtils;
 
@@ -27,5 +28,17 @@ public class MyFavoriteArticleService {
 	 */
 	public List<BllFavarticle> getMyFavoriteArticle(String userCode) {
 		return myFavoriteArticleDAO.getMyFavoriteArticle(userCode);
+	}
+
+	public boolean addMyFavoriteArticle(BllFavarticle favArticle) {
+		return myFavoriteArticleDAO.addMyFavoriteArticle(favArticle);
+	}
+	
+	public boolean updateMyFavoriteArticle(BllFavarticle favArticle) {
+		return myFavoriteArticleDAO.updateMyFavoriteArticle(favArticle);
+	}
+	
+	public boolean deleteMyFavoriteArticle(String favArticleIdIds) {
+		return myFavoriteArticleDAO.deleteMyFavoriteArticle(favArticleIdIds);
 	}
 }

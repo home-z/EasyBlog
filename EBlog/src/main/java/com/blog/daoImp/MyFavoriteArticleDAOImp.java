@@ -24,4 +24,33 @@ public class MyFavoriteArticleDAOImp implements MyFavoriteArticleDAO {
 		return list;
 	}
 
+	@Override
+	public boolean addMyFavoriteArticle(BllFavarticle favArticle) {
+		return HibernateUtils.add(favArticle);
+	}
+
+	@Override
+	public boolean updateMyFavoriteArticle(BllFavarticle favArticle) {
+		return HibernateUtils.update(favArticle);
+	}
+
+	@Override
+	public boolean deleteMyFavoriteArticle(String favArticleIdIds) {
+		String[] deleteidArray = favArticleIdIds.split(",");
+
+		StringBuilder strSqlBlder = new StringBuilder();
+		strSqlBlder.append("delete from bll_favarticle where id in (");
+
+		for (int i = 0; i < deleteidArray.length; i++) {
+			strSqlBlder.append("'");
+			strSqlBlder.append(deleteidArray[i]);
+			strSqlBlder.append("'");
+			strSqlBlder.append(",");
+		}
+		strSqlBlder.deleteCharAt(strSqlBlder.length() - 1);
+		strSqlBlder.append(")");
+
+		return HibernateUtils.executeSql(strSqlBlder.toString());
+	}
+
 }

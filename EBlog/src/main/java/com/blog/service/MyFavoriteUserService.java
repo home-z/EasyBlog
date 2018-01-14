@@ -27,4 +27,16 @@ public class MyFavoriteUserService {
 	public List<BllFavuser> getMyFavoriteUser(String userCode) {
 		return myFavoriteUserDAO.getMyFavoriteUser(userCode);
 	}
+
+	public boolean addMyFavoriteUser(BllFavuser myFavoriteUser) {
+		return myFavoriteUserDAO.addMyFavoriteUser(myFavoriteUser);
+	}
+
+	public boolean updateMyFavoriteUser(BllFavuser myFavoriteUser) {
+		return myFavoriteUserDAO.updateMyFavoriteUser(myFavoriteUser);
+	}
+
+	public boolean deleteMyFavoriteUser(String favUserIds) {
+		return myFavoriteUserDAO.deleteMyFavoriteUser(favUserIds);
+	}
 }
