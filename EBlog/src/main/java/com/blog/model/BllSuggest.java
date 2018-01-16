@@ -9,6 +9,7 @@ public class BllSuggest implements java.io.Serializable {
 	private String id;
 	private String user;
 	private String articleId;
+	private String articleTitle;
 
 	public BllSuggest() {
 	}
@@ -45,6 +46,14 @@ public class BllSuggest implements java.io.Serializable {
 
 	public void setArticleId(String articleId) {
 		this.articleId = articleId;
+	}
+
+	public String getArticleTitle() {
+		return articleTitle;
+	}
+
+	public void setArticleTitle(String articleTitle) {
+		this.articleTitle = articleTitle;
 	}
 
 }

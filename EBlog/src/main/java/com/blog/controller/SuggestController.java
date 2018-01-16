@@ -11,40 +11,39 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.model.BllCommont;
+import com.blog.model.BllSuggest;
 import com.blog.model.SysUsers;
-import com.blog.service.CommentService;
+import com.blog.service.SuggestService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.JsonHelper;
 
 /**
  * @author：Tim
- * @date：2018年1月14日 下午4:20:35
- * @description：评论控制器
+ * @date：2018年1月14日 下午8:46:41
+ * @description：推荐控制器
  */
 @Controller
-@RequestMapping("/comment")
-public class CommentController {
-
+@RequestMapping("/suggest")
+public class SuggestController {
 	@Autowired
-	private CommentService commentService;
+	private SuggestService suggestService;
 
-	@RequestMapping("/getCommentListByUser")
+	@RequestMapping("/getSuggestListByUser")
 	@ResponseBody
-	public Map<String, Object> getCommentListByUser(HttpServletRequest request) {
+	public Map<String, Object> getSuggestListByUser(HttpServletRequest request) {
 		// 获取当前登录的用户
 		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllCommont> list = commentService.getCommentListByUser(currentUser.getUserCode());
+		List<BllSuggest> list = suggestService.getSuggestListByUser(currentUser.getUserCode());
 
 		return JsonHelper.getModelMapforGrid(list);
 	}
 
-	@RequestMapping("/deleteComment")
+	@RequestMapping("/deleteSuggest")
 	@ResponseBody
-	public Map<String, String> deleteComment(HttpServletResponse response, HttpServletRequest request) {
-		String toDeleteIds = request.getParameter("commentIds");
+	public Map<String, String> deleteSuggest(HttpServletResponse response, HttpServletRequest request) {
+		String toDeleteIds = request.getParameter("suggestIds");
 
-		boolean result = commentService.deleteComment(toDeleteIds);
+		boolean result = suggestService.deleteSuggest(toDeleteIds);
 		return JsonHelper.getSucessResult(result);
 	}
 }

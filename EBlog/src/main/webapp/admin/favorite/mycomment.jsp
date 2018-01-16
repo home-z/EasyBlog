@@ -111,18 +111,18 @@
 						checkbox : true,
 					},
 					{
-						field : 'articleId',
+						field : 'articleTitle',
 						title : '评论博客',
 						width : 300,
 						align : 'center',
 						editor : 'text',
-						formatter : function(value, row,index) {
+						formatter : function(value, row, index) {
 							return "<a href='${ctxPath}/MainIndex/getDetailById.do?id="
 								+ row.articleId
 								+ "' target='_blank'>"
-								+ row.articleId
+								+ value
 								+ "</a>";
-					}
+						}
 					}, 
 					{
 						field : 'comContent',

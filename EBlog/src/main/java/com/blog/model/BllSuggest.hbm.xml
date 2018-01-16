@@ -20,5 +20,8 @@
                 &#230;&#142;&#168;&#232;&#141;&#144;&#230;&#150;&#135;&#231;&#171;&#160;&#231;&#154;&#132;ID&#227;&#128;&#130;bll_article&#232;&#161;&#168;&#231;&#154;&#132;ID</comment>
             </column>
         </property>
+        <property name="articleTitle" type="string">
+            <column name="ArticleTitle" length="50" />
+        </property>
     </class>
 </hibernate-mapping>

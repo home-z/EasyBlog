@@ -23,5 +23,8 @@
         <property name="comEmail" type="string">
             <column name="ComEmail" length="50" />
         </property>
+        <property name="articleTitle" type="string">
+            <column name="ArticleTitle" length="50" />
+        </property>
     </class>
 </hibernate-mapping>

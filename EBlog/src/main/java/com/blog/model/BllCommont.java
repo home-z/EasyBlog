@@ -18,6 +18,7 @@ public class BllCommont implements java.io.Serializable {
 	private String comContent;
 	private Date comTime;
 	private String comEmail;
+	private String articleTitle;
 
 	public BllCommont() {
 	}
@@ -83,6 +84,14 @@ public class BllCommont implements java.io.Serializable {
 
 	public void setComEmail(String comEmail) {
 		this.comEmail = comEmail;
+	}
+
+	public String getArticleTitle() {
+		return articleTitle;
+	}
+
+	public void setArticleTitle(String articleTitle) {
+		this.articleTitle = articleTitle;
 	}
 
 }

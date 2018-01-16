@@ -19,14 +19,13 @@ import org.codehaus.jackson.map.SerializerProvider;
 public class CustomDateSerializer extends JsonSerializer<Date> {
 
 	private SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Override
 	public void serialize(Date value, JsonGenerator jgen, SerializerProvider provider)
 			throws JsonProcessingException, IOException {
-		String formattedDateString = datetimeFormat.format(value);
-
-		jgen.writeString(formattedDateString);
-
+		if (value != null) {
+			String formattedDateString = datetimeFormat.format(value);
+			jgen.writeString(formattedDateString);
+		}
 	}
 }
