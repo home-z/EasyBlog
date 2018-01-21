@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.blog.vo.MenuTree;
-import com.blog.model.SysMenu;
+import com.blog.po.SysMenu;
 
 /**
  * @author：Tim

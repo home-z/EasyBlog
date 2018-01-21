@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.UserDAO;
-import com.blog.model.SysUsers;
+import com.blog.po.SysUser;
 import com.blog.vo.UserSearchParams;
 
 /**
@@ -25,7 +25,7 @@ public class UserService {
 	 * @param userId 用户id
 	 * @return
 	 */
-	public SysUsers getUserById(String userId) {
+	public SysUser getUserById(String userId) {
 		return userDAO.getUserById(userId);
 	}
 
@@ -34,7 +34,7 @@ public class UserService {
 	 * @param userSearchParams
 	 * @return
 	 */
-	public List<SysUsers> searchUser(UserSearchParams userSearchParams) {
+	public List<SysUser> searchUser(UserSearchParams userSearchParams) {
 		return userDAO.searchUser(userSearchParams);
 	}
 
@@ -53,7 +53,7 @@ public class UserService {
 	 * @param userPassWord 用户密码
 	 * @return
 	 */
-	public SysUsers login(String userCode, String userPassWord) {
+	public SysUser login(String userCode, String userPassWord) {
 		return userDAO.login(userCode, userPassWord);
 	}
 
@@ -61,7 +61,7 @@ public class UserService {
 	 * 选出所有用户
 	 * @return
 	 */
-	public List<SysUsers> getUserList() {
+	public List<SysUser> getUserList() {
 		return userDAO.getUserList();
 	}
 
@@ -70,7 +70,7 @@ public class UserService {
 	 * @param userId
 	 * @return
 	 */
-	public List<SysUsers> getUserListByUserId(String userId) {
+	public List<SysUser> getUserListByUserId(String userId) {
 		return userDAO.getUserListByUserId(userId);
 	}
 
@@ -79,7 +79,7 @@ public class UserService {
 	 * @param currentUser
 	 * @return
 	 */
-	public List<SysUsers> getUserCodeNotCurrent(String currentUser) {
+	public List<SysUser> getUserCodeNotCurrent(String currentUser) {
 		return userDAO.getUserCodeNotCurrent(currentUser);
 	}
 
@@ -88,7 +88,7 @@ public class UserService {
 	 * @param user
 	 * @return
 	 */
-	public boolean addUser(SysUsers user) {
+	public boolean addUser(SysUser user) {
 		return userDAO.addUser(user);
 	}
 
@@ -97,7 +97,7 @@ public class UserService {
 	 * @param user
 	 * @return
 	 */
-	public boolean updateUser(SysUsers user) {
+	public boolean updateUser(SysUser user) {
 		return userDAO.updateUser(user);
 	}
 
@@ -114,7 +114,7 @@ public class UserService {
 	 * 选出所有有头像的用户
 	 * @return
 	 */
-	public List<SysUsers> getUserHasPhotoList() {
+	public List<SysUser> getUserHasPhotoList() {
 		return userDAO.getUserHasPhotoList();
 	}
 

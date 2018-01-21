@@ -11,8 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.model.BllSuggest;
-import com.blog.model.SysUsers;
+import com.blog.po.BllSuggest;
+import com.blog.po.SysUser;
 import com.blog.service.SuggestService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.JsonHelper;
@@ -32,7 +32,7 @@ public class SuggestController {
 	@ResponseBody
 	public Map<String, Object> getSuggestListByUser(HttpServletRequest request) {
 		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 		List<BllSuggest> list = suggestService.getSuggestListByUser(currentUser.getUserCode());
 
 		return JsonHelper.getModelMapforGrid(list);

@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.BlogTypeDAO;
-import com.blog.model.BllArticletype;
-import com.blog.model.SysUsers;
+import com.blog.po.BllArticletype;
 
 /**
  * @author：Tim

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.SuggestDAO;
-import com.blog.model.BllSuggest;
+import com.blog.po.BllSuggest;
 
 /**
  * @author：Tim

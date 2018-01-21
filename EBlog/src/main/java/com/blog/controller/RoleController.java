@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.model.SysRole;
-import com.blog.model.SysUsers;
+import com.blog.constant.RuntimeEnvs;
+import com.blog.po.SysRole;
+import com.blog.po.SysUser;
 import com.blog.service.RoleService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.HibernateUtils;
@@ -81,7 +82,7 @@ public class RoleController {
 		role.setRemark(request.getParameter("remark"));
 
 		role.setCreateTime(new Date());// 设置创建时间为当前
-		role.setCreator(CoreConsts.Runtime.CURRENT_USERCODE);// 设置创建人为当前登录用户
+		role.setCreator(RuntimeEnvs.CURRENT_USERCODE);// 设置创建人为当前登录用户
 
 		boolean isRoleNameExist = roleService.isRoleNameExist(role.getRoleName());
 		if (isRoleNameExist) {
@@ -101,8 +102,7 @@ public class RoleController {
 		SysRole role = (SysRole) HibernateUtils.findById(SysRole.class, request.getParameter("id"));// 获取角色对象
 		role.setRoleName(request.getParameter("roleName"));
 		role.setRemark(request.getParameter("remark"));
-		role.setModifiedTime(new Date());// 设置修改时间为当前
-		role.setModifiedtor(CoreConsts.Runtime.CURRENT_USERCODE);// 设置修改人为当前登录用户
+		role.setModifier(RuntimeEnvs.CURRENT_USERID);// 设置修改人为当前登录用户
 
 		// 修改
 		roleService.updateRole(role);

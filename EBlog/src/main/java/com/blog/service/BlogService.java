@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.BlogDAO;
-import com.blog.model.BllArticle;
-import com.blog.model.BllCommont;
+import com.blog.po.BllArticle;
+import com.blog.po.BllCommont;
 import com.blog.utils.DbAction;
 import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;

@@ -30,7 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.blog.model.SysUsers;
+import com.blog.constant.RuntimeEnvs;
+import com.blog.po.SysUser;
 import com.blog.service.BlogService;
 import com.blog.service.UserService;
 import com.blog.utils.CoreConsts;
@@ -63,7 +64,7 @@ public class UserController {
 		userSearchParams.setUserName(request.getParameter("vuserName"));
 		userSearchParams.setEmail(request.getParameter("vemail"));
 
-		List<SysUsers> list = userService.searchUser(userSearchParams);
+		List<SysUser> list = userService.searchUser(userSearchParams);
 
 		return JsonHelper.getModelMapforGrid(list);
 	}
@@ -76,7 +77,7 @@ public class UserController {
 	@RequestMapping("/index")
 	@ResponseBody
 	public Map<String, Object> getUserList() {
-		List<SysUsers> list = userService.getUserList();
+		List<SysUser> list = userService.getUserList();
 
 		return JsonHelper.getModelMapforGrid(list);
 	}
@@ -84,14 +85,14 @@ public class UserController {
 	@RequestMapping("/getUserCode")
 	@ResponseBody
 	public void getUserCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		List<SysUsers> list = userService.getUserCodeNotCurrent(CoreConsts.Runtime.CURRENT_USERCODE);
+		List<SysUser> list = userService.getUserCodeNotCurrent(RuntimeEnvs.CURRENT_USERCODE);
 
 		// 拼接Json字符串
 		PrintWriter out = response.getWriter();
 		StringBuffer strOut = new StringBuffer();
 
 		strOut.append("[");
-		for (SysUsers user : list) {
+		for (SysUser user : list) {
 			strOut.append("{");
 			strOut.append("\"id\":\"" + user.getId() + "\",");
 			strOut.append("\"text\":\"" + user.getUserCode() + "\"");
@@ -118,14 +119,14 @@ public class UserController {
 			HttpSession session) throws IOException {
 
 		// 获取用户对象
-		SysUsers user = new SysUsers();
+		SysUser user = new SysUser();
 		user.setUserCode(request.getParameter("userCode"));
 		user.setUserName(request.getParameter("userName"));
 		user.setEmail(request.getParameter("email"));
 		user.setUserPassword(request.getParameter("userPassword"));
 		user.setCreateTime(new Date());// 设置创建时间为当前
-		user.setCreator(CoreConsts.Runtime.CURRENT_USERCODE == null ? request.getParameter("userCode")
-				: CoreConsts.Runtime.CURRENT_USERCODE);// 设置创建人为当前登录用户
+		user.setCreator(
+				RuntimeEnvs.CURRENT_USERCODE == null ? request.getParameter("userCode") : RuntimeEnvs.CURRENT_USERCODE);// 设置创建人为当前登录用户
 
 		if (uploadFile != null && uploadFile.getSize() != 0) {
 			// 上传用户图片
@@ -155,7 +156,7 @@ public class UserController {
 	@RequestMapping("/editUser")
 	public String getDetailByUserId(Model model, @RequestParam(value = "userId", required = true) String userId) {
 		// 读取用户详细内容
-		SysUsers user = (SysUsers) HibernateUtils.findById(SysUsers.class, userId);
+		SysUser user = (SysUser) HibernateUtils.findById(SysUser.class, userId);
 		model.addAttribute("userDTO", user);
 
 		return "admin/system/usersEdit";
@@ -167,11 +168,10 @@ public class UserController {
 			@RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile, HttpServletRequest request,
 			HttpSession session) throws IllegalStateException, IOException {
 
-		SysUsers user = (SysUsers) HibernateUtils.findById(SysUsers.class, request.getParameter("id"));// 获取用户对象
+		SysUser user = (SysUser) HibernateUtils.findById(SysUser.class, request.getParameter("id"));// 获取用户对象
 		user.setUserName(request.getParameter("userName"));
 		user.setEmail(request.getParameter("email"));
-		user.setModifiedTime(new Date());// 设置修改时间为当前
-		user.setModifiedtor(CoreConsts.Runtime.CURRENT_USERCODE);// 设置修改人为当前登录用户
+		user.setModifier(RuntimeEnvs.CURRENT_USERID);// 设置修改人为当前登录用户
 
 		if (uploadFile != null && uploadFile.getSize() != 0) {
 			// 上传用户图片
@@ -208,7 +208,7 @@ public class UserController {
 		String[] userIds = userId.split(",");
 		for (int i = 0; i < userIds.length; i++) {
 			if (blogService.getCountByUserId(userIds[i]) > 0) {
-				SysUsers user = userService.getUserById(userIds[i]);
+				SysUser user = userService.getUserById(userIds[i]);
 				return JsonHelper.getSucessResult(false, user.getUserCode() + "有发表的博客，不能删除！");
 			}
 		}
@@ -225,7 +225,7 @@ public class UserController {
 	@RequestMapping("/exportUser")
 	public void exportUser(HttpServletResponse response, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
-		List<SysUsers> userList = userService.getUserListByUserId(userId);
+		List<SysUser> userList = userService.getUserListByUserId(userId);
 
 		exportUser(userList, response);
 	}
@@ -249,7 +249,7 @@ public class UserController {
 	 */
 	@RequestMapping("/exportAllUser")
 	public void exportAllUser(HttpServletResponse response, HttpServletRequest request) {
-		List<SysUsers> userList = userService.getUserList();
+		List<SysUser> userList = userService.getUserList();
 
 		exportUser(userList, response);
 	}
@@ -259,7 +259,7 @@ public class UserController {
 	 * @param userList 用户记录
 	 * @param response
 	 */
-	private void exportUser(List<SysUsers> userList, HttpServletResponse response) {
+	private void exportUser(List<SysUser> userList, HttpServletResponse response) {
 		// 创建表格
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet("用户");
@@ -298,9 +298,8 @@ public class UserController {
 			data[2] = userList.get(i).getEmail();
 			data[3] = dateFormat.format(userList.get(i).getCreateTime());
 			data[4] = userList.get(i).getCreator();
-			data[5] = userList.get(i).getModifiedTime() == null ? ""
-					: dateFormat.format(userList.get(i).getModifiedTime());
-			data[6] = userList.get(i).getModifiedtor();
+			data[5] = userList.get(i).getModifyTime() == null ? "" : dateFormat.format(userList.get(i).getModifyTime());
+			data[6] = userList.get(i).getModifier();
 
 			rowData = sheet.createRow(i + 1);// 首行为标题
 

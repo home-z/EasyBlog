@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
-import com.blog.model.BllArticle;
-import com.blog.model.BllCommont;
-import com.blog.model.SysUsers;
+import com.blog.po.BllArticle;
+import com.blog.po.BllCommont;
+import com.blog.po.SysUser;
 import com.blog.service.BlogService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.ElasticSearchUtils;
@@ -52,7 +52,7 @@ public class BlogInfoController {
 	public void searchBlog(HttpServletRequest request, HttpServletResponse response) throws InstantiationException,
 			IllegalAccessException, UnsupportedEncodingException, IOException, ParseException {
 		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 
 		String vblogType = request.getParameter("vblogType") == null ? "" : request.getParameter("vblogType");
 		String vTitle = request.getParameter("vTitle") == null ? "" : request.getParameter("vTitle");
@@ -110,10 +110,10 @@ public class BlogInfoController {
 		if (article.getId() == null || article.getId() == "") {
 			// 新增
 			// 获取当前登录的用户
-			SysUsers currentUser = (SysUsers) request.getSession()
+			SysUser currentUser = (SysUser) request.getSession()
 					.getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 			article.setId(UUID.randomUUID().toString());
-			article.setCreateBy(currentUser.getUserCode());
+			article.setCreator(currentUser.getId());
 			article.setCreateTime(new Date());// new Date()为获取当前系统时间
 			article.setModifyTime(new Date());
 			article.setComCount(0);
@@ -179,8 +179,8 @@ public class BlogInfoController {
 	public Map<String, Object> getBlogStatistics(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException {
 
-	    RequestContext requestContext = new RequestContext(request);//读取多语资源
-		
+		RequestContext requestContext = new RequestContext(request);// 读取多语资源
+
 		String styleType = request.getParameter("styleType");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");

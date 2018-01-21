@@ -2,7 +2,7 @@ package com.blog.dao;
 
 import java.util.List;
 
-import com.blog.model.SysUsers;
+import com.blog.po.SysUser;
 
 /**
  * @author：Tim
@@ -16,7 +16,7 @@ public interface RoleUserDAO {
 	 * @param roleId 角色id
 	 * @return
 	 */
-	public List<SysUsers> getRoleUser(String roleId);
+	public List<SysUser> getRoleUser(String roleId);
 
 	/**
 	 * 增加用户到角色下

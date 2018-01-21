@@ -2,8 +2,8 @@ package com.blog.dao;
 
 import java.util.List;
 
-import com.blog.model.BllArticletype;
-import com.blog.model.BllFavarticle;
+import com.blog.po.BllArticletype;
+import com.blog.po.BllFavarticle;
 
 /**
  * @author：Tim

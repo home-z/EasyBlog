@@ -11,48 +11,6 @@ import javax.servlet.ServletContext;
 public class CoreConsts {
 
 	/**
-	 * 语言包
-	 * 
-	 * @author tim
-	 * 
-	 */
-	public static class Langs {
-		public static final String zh_CN = "zh_CN";
-		public static final String zh_TW = "zh_TW";
-		public static final String en_US = "en";
-		public static final String Jap = "jp";
-	}
-
-	/**
-	 * 运行时的一些常量，在用户登录时赋值
-	 * 
-	 * @author tim
-	 * 
-	 */
-	public static class Runtime {
-
-		/**
-		 * 应用程序的绝对路径
-		 */
-		public static String APP_ABSOLUTE_PATH;
-
-		/**
-		 * 执行环境
-		 */
-		public static ServletContext SERVLETCONTEXT;
-
-		/**
-		 * 当前登录用户用户名
-		 */
-		public static String CURRENT_USERCODE;
-
-		/**
-		 * 当前语言
-		 */
-		public static String CURRENT_LANGUAGE;
-	}
-
-	/**
 	 * 执行环境的key
 	 * 
 	 * @author tim

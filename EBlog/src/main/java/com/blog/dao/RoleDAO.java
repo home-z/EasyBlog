@@ -2,7 +2,7 @@ package com.blog.dao;
 
 import java.util.List;
 
-import com.blog.model.SysRole;
+import com.blog.po.SysRole;
 import com.blog.vo.RoleSearchParams;
 
 /**

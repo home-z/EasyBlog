@@ -11,8 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.model.BllCommont;
-import com.blog.model.SysUsers;
+import com.blog.po.BllCommont;
+import com.blog.po.SysUser;
 import com.blog.service.CommentService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.JsonHelper;
@@ -33,7 +33,7 @@ public class CommentController {
 	@ResponseBody
 	public Map<String, Object> getCommentListByUser(HttpServletRequest request) {
 		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 		List<BllCommont> list = commentService.getCommentListByUser(currentUser.getUserCode());
 
 		return JsonHelper.getModelMapforGrid(list);

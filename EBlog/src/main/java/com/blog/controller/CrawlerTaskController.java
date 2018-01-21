@@ -14,8 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.model.BllCrawltask;
-import com.blog.model.SysUsers;
+import com.blog.po.BllCrawltask;
+import com.blog.po.SysUser;
 import com.blog.service.CrawlerTaskService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.JsonHelper;
@@ -36,7 +36,7 @@ public class CrawlerTaskController {
 	@ResponseBody
 	public Map<String, Object> getListCrawlerTaskByUser(HttpServletRequest request) {
 		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 		List<BllCrawltask> list = crawlerTaskService.getListCrawlerTaskByUser(currentUser.getUserCode());
 
 		return JsonHelper.getModelMapforGrid(list);
@@ -56,16 +56,15 @@ public class CrawlerTaskController {
 	public Map<String, String> addCrawlerTask(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 
 		BllCrawltask crawltask = new BllCrawltask();
 
 		crawltask.setId(UUID.randomUUID().toString());
-		crawltask.setCreateBy(currentUser.getUserCode());
+		crawltask.setCreator(currentUser.getId());
 		crawltask.setCrawlUrl(request.getParameter("crawlUrl"));
 		crawltask.setKeyWords(request.getParameter("keyWords"));
 		crawltask.setState(0);
-		crawltask.setCreateTime(new Date());
 
 		crawlerTaskService.addCrawlerTask(crawltask);
 

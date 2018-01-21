@@ -2,7 +2,7 @@ package com.blog.dao;
 
 import java.util.List;
 
-import com.blog.model.BllPageinfo;
+import com.blog.po.BllPageinfo;
 
 /**
  * @author：Tim

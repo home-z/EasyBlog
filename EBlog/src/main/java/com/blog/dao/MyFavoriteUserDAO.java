@@ -2,7 +2,7 @@ package com.blog.dao;
 
 import java.util.List;
 
-import com.blog.model.BllFavuser;
+import com.blog.po.BllFavuser;
 
 /**
  * @author：Tim

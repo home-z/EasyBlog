@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import com.blog.constant.RuntimeEnvs;
 import com.blog.utils.CoreConsts;
 
 /**
@@ -41,7 +42,8 @@ public class GlobalController {
 		}
 		request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);// session中记录当前语言，供springmvc读取切换语言
 
-		CoreConsts.Runtime.CURRENT_LANGUAGE = langType;
+		// 存储当前语种
+		RuntimeEnvs.CURRENT_LANGUAGE = langType;
 
 		if (from.equals("admin")) {
 			return "admin/admin";// 重新定位到admin.jsp页面

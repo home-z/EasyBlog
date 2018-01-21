@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.model.SysUsers;
+import com.blog.po.SysUser;
 import com.blog.service.RoleUserService;
 import com.blog.utils.JsonHelper;
 
@@ -33,7 +33,7 @@ public class RoleUserController {
 	public Map<String, Object> getRoleUser(HttpServletRequest request, HttpServletResponse response) {
 		String roleId = request.getParameter("roleId");
 
-		List<SysUsers> usersList = roleUserService.getRoleUser(roleId);
+		List<SysUser> usersList = roleUserService.getRoleUser(roleId);
 
 		return JsonHelper.getModelMapforGrid(usersList);
 	}
@@ -42,17 +42,17 @@ public class RoleUserController {
 	@ResponseBody
 	public Map<String, String> addRoleUser(HttpServletResponse response, HttpServletRequest request) {
 		String roleId = request.getParameter("roleId");
-		String userCodes = request.getParameter("userCodes");
+		String userIds = request.getParameter("userIds");
 
 		// 判断角色中是否已经存在选择的用户
-		String[] userCodesArray = userCodes.split(",");
-		for (int i = 0; i < userCodesArray.length; i++) {
-			if (roleUserService.isExistRoleUser(roleId, userCodesArray[i])) {
-				return JsonHelper.getSucessResult(false, userCodesArray[i] + "已经在该角色中，请重新选择！");
+		String[] userIdsArray = userIds.split(",");
+		for (int i = 0; i < userIdsArray.length; i++) {
+			if (roleUserService.isExistRoleUser(roleId, userIdsArray[i])) {
+				return JsonHelper.getSucessResult(false, userIdsArray[i] + "已经在该角色中，请重新选择！");
 			}
 		}
 
-		boolean result = roleUserService.addRoleUser(roleId, userCodes);
+		boolean result = roleUserService.addRoleUser(roleId, userIds);
 
 		return JsonHelper.getSucessResult(result);
 	}

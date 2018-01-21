@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.RoleUserDAO;
-import com.blog.model.SysUsers;
+import com.blog.po.SysUser;
 
 /**
  * @author：Tim
@@ -19,7 +19,7 @@ public class RoleUserService {
 	@Autowired
 	private RoleUserDAO roleUserDAO;
 
-	public List<SysUsers> getRoleUser(String roleId) {
+	public List<SysUser> getRoleUser(String roleId) {
 		return roleUserDAO.getRoleUser(roleId);
 	}
 

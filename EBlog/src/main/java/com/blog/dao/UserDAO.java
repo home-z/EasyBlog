@@ -2,7 +2,7 @@ package com.blog.dao;
 
 import java.util.List;
 
-import com.blog.model.SysUsers;
+import com.blog.po.SysUser;
 import com.blog.vo.UserSearchParams;
 
 /**
@@ -17,14 +17,14 @@ public interface UserDAO {
 	 * @param userId 用户id
 	 * @return
 	 */
-	public SysUsers getUserById(String userId);
+	public SysUser getUserById(String userId);
 
 	/**
 	 * 根据条件搜索用户
 	 * @param userSearchParams 搜索用户参数
 	 * @return
 	 */
-	public List<SysUsers> searchUser(UserSearchParams userSearchParams);
+	public List<SysUser> searchUser(UserSearchParams userSearchParams);
 
 	/**
 	 * 根据用户编码判断用户是否存在
@@ -39,41 +39,41 @@ public interface UserDAO {
 	 * @param userPassWord 用户密码
 	 * @return
 	 */
-	public SysUsers login(String userCode, String userPassWord);
+	public SysUser login(String userCode, String userPassWord);
 
 	/**
 	 * 选出所有用户
 	 * @return
 	 */
-	public List<SysUsers> getUserList();
+	public List<SysUser> getUserList();
 
 	/**
 	 * 根据用户id选出所有用户
 	 * @param userId 用户id
 	 * @return
 	 */
-	public List<SysUsers> getUserListByUserId(String userId);
+	public List<SysUser> getUserListByUserId(String userId);
 
 	/**
 	 * 获取非当前用户的其他用户信息
 	 * @param currentUser
 	 * @return
 	 */
-	public List<SysUsers> getUserCodeNotCurrent(String currentUser);
+	public List<SysUser> getUserCodeNotCurrent(String currentUser);
 
 	/**
 	 * 保存用户
 	 * @param user
 	 * @return
 	 */
-	public boolean addUser(SysUsers user);
+	public boolean addUser(SysUser user);
 
 	/**
 	 * 更新用户
 	 * @param user
 	 * @return
 	 */
-	public boolean updateUser(SysUsers user);
+	public boolean updateUser(SysUser user);
 
 	/**
 	 * 根据id删除用户
@@ -86,5 +86,5 @@ public interface UserDAO {
 	 * 选出所有有头像的用户
 	 * @return
 	 */
-	public List<SysUsers> getUserHasPhotoList();
+	public List<SysUser> getUserHasPhotoList();
 }

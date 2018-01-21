@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.model.BllArticletype;
-import com.blog.model.SysUsers;
+import com.blog.constant.RuntimeEnvs;
+import com.blog.po.BllArticletype;
+import com.blog.po.SysUser;
 import com.blog.service.BlogTypeService;
 import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
@@ -46,7 +47,7 @@ public class BlogTypeController {
 	@ResponseBody
 	public void getBlogTypeByUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 		List<BllArticletype> typeList = blogTypeService.getTypeListByUser(currentUser.getId());
 
 		// 拼接Json字符串
@@ -73,7 +74,7 @@ public class BlogTypeController {
 	@ResponseBody
 	public Map<String, Object> getBlogTypeListByUser(HttpServletRequest request) {
 		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 		List<BllArticletype> typeList = blogTypeService.getTypeListByUser(currentUser.getId());
 
 		return JsonHelper.getModelMapforGrid(typeList);
@@ -82,14 +83,11 @@ public class BlogTypeController {
 	@RequestMapping("/addBlogType")
 	@ResponseBody
 	public Map<String, String> addBlogType(HttpServletResponse response, HttpServletRequest request) {
-		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-
 		BllArticletype articletype = new BllArticletype();
 		articletype.setId(UUID.randomUUID().toString());
 		articletype.setTypeName(request.getParameter("typeName"));
 		articletype.setDescription(request.getParameter("description"));
-		articletype.setUserId(currentUser.getId());
+		articletype.setCreator(RuntimeEnvs.CURRENT_USERID);
 
 		blogTypeService.addBlogType(articletype);
 

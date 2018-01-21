@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.model.SysMenu;
+import com.blog.po.SysMenu;
 import com.blog.service.AuthService;
 import com.blog.utils.JsonHelper;
 import com.blog.vo.MenuTree;

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.MyFavoriteArticleDAO;
-import com.blog.model.BllArticletype;
-import com.blog.model.BllFavarticle;
+import com.blog.po.BllArticletype;
+import com.blog.po.BllFavarticle;
 import com.blog.utils.HibernateUtils;
 
 /**

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.RoleDAO;
-import com.blog.model.SysRole;
+import com.blog.po.SysRole;
 import com.blog.vo.RoleSearchParams;
 
 /**

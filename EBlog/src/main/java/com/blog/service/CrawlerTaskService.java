@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.CrawlerTaskDAO;
-import com.blog.model.BllCrawltask;
-import com.blog.model.BllFavarticle;
+import com.blog.po.BllCrawltask;
+import com.blog.po.BllFavarticle;
 
 /**
  * @author：Tim

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.CommentDAO;
-import com.blog.model.BllCommont;
+import com.blog.po.BllCommont;
 
 /**
  * @author：Tim

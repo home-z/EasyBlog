@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.blog.vo.MenuTree;
-import com.blog.model.SysUsers;
+import com.blog.constant.RuntimeEnvs;
+import com.blog.po.SysUser;
 import com.blog.service.AuthService;
 import com.blog.service.UserService;
 import com.blog.utils.CoreConsts;
@@ -55,7 +56,7 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/loginpage", method = RequestMethod.GET)
 	public String loginpage(HttpServletRequest request) {
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 		if (currentUser != null) {
 			// 已经登录的用户不能进入登录页面，直接进入管理页
 			return "admin/admin";
@@ -77,16 +78,17 @@ public class LoginController {
 	public Map<String, String> login(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "userCode", required = true) String userCode,
 			@RequestParam(value = "userPassWord", required = true) String userPassWord) throws IOException {
-		SysUsers loginUser = userService.login(userCode, userPassWord);
+		SysUser loginUser = userService.login(userCode, userPassWord);
 
 		if (loginUser != null) {
 			// 根据用户角色，获取用户的权限菜单
-			List<MenuTree> menus = authService.getMenuTree(loginUser.getUserCode());
-			
-			//登录成功后会清除session，导致在首页选择的语言失效
-			//TODO，不能记录？还是使用默认的英文
-			Locale locale= (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
-			
+			List<MenuTree> menus = authService.getMenuTree(loginUser.getId());
+
+			// 登录成功后会清除session，导致在首页选择的语言失效
+			// TODO，不能记录？还是使用默认的英文
+			Locale locale = (Locale) request.getSession()
+					.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+
 			// 登录成功，则设置全局用户信息，在其他页面检测是否经过登录
 			HttpSession session = request.getSession();
 			response.setHeader("Pragma", "No-cache");// 清理缓存
@@ -95,12 +97,13 @@ public class LoginController {
 
 			session.setAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER, loginUser);// 放入当前登录的用户
 			session.setAttribute(CoreConsts.ExecuteContextKeys.CURRENT_MENU, menus);// 放入当前用户的菜单，登录后获取生成菜单
-			session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);//session中记录当前语言，供springmvc读取切换语言
+			session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);// session中记录当前语言，供springmvc读取切换语言
 
-			// 变量赋值
-			CoreConsts.Runtime.APP_ABSOLUTE_PATH = request.getServletContext().getRealPath("/");// 存储绝对路径
-			CoreConsts.Runtime.SERVLETCONTEXT = request.getServletContext();// 存储执行环境
-			CoreConsts.Runtime.CURRENT_USERCODE = loginUser.getUserCode();// 当前登录用户用户名
+			// 系统变量赋值
+			RuntimeEnvs.APP_ABSOLUTE_PATH = request.getServletContext().getRealPath("/");// 存储绝对路径
+			RuntimeEnvs.SERVLETCONTEXT = request.getServletContext();// 存储执行环境
+			RuntimeEnvs.CURRENT_USERCODE = loginUser.getUserCode();// 当前登录用户用户名
+			RuntimeEnvs.CURRENT_USERID = loginUser.getId();// 当前登录用户ID
 
 			return JsonHelper.getSucessResult(true);
 		} else {
@@ -119,9 +122,10 @@ public class LoginController {
 		request.getSession().invalidate();// 清除缓存
 
 		// 变量清空
-		CoreConsts.Runtime.APP_ABSOLUTE_PATH = null;// 存储绝对路径
-		CoreConsts.Runtime.SERVLETCONTEXT = null;// 存储执行环境
-		CoreConsts.Runtime.CURRENT_USERCODE = null;// 当前登录用户用户名
+		RuntimeEnvs.APP_ABSOLUTE_PATH = null;// 存储绝对路径
+		RuntimeEnvs.SERVLETCONTEXT = null;// 存储执行环境
+		RuntimeEnvs.CURRENT_USERCODE = null;// 当前登录用户用户名
+		RuntimeEnvs.CURRENT_USERID = null;
 
 		return "admin/login";// 回到登录页
 	}

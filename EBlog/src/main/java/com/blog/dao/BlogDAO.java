@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
 
-import com.blog.model.BllArticle;
-import com.blog.model.BllCommont;
+import com.blog.po.BllArticle;
+import com.blog.po.BllCommont;
 
 /**
  * @author：Tim

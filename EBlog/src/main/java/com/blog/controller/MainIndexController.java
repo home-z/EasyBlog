@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
-import com.blog.model.BllArticle;
-import com.blog.model.BllCommont;
+import com.blog.po.BllArticle;
+import com.blog.po.BllCommont;
 import com.blog.service.MainIndexService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.DateBindController;

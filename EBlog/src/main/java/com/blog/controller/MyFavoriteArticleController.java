@@ -13,8 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.model.BllFavarticle;
-import com.blog.model.SysUsers;
+import com.blog.po.BllFavarticle;
+import com.blog.po.SysUser;
 import com.blog.service.MyFavoriteArticleService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.HibernateUtils;
@@ -32,7 +32,7 @@ public class MyFavoriteArticleController {
 	public Map<String, Object> getMyFavoriteArticle(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 		List<BllFavarticle> list = myFavoriteArticleService.getMyFavoriteArticle(currentUser.getUserCode());
 
 		return JsonHelper.getModelMapforGrid(list);
@@ -43,12 +43,12 @@ public class MyFavoriteArticleController {
 	public Map<String, String> addMyFavoriteArticle(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 
 		BllFavarticle favArticle = new BllFavarticle();
 
 		favArticle.setId(UUID.randomUUID().toString());
-		favArticle.setUser(currentUser.getUserCode());
+		favArticle.setCreator(currentUser.getId());
 		favArticle.setArticleTitle(request.getParameter("articleTitle"));
 		favArticle.setArticleUrl(request.getParameter("articleUrl"));
 		favArticle.setDescrible(request.getParameter("describle"));

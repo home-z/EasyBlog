@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.blog.model.BllArticle;
-import com.blog.model.BllCommont;
+import com.blog.po.BllArticle;
+import com.blog.po.BllCommont;
 
 /**
  * @author：Tim

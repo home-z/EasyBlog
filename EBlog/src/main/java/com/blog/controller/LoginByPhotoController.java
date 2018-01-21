@@ -22,12 +22,13 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import com.blog.vo.MenuTree;
-import com.blog.model.SysUsers;
+import com.blog.po.SysUser;
 import com.blog.service.AuthService;
 import com.blog.service.UserService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.ImageCompareHelper;
 import com.blog.utils.JsonHelper;
+
 import java.util.List;
 
 /**
@@ -52,9 +53,9 @@ public class LoginByPhotoController {
 		String imgPath = generateImage(userPhoto);// 获取临时头像
 		String imgFingerPrint = ImageCompareHelper.produceFingerPrint(imgPath);// 计算头像指纹
 		// 查找数据库中用户表的指纹，进行匹配
-		List<SysUsers> userList = userService.getUserHasPhotoList();
-		for (SysUsers sysUsers : userList) {
-			double similarty = ImageCompareHelper.getSimilarty(sysUsers.getPhotoFingerPrint(), imgFingerPrint);
+		List<SysUser> userList = userService.getUserHasPhotoList();
+		for (SysUser SysUser : userList) {
+			double similarty = ImageCompareHelper.getSimilarty(SysUser.getPhotoFingerPrint(), imgFingerPrint);
 
 			System.out.println(similarty);
 			// 相似度大于或等于阈值，则认为匹配成功，登录通过
@@ -66,10 +67,10 @@ public class LoginByPhotoController {
 				response.setDateHeader("Expires", 0);
 
 				// 放入当前登录的用户
-				session.setAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER, sysUsers);
+				session.setAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER, SysUser);
 
 				// 根据用户角色，获取用户的权限菜单
-				List<MenuTree> menus = authService.getMenuTree(sysUsers.getUserCode());
+				List<MenuTree> menus = authService.getMenuTree(SysUser.getId());
 
 				// 放入当前用户的菜单，登录后获取生成菜单
 				session.setAttribute(CoreConsts.ExecuteContextKeys.CURRENT_MENU, menus);

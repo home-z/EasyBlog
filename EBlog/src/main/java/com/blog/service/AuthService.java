@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.blog.dao.MenuDAO;
 import com.blog.dao.RoleAuthDAO;
 import com.blog.vo.MenuTree;
-import com.blog.model.SysMenu;
+import com.blog.po.SysMenu;
 
 /**
  * @author：Tim
@@ -40,12 +40,12 @@ public class AuthService {
 	}
 
 	/**
-	 * 根据用户编码获取用户下权限菜单。登录成功后，获取用户菜单
-	 * @param userCode 用户编码
+	 * 根据用户id获取用户下权限菜单。登录成功后，获取用户菜单
+	 * @param userId 用户id
 	 * @return
 	 */
-	public List<MenuTree> getMenuTree(String userCode) {
-		List<SysMenu> menus = menuDAO.getMenuByUserCode(userCode);// 读取该用户下菜单
+	public List<MenuTree> getMenuTree(String userId) {
+		List<SysMenu> menus = menuDAO.getMenuByUserId(userId);// 读取该用户下菜单
 
 		return getMenuTreeList(menus);
 	}
@@ -70,11 +70,11 @@ public class AuthService {
 		List<MenuTree> menuTrees = new ArrayList<MenuTree>();
 
 		// 将菜单构建成树
-		Map<Integer, MenuTree> temp = new HashMap<Integer, MenuTree>();// 以id和菜单为主键
+		Map<String, MenuTree> temp = new HashMap<String, MenuTree>();// 以id和菜单为主键
 		for (SysMenu app : menus) {
 			MenuTree menuTree = new MenuTree(app);
 
-			if (app.getParentID() == 0) {// 目前是二级菜单，存着子菜单。一级菜单为总的根
+			if (app.getParentID().equals("menu0")) {// 目前是二级菜单，存着子菜单。一级菜单为总的根
 				menuTrees.add(menuTree);
 			} else {
 				MenuTree parent = temp.get(app.getParentID());// 通过parentid找到父节点

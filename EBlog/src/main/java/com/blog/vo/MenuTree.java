@@ -3,7 +3,7 @@ package com.blog.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.blog.model.SysMenu;
+import com.blog.po.SysMenu;
 
 /**
  * @author：Tim

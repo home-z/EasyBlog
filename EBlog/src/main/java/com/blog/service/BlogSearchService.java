@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.blog.model.BllArticle;
+import com.blog.po.BllArticle;
 import com.blog.utils.DbAction;
 import com.blog.utils.ElasticSearchUtils;
 import com.blog.utils.HibernateUtils;

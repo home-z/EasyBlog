@@ -2,7 +2,7 @@ package com.blog.dao;
 
 import java.util.List;
 
-import com.blog.model.SysMenu;
+import com.blog.po.SysMenu;
 
 /**
  * @author：Tim
@@ -19,11 +19,11 @@ public interface MenuDAO {
 	public List<SysMenu> getMenuByRoleId(String roleId);
 
 	/**
-	 * 根据用户编码获取用户权限下的菜单
-	 * @param userCode 用户编码
+	 * 根据用户id获取用户权限下的菜单
+	 * @param userId 用户id
 	 * @return 用户菜单
 	 */
-	public List<SysMenu> getMenuByUserCode(String userCode);
+	public List<SysMenu> getMenuByUserId(String userId);
 
 	/**
 	 * 获取所有菜单

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.MyFavoriteUserDAO;
-import com.blog.model.BllFavuser;
+import com.blog.po.BllFavuser;
 
 /**
  * @author：Tim

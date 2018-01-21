@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.CrawlerNewsDAO;
-import com.blog.model.BllPageinfo;
+import com.blog.po.BllPageinfo;
 
 /**
  * @author：Tim

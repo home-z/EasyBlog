@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.model.BllPageinfo;
-import com.blog.model.SysUsers;
+import com.blog.po.BllPageinfo;
+import com.blog.po.SysUser;
 import com.blog.service.CrawlerNewsService;
 import com.blog.utils.CoreConsts;
 import com.blog.utils.JsonHelper;
@@ -32,7 +32,7 @@ public class CrawlerNewsController {
 	@ResponseBody
 	public Map<String, Object> getListCrawlerNewsByUser(HttpServletRequest request) {
 		// 获取当前登录的用户
-		SysUsers currentUser = (SysUsers) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
+		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
 		List<BllPageinfo> list = CrawlerNewsService.getListCrawlerNewsByUser(currentUser.getUserCode());
 
 		return JsonHelper.getModelMapforGrid(list);
