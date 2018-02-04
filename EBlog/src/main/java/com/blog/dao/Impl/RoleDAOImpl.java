@@ -2,7 +2,6 @@ package com.blog.dao.Impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +9,7 @@ import com.blog.dao.RoleDAO;
 import com.blog.po.SysRole;
 import com.blog.utils.HibernateUtils;
 import com.blog.vo.RoleSearchParams;
+import com.blog.vo.RoleSearchResponse;
 
 /**
  * @author：Tim
@@ -20,20 +20,21 @@ import com.blog.vo.RoleSearchParams;
 public class RoleDAOImpl implements RoleDAO {
 
 	@Override
-	public List<SysRole> searchRole(RoleSearchParams roleSearchParams) {
-		List<SysRole> lstSysRoles = new ArrayList<SysRole>();
+	public List<RoleSearchResponse> searchRole(RoleSearchParams roleSearchParams) {
+		List<RoleSearchResponse> lstSysRoles = new ArrayList<RoleSearchResponse>();
 
 		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append("select * from sys_role r where 1=1");
+		strBuilder.append(
+				"select a.ID,a.RoleName,a.CreateTime,b.UserName CreatorName,a.ModifyTime,c.UserName ModifierName,a.Remark from sys_role a inner join sys_user b on a.creator=b.id left join sys_user c on a.Modifier=c.id where 1=1");
 
 		if (roleSearchParams.getRoleName() != null && !roleSearchParams.getRoleName().equals("")) {
-			strBuilder.append(" and r.roleName like '%");
+			strBuilder.append(" and a.roleName like '%");
 			strBuilder.append(roleSearchParams.getRoleName());
 			strBuilder.append("%'");
 		}
 
-		strBuilder.append(" order by createtime desc ");
-		lstSysRoles = HibernateUtils.queryListParam(SysRole.class, strBuilder.toString());
+		strBuilder.append(" order by a.createtime desc ");
+		lstSysRoles = HibernateUtils.queryListParamBean(RoleSearchResponse.class, strBuilder.toString());
 
 		return lstSysRoles;
 	}
@@ -66,16 +67,12 @@ public class RoleDAOImpl implements RoleDAO {
 
 	@Override
 	public boolean addRole(SysRole role) {
-		role.setId(UUID.randomUUID().toString());// 生成一个id
-
 		return HibernateUtils.add(role);
 	}
 
 	@Override
 	public boolean updateRole(SysRole role) {
-		HibernateUtils.update(role);
-
-		return true;
+		return HibernateUtils.update(role);
 	}
 
 	@Override

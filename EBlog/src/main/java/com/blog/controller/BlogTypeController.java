@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,17 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.constant.RuntimeEnvs;
+import com.blog.utils.SessionHelper;
 import com.blog.po.BllArticletype;
-import com.blog.po.SysUser;
 import com.blog.service.BlogTypeService;
-import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
+import com.blog.vo.ArticleTypeAddRequest;
+import com.blog.vo.TypeCountResponse;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.blog.utils.CoreConsts;
 
 /**
  * 博客类别管理
@@ -32,7 +30,9 @@ import com.blog.utils.CoreConsts;
  */
 @Controller
 @RequestMapping("/BlogType")
-public class BlogTypeController {
+public class BlogTypeController extends BaseController {
+
+	private static Logger logger = Logger.getLogger(BlogTypeController.class);
 
 	@Autowired
 	private BlogTypeService blogTypeService;
@@ -45,10 +45,8 @@ public class BlogTypeController {
 	 */
 	@RequestMapping("/getBlogTypeByUser")
 	@ResponseBody
-	public void getBlogTypeByUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		// 获取当前登录的用户
-		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllArticletype> typeList = blogTypeService.getTypeListByUser(currentUser.getId());
+	public void getBlogTypeByUser(HttpServletResponse response) throws IOException {
+		List<BllArticletype> typeList = blogTypeService.getTypeListByUser(SessionHelper.getCurrentUserId(request));
 
 		// 拼接Json字符串
 		PrintWriter out = response.getWriter();
@@ -72,22 +70,22 @@ public class BlogTypeController {
 
 	@RequestMapping("/getBlogTypeListByUser")
 	@ResponseBody
-	public Map<String, Object> getBlogTypeListByUser(HttpServletRequest request) {
+	public Map<String, Object> getBlogTypeListByUser() {
 		// 获取当前登录的用户
-		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllArticletype> typeList = blogTypeService.getTypeListByUser(currentUser.getId());
+		List<BllArticletype> typeList = blogTypeService.getTypeListByUser(SessionHelper.getCurrentUserId(request));
 
 		return JsonHelper.getModelMapforGrid(typeList);
 	}
 
 	@RequestMapping("/addBlogType")
 	@ResponseBody
-	public Map<String, String> addBlogType(HttpServletResponse response, HttpServletRequest request) {
+	public Map<String, String> addBlogType(ArticleTypeAddRequest articleTypeAdd) {
 		BllArticletype articletype = new BllArticletype();
+
 		articletype.setId(UUID.randomUUID().toString());
-		articletype.setTypeName(request.getParameter("typeName"));
-		articletype.setDescription(request.getParameter("description"));
-		articletype.setCreator(RuntimeEnvs.CURRENT_USERID);
+		articletype.setTypeName(articleTypeAdd.getTypeName());
+		articletype.setDescription(articleTypeAdd.getDescription());
+		articletype.setCreator(SessionHelper.getCurrentUserId(request));
 
 		blogTypeService.addBlogType(articletype);
 
@@ -96,7 +94,7 @@ public class BlogTypeController {
 
 	@RequestMapping("/editBlogType")
 	public String editBlogType(Model model, @RequestParam(value = "blogTypeId", required = true) String blogTypeId) {
-		BllArticletype articletype = (BllArticletype) HibernateUtils.findById(BllArticletype.class, blogTypeId);
+		BllArticletype articletype = blogTypeService.getBlogTypeById(blogTypeId);
 		model.addAttribute("blogTypeDTO", articletype);
 
 		return "admin/blog/blogTypeEdit";
@@ -104,10 +102,11 @@ public class BlogTypeController {
 
 	@RequestMapping("/updateBlogType")
 	@ResponseBody
-	public Map<String, String> updateBlogType(HttpServletResponse response, HttpServletRequest request) {
-		BllArticletype articletype = (BllArticletype) HibernateUtils.findById(BllArticletype.class,
-				request.getParameter("id"));
-		articletype.setDescription(request.getParameter("description"));
+	public Map<String, String> updateBlogType(String id, String description) {
+		BllArticletype articletype = blogTypeService.getBlogTypeById(id);
+
+		articletype.setDescription(description);
+		articletype.setModifier(SessionHelper.getCurrentUserId(request));
 
 		blogTypeService.updateBlogType(articletype);
 
@@ -116,9 +115,7 @@ public class BlogTypeController {
 
 	@RequestMapping("/deleteBlogType")
 	@ResponseBody
-	public Map<String, String> deleteBlogType(HttpServletResponse response, HttpServletRequest request) {
-		String blogTypeIds = request.getParameter("blogTypeIds");
-
+	public Map<String, String> deleteBlogType(String blogTypeIds) {
 		String[] blogTypeIdArray = blogTypeIds.split(",");
 		for (int i = 0; i < blogTypeIdArray.length; i++) {
 			if (blogTypeService.getBlogCountByType(blogTypeIdArray[i]) > 0) {
@@ -128,6 +125,35 @@ public class BlogTypeController {
 		}
 
 		boolean result = blogTypeService.deleteBlogType(blogTypeIds);
+		logger.info("删除文章类别。" + blogTypeIds);
+
 		return JsonHelper.getSucessResult(result);
+	}
+
+	// 获取分类及每个分类下的文章数量
+	@RequestMapping("/getCategory")
+	@ResponseBody
+	public Map<String, Object> getCategory() {
+		StringBuffer strBCategory = new StringBuffer();
+		strBCategory.append("<ul>");
+
+		List<TypeCountResponse> lstTypeCount = blogTypeService.getTypeCount();
+		for (TypeCountResponse typeCountResponse : lstTypeCount) {
+			strBCategory.append("<li><a onClick='addTypeMenu(\"");
+			strBCategory.append(typeCountResponse.getTypeName());
+			strBCategory.append("\",\"");
+			strBCategory.append(typeCountResponse.getTypeId());
+			strBCategory.append("\")");
+			strBCategory.append("' href=\"#\" >");
+			strBCategory.append(typeCountResponse.getTypeName());
+			strBCategory.append("(");
+			strBCategory.append(typeCountResponse.getTypeCount());
+			strBCategory.append(")");
+			strBCategory.append("</a></li>");
+		}
+
+		strBCategory.append("</ul>");
+
+		return JsonHelper.getModel(strBCategory.toString());
 	}
 }

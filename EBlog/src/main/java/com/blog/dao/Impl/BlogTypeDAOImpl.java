@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.blog.dao.BlogTypeDAO;
 import com.blog.po.BllArticletype;
 import com.blog.utils.HibernateUtils;
+import com.blog.vo.TypeCountResponse;
 
 /**
  * @author：Tim
@@ -19,7 +20,7 @@ public class BlogTypeDAOImpl implements BlogTypeDAO {
 	@Override
 	public List<BllArticletype> getTypeListByUser(String userId) {
 		List<BllArticletype> typeList = HibernateUtils.queryListParam(BllArticletype.class,
-				"select * from bll_articletype where userid='" + userId + "'");
+				"select * from bll_articletype where creator='" + userId + "'");
 
 		return typeList;
 	}
@@ -41,6 +42,13 @@ public class BlogTypeDAOImpl implements BlogTypeDAO {
 		strSqlBlder.append(")");
 
 		return HibernateUtils.executeSql(strSqlBlder.toString());
+	}
+
+	@Override
+	public List<TypeCountResponse> getTypeCount() {
+		String strSql = "select b.id typeId,b.typename typeName,count(typeid) typeCount from bll_article a right join bll_articletype b on a.typeid=b.id group by b.id,b.typename order by typeCount desc";
+
+		return HibernateUtils.queryListParamBean(TypeCountResponse.class, strSql);
 	}
 
 	@Override

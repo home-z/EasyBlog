@@ -2,7 +2,6 @@ package com.blog.dao;
 
 import java.util.List;
 
-import com.blog.po.BllArticletype;
 import com.blog.po.BllFavarticle;
 
 /**
@@ -13,10 +12,12 @@ import com.blog.po.BllFavarticle;
 public interface MyFavoriteArticleDAO {
 	/**
 	 * 读取当前用户关注的文章
-	 * @param userCode 当前用户编码
+	 * @param userId 当前用户id
 	 * @return
 	 */
-	List<BllFavarticle> getMyFavoriteArticle(String userCode);
+	List<BllFavarticle> getMyFavoriteArticle(String userId);
+
+	BllFavarticle getMyFavoriteArticleById(String myFavoriteArticleId);
 
 	boolean addMyFavoriteArticle(BllFavarticle favArticle);
 

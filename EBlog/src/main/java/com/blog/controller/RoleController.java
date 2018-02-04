@@ -1,12 +1,8 @@
 package com.blog.controller;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.constant.RuntimeEnvs;
+import com.blog.utils.SessionHelper;
 import com.blog.po.SysRole;
-import com.blog.po.SysUser;
 import com.blog.service.RoleService;
-import com.blog.utils.CoreConsts;
-import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
 import com.blog.vo.RoleSearchParams;
+import com.blog.vo.RoleSearchResponse;
 
 /**
  * @author：Tim
@@ -33,7 +27,7 @@ import com.blog.vo.RoleSearchParams;
 
 @Controller
 @RequestMapping("/Role")
-public class RoleController {
+public class RoleController extends BaseController {
 	private static Logger logger = Logger.getLogger(RoleController.class);
 
 	@Autowired
@@ -45,20 +39,18 @@ public class RoleController {
 	 */
 	@RequestMapping("/searchRole")
 	@ResponseBody
-	public Map<String, Object> searchRole(HttpServletRequest request, HttpServletResponse response) {
+	public Map<String, Object> searchRole(String vroleName) {
 		RoleSearchParams roleSearchParams = new RoleSearchParams();
-		roleSearchParams.setRoleName(request.getParameter("vroleName"));
+		roleSearchParams.setRoleName(vroleName);
 
-		List<SysRole> rolesList = roleService.searchRole(roleSearchParams);
+		List<RoleSearchResponse> rolesList = roleService.searchRole(roleSearchParams);
 
 		return JsonHelper.getModelMapforGrid(rolesList);
 	}
 
 	@RequestMapping("/deleteRole")
 	@ResponseBody
-	public Map<String, String> deleteRole(HttpServletResponse response, HttpServletRequest request) {
-		String roleId = request.getParameter("roleId");
-
+	public Map<String, String> deleteRole(String roleId) {
 		String[] roleIds = roleId.split(",");
 		for (int i = 0; i < roleIds.length; i++) {
 			if (roleService.getCountByRoleId(roleIds[i]) > 0) {
@@ -74,20 +66,19 @@ public class RoleController {
 
 	@RequestMapping("/addRole")
 	@ResponseBody
-	public Map<String, String> addRole(HttpServletRequest request, HttpSession session) {
-
-		// 新建角色对象
-		SysRole role = new SysRole();
-		role.setRoleName(request.getParameter("roleName"));
-		role.setRemark(request.getParameter("remark"));
-
-		role.setCreateTime(new Date());// 设置创建时间为当前
-		role.setCreator(RuntimeEnvs.CURRENT_USERCODE);// 设置创建人为当前登录用户
-
-		boolean isRoleNameExist = roleService.isRoleNameExist(role.getRoleName());
+	public Map<String, String> addRole(String roleName, String remark) {
+		boolean isRoleNameExist = roleService.isRoleNameExist(roleName);
 		if (isRoleNameExist) {
 			return JsonHelper.getSucessResult(false, "该角色名称已经存在！");
 		}
+
+		// 新建角色对象
+		SysRole role = new SysRole();
+
+		role.setId(UUID.randomUUID().toString());// 生成一个id
+		role.setRoleName(roleName);
+		role.setRemark(remark);
+		role.setCreator(SessionHelper.getCurrentUserId(request));// 设置创建人为当前登录用户
 
 		// 保存
 		roleService.addRole(role);
@@ -97,12 +88,12 @@ public class RoleController {
 
 	@RequestMapping("/updateRole")
 	@ResponseBody
-	public Map<String, String> updateRole(HttpServletRequest request, HttpSession session) {
+	public Map<String, String> updateRole(String id, String roleName, String remark) {
+		SysRole role = roleService.getSysRoleByRoleId(id);// 获取角色对象
 
-		SysRole role = (SysRole) HibernateUtils.findById(SysRole.class, request.getParameter("id"));// 获取角色对象
-		role.setRoleName(request.getParameter("roleName"));
-		role.setRemark(request.getParameter("remark"));
-		role.setModifier(RuntimeEnvs.CURRENT_USERID);// 设置修改人为当前登录用户
+		role.setRoleName(roleName);
+		role.setRemark(remark);
+		role.setModifier(SessionHelper.getCurrentUserId(request));// 设置修改人为当前登录用户
 
 		// 修改
 		roleService.updateRole(role);
@@ -113,7 +104,7 @@ public class RoleController {
 	@RequestMapping("/editRole")
 	public String getDetailByRoleId(Model model, @RequestParam(value = "roleId", required = true) String roleId) {
 		// 读取角色详细内容
-		SysRole role = (SysRole) HibernateUtils.findById(SysRole.class, roleId);
+		SysRole role = roleService.getSysRoleByRoleId(roleId);
 		model.addAttribute("roleDTO", role);
 
 		return "admin/system/rolesEdit";

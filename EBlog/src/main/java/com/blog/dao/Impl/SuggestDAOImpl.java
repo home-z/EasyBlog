@@ -19,7 +19,7 @@ public class SuggestDAOImpl implements SuggestDAO {
 	@Override
 	public List<BllSuggest> getSuggestListByUser(String userId) {
 		List<BllSuggest> list = HibernateUtils.queryListParam(BllSuggest.class,
-				"select * from bll_suggest where user='" + userId + "'");
+				"select * from bll_suggest where creator='" + userId + "'");
 
 		return list;
 	}

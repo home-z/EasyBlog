@@ -2,7 +2,6 @@ package com.blog.dao.Impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +10,7 @@ import com.blog.po.SysUser;
 import com.blog.utils.HibernateUtils;
 import com.blog.utils.MD5;
 import com.blog.vo.UserSearchParams;
+import com.blog.vo.UserSearchResponse;
 
 /**
  * @author：Tim
@@ -40,24 +40,23 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public List<SysUser> getUserList() {
-		List<SysUser> userList = HibernateUtils.queryListParam(SysUser.class,
-				"select * from sys_user order by createtime desc");
+	public List<UserSearchResponse> getUserList() {
+		List<UserSearchResponse> userList = HibernateUtils.queryListParamBean(UserSearchResponse.class,
+				"select a.ID,a.UserCode,a.UserName,a.Email,a.CreateTime,b.UserName CreatorName,a.ModifyTime,c.UserName ModifierName from sys_user a inner join sys_user b on a.creator=b.id left join sys_user c on a.Modifier=c.id order by a.CreateTime desc");
 
 		return userList;
 	}
 
 	@Override
-	public List<SysUser> getUserCodeNotCurrent(String currentUser) {
+	public List<SysUser> getUserNotCurrent(String currentUserId) {
 		List<SysUser> userList = HibernateUtils.queryListParam(SysUser.class,
-				"select * from sys_user where usercode!='" + currentUser + "'");
+				"select * from sys_user where id!='" + currentUserId + "'");
 
 		return userList;
 	}
 
 	@Override
 	public boolean addUser(SysUser user) {
-		user.setId(UUID.randomUUID().toString());// 生成一个id
 		user.setUserPassword(MD5.encode(user.getUserPassword()));// 将密码加密后存入
 
 		return HibernateUtils.add(user);
@@ -65,9 +64,9 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public boolean updateUser(SysUser user) {
-		HibernateUtils.update(user);
+		user.setUserPassword(MD5.encode(user.getUserPassword()));// 将密码加密后存入
 
-		return true;
+		return HibernateUtils.update(user);
 	}
 
 	@Override
@@ -96,11 +95,12 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public List<SysUser> getUserListByUserId(String userId) {
+	public List<UserSearchResponse> getUserListByUserId(String userId) {
 		String[] userIds = userId.split(",");
 
 		StringBuilder strSqlBlder = new StringBuilder();
-		strSqlBlder.append("select * from sys_user where id in (");
+		strSqlBlder.append(
+				"select a.ID,a.UserCode,a.UserName,a.Email,a.CreateTime,b.UserName CreatorName,a.ModifyTime,c.UserName ModifierName from sys_user a inner join sys_user b on a.creator=b.id left join sys_user c on a.Modifier=c.id where a.id in (");
 
 		for (int i = 0; i < userIds.length; i++) {
 			strSqlBlder.append("'");
@@ -108,38 +108,42 @@ public class UserDAOImpl implements UserDAO {
 			strSqlBlder.append("'");
 			strSqlBlder.append(",");
 		}
+
 		strSqlBlder.deleteCharAt(strSqlBlder.length() - 1);
 		strSqlBlder.append(")");
+		strSqlBlder.append(" order by a.createtime desc ");
 
-		return HibernateUtils.queryListParam(SysUser.class, strSqlBlder.toString());
+		return HibernateUtils.queryListParamBean(UserSearchResponse.class, strSqlBlder.toString());
 	}
 
 	@Override
-	public List<SysUser> searchUser(UserSearchParams userSearchParams) {
-		List<SysUser> lstSysUsers = new ArrayList<SysUser>();
+	public List<UserSearchResponse> searchUser(UserSearchParams userSearchParams) {
+		List<UserSearchResponse> lstSysUsersResponse = new ArrayList<UserSearchResponse>();
 
 		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append("select * from sys_user u where 1=1");
+		strBuilder.append(
+				"select a.ID,a.UserCode,a.UserName,a.Email,a.CreateTime,b.UserName CreatorName,a.ModifyTime,c.UserName ModifierName from sys_user a inner join sys_user b on a.creator=b.id left join sys_user c on a.Modifier=c.id where 1=1");
 		if (userSearchParams.getUserCode() != null && !userSearchParams.getUserCode().equals("")) {
-			strBuilder.append(" and u.UserCode like '%");
+			strBuilder.append(" and a.UserCode like '%");
 			strBuilder.append(userSearchParams.getUserCode());
 			strBuilder.append("%'");
 		}
 		if (userSearchParams.getUserName() != null && !userSearchParams.getUserName().equals("")) {
-			strBuilder.append(" and u.UserName like '%");
+			strBuilder.append(" and a.UserName like '%");
 			strBuilder.append(userSearchParams.getUserName());
 			strBuilder.append("%'");
 		}
 		if (userSearchParams.getEmail() != null && !userSearchParams.getEmail().equals("")) {
-			strBuilder.append(" and u.Email like '%");
+			strBuilder.append(" and a.Email like '%");
 			strBuilder.append(userSearchParams.getEmail());
 			strBuilder.append("%'");
 		}
 
-		strBuilder.append(" order by createtime desc ");
-		lstSysUsers = HibernateUtils.queryListParam(SysUser.class, strBuilder.toString());
+		strBuilder.append(" order by a.createtime desc ");
 
-		return lstSysUsers;
+		lstSysUsersResponse = HibernateUtils.queryListParamBean(UserSearchResponse.class, strBuilder.toString());
+
+		return lstSysUsersResponse;
 	}
 
 	@Override

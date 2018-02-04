@@ -7,7 +7,7 @@ function getCategory() {
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
-		url : getContextPath() + '/MainIndex/getCategory.do',
+		url : getContextPath() + '/BlogType/getCategory.do',
 		dataType : 'json',
 		success : function(data) {
 			if (data && data.success == "true") {
@@ -29,7 +29,7 @@ function getPageFilter(action) {
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
-		url : getContextPath() + '/MainIndex/getArticlePage.do?action=' + action,
+		url : getContextPath() + '/BlogInfo/getArticlePage.do?action=' + action,
 		dataType : 'json',
 		success : function(data) {
 			if (data && data.success == "true") {
@@ -67,9 +67,9 @@ function getArticle(url) {
 //调用的控制器方法 
 //首页：getallArticle； 热读：getArticleRead； 热评：getArticleCommit；推荐：getArticleSuggest；
 function getArticleByMenu(method) {
-	getPageFilter("/MainIndex/" + method + ".do");// 生成底部的分页
+	getPageFilter("/BlogInfo/" + method + ".do");// 生成底部的分页
 	aPageChange();// 分页切换
-	getArticle(getContextPath() + "/MainIndex/" + method + ".do?page=1");
+	getArticle(getContextPath() + "/BlogInfo/" + method + ".do?page=1");
 }
 
 // 分页切换
@@ -93,9 +93,9 @@ function aPageChange() {
 // 点击分类
 function getArticleType(typeid) {
 	// 生成分页
-	getPageFilter("/MainIndex/getArticleByType.do?typeid=" + typeid);// 生成底部的分页
+	getPageFilter("/BlogInfo/getArticleByType.do?typeid=" + typeid);// 生成底部的分页
 	aPageChange();
-	getArticle(getContextPath() + '/MainIndex/getArticleByType.do?typeid=' + typeid + '&page=1');
+	getArticle(getContextPath() + '/BlogInfo/getArticleByType.do?typeid=' + typeid + '&page=1');
 }
 
 // 点击右侧分类，则增加对应分类菜单
@@ -104,8 +104,8 @@ function addTypeMenu(typeName, typeid) {
 	if ($("#" + typeid + "").length <= 0) {
 		$("#divMenu ul").append("<li><a id=\""
 								+ typeid
-								+ "\" href='javascript:void(0);' onclick='getArticleType("
-								+ typeid + ")''>" + typeName + "</a></li>");
+								+ "\" href='javascript:void(0);' onclick=\"getArticleType(\'"
+								+ typeid + "\')\" >" + typeName + "</a></li>");
 	}
 
 	// 触发click事件
@@ -116,12 +116,6 @@ function addTypeMenu(typeName, typeid) {
 function searchKeyword() {
 	var keyword = $("#txtKeyword").val();
 	if (keyword != "") {
-		// 显示查询菜单
-		if ($("#searchMenu").length <= 0) {
-			$("#divMenu ul").append("<li><a id='searchMenu' href='javascript:void(0);'>"+localResource["search"]+"</a></li>");
-		}
-
-		$("#searchMenu").click();// 只是为了加上选中样式而进行一次点击
 		getSearchBlog(keyword);
 	} else {
 		alert(localResource["inputKeyWord"]);
@@ -139,7 +133,19 @@ function getSearchBlog(keyword) {
 		url : getContextPath() + "/BlogSearch/searchBlog.do",
 		data : $.param(param),
 		success : function(data) {
+			if(data.enableES == false) {
+				alert("未开启搜索功能！");
+				return;
+			}
+			
 			if (data && data.total != 0) {
+				// 显示查询菜单
+				if ($("#searchMenu").length <= 0) {
+					$("#divMenu ul").append("<li><a id='searchMenu' href='javascript:void(0);'>"+localResource["search"]+"</a></li>");
+				}
+
+				$("#searchMenu").click();// 只是为了加上选中样式而进行一次点击
+				
 				var strSearchArticle = appendArticle(data.rows);
 				$('#articleInfo').html(strSearchArticle);
 				
@@ -158,7 +164,7 @@ function appendArticle(dataSource) {
 	var strAllArticle = "";
 	$.each(dataSource, function(i, item) {
 		strAllArticle += "<div>";
-		strAllArticle += "<a href='" + getContextPath() + "/MainIndex/getDetailById.do?id=";
+		strAllArticle += "<a href='" + getContextPath() + "/BlogInfo/getDetailByIdView.do?id=";
 		strAllArticle += item.id;
 		strAllArticle += "' target='_blank'>";
 		strAllArticle += item.title;
@@ -167,10 +173,10 @@ function appendArticle(dataSource) {
 		strAllArticle += item.content;
 		strAllArticle += "</p>";
 		strAllArticle += "<p id='postInfo'>";
-		strAllArticle += "<a style='text-decoration:none' href='" + getContextPath() + "/MainIndex/getArticleByCreateBy.do?user=";
-		strAllArticle += item.createBy;
+		strAllArticle += "<a style='text-decoration:none' href='" + getContextPath() + "/BlogInfo/getArticleByCreateBy.do?userId=";
+		strAllArticle += item.creator;
 		strAllArticle += "' target='_blank'>";
-		strAllArticle += item.createBy;
+		strAllArticle += item.creatorName;
 		strAllArticle += "</a>";
 		strAllArticle += "&nbsp;";
 		strAllArticle += localResource["postat"];

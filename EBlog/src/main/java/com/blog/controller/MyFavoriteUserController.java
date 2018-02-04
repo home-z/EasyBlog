@@ -1,54 +1,43 @@
 package com.blog.controller;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.blog.utils.SessionHelper;
 import com.blog.po.BllFavuser;
-import com.blog.po.SysUser;
 import com.blog.service.MyFavoriteUserService;
-import com.blog.utils.CoreConsts;
-import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
 
 @Controller
 @RequestMapping("/FavoriteUser")
-public class MyFavoriteUserController {
+public class MyFavoriteUserController extends BaseController {
 
 	@Autowired
 	private MyFavoriteUserService myFavoriteUserService;
 
 	@RequestMapping("/getMyFavoriteUser")
 	@ResponseBody
-	public Map<String, Object> getMyFavoriteUser(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		// 获取当前登录的用户
-		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllFavuser> list = myFavoriteUserService.getMyFavoriteUser(currentUser.getUserCode());
+	public Map<String, Object> getMyFavoriteUser() {
+		List<BllFavuser> list = myFavoriteUserService.getMyFavoriteUser(SessionHelper.getCurrentUserId(request));
 
 		return JsonHelper.getModelMapforGrid(list);
 	}
 
 	@RequestMapping("/addMyFavoriteUser")
 	@ResponseBody
-	public Map<String, String> addMyFavoriteUser(HttpServletResponse response, HttpServletRequest request) {
-		// 获取当前登录的用户
-		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-
+	public Map<String, String> addMyFavoriteUser(String favUser, String favUserDescrible) {
 		BllFavuser myFavoriteUser = new BllFavuser();
+
 		myFavoriteUser.setId(UUID.randomUUID().toString());
-		myFavoriteUser.setCreator(currentUser.getId());
-		myFavoriteUser.setFavUser(request.getParameter("favUser"));
-		myFavoriteUser.setDescrible(request.getParameter("favUserDescrible"));
+		myFavoriteUser.setCreator(SessionHelper.getCurrentUserId(request));
+		myFavoriteUser.setFavUser(favUser);
+		myFavoriteUser.setDescrible(favUserDescrible);
 
 		myFavoriteUserService.addMyFavoriteUser(myFavoriteUser);
 
@@ -57,12 +46,12 @@ public class MyFavoriteUserController {
 
 	@RequestMapping("/updateMyFavoriteUser")
 	@ResponseBody
-	public Map<String, String> updateMyFavoriteUser(HttpServletResponse response, HttpServletRequest request) {
-		BllFavuser myFavoriteUser = (BllFavuser) HibernateUtils.findById(BllFavuser.class,
-				request.getParameter("favuserId"));
+	public Map<String, String> updateMyFavoriteUser(String favuserId, String favUser, String favUserDescrible) {
+		BllFavuser myFavoriteUser = myFavoriteUserService.getMyFavuserById(favuserId);
 
-		myFavoriteUser.setFavUser(request.getParameter("favUser"));
-		myFavoriteUser.setDescrible(request.getParameter("favUserDescrible"));
+		myFavoriteUser.setFavUser(favUser);
+		myFavoriteUser.setDescrible(favUserDescrible);
+		myFavoriteUser.setModifier(SessionHelper.getCurrentUserId(request));
 
 		myFavoriteUserService.updateMyFavoriteUser(myFavoriteUser);
 
@@ -71,9 +60,7 @@ public class MyFavoriteUserController {
 
 	@RequestMapping("/deleteMyFavoriteUser")
 	@ResponseBody
-	public Map<String, String> deleteMyFavoriteUser(HttpServletResponse response, HttpServletRequest request) {
-		String favUserIds = request.getParameter("favUserIds");
-
+	public Map<String, String> deleteMyFavoriteUser(String favUserIds) {
 		boolean result = myFavoriteUserService.deleteMyFavoriteUser(favUserIds);
 		return JsonHelper.getSucessResult(result);
 	}

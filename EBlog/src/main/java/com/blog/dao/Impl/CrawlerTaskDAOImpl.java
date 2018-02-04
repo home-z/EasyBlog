@@ -19,7 +19,7 @@ public class CrawlerTaskDAOImpl implements CrawlerTaskDAO {
 	@Override
 	public List<BllCrawltask> getListCrawlerTaskByUser(String userId) {
 		List<BllCrawltask> list = HibernateUtils.queryListParam(BllCrawltask.class,
-				"select * from bll_crawltask where CreateBy='" + userId + "'");
+				"select * from bll_crawltask where Creator='" + userId + "'");
 
 		return list;
 	}

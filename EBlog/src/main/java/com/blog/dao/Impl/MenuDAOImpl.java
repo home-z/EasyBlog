@@ -20,7 +20,7 @@ public class MenuDAOImpl implements MenuDAO {
 	public List<SysMenu> getMenuByRoleId(String roleId) {
 		List<SysMenu> list = HibernateUtils.queryListParam(SysMenu.class,
 				"select * from sys_menu m where m.ParentID is not null and m.id in (select menuid from sys_roleauth where roleid='"
-						+ roleId + "') order by m.id");
+						+ roleId + "') order by m.index");
 
 		return list;
 	}
@@ -38,7 +38,7 @@ public class MenuDAOImpl implements MenuDAO {
 	@Override
 	public List<SysMenu> getAllMenus() {
 		List<SysMenu> list = HibernateUtils.queryListParam(SysMenu.class,
-				"select * from sys_menu m where m.ParentID is not null and m.id in (select menuid from sys_roleauth) order by m.id");
+				"select * from sys_menu m where m.ParentID is not null and m.id in (select menuid from sys_roleauth) order by m.index");
 
 		return list;
 	}

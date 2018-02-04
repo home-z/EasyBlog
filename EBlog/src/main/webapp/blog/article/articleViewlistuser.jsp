@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>${dto[0].createBy}-<spring:message code="blogworld"/></title>
+	<title>${dto[0].creator}-<spring:message code="blogworld"/></title>
 	<%@include file="/common/resinculde.jsp"%>
 	<link href="${cssPath}/articleViewlistuser.css" rel="stylesheet" type="text/css" />
 </head>
@@ -22,9 +22,9 @@
 	</div>
 	<div id="articleInfo">
 		<c:forEach items="${dto}" var="item">
-			<a href="${ctxPath}/MainIndex/getDetailById.do?id=${item.id}" target="_blank">${item.title}</a>
+			<a href="${ctxPath}/BlogInfo/getDetailByIdView.do?id=${item.id}" target="_blank">${item.title}</a>
 			<p>${item.content}</p>
-			<p id="postInfo">${item.createBy}&nbsp;<spring:message code="postat"/>&nbsp;${item.createTime}&nbsp;<spring:message code="commit"/>(${item.comCount})</p>
+			<p id="postInfo">${item.creator}&nbsp;<spring:message code="postat"/>&nbsp;${item.createTime}&nbsp;<spring:message code="commit"/>(${item.comCount})</p>
 			<hr>
 		</c:forEach>
 	</div>

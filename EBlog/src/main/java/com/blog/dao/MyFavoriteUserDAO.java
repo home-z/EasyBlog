@@ -13,10 +13,12 @@ public interface MyFavoriteUserDAO {
 
 	/**
 	 * 获取当前用户关注的用户
-	 * @param userCode 当前用户编码
+	 * @param userId 当前用户id
 	 * @return
 	 */
-	List<BllFavuser> getMyFavoriteUser(String userCode);
+	List<BllFavuser> getMyFavoriteUser(String userId);
+
+	BllFavuser getMyFavuserById(String favUserId);
 
 	boolean addMyFavoriteUser(BllFavuser myFavoriteUser);
 

@@ -1,23 +1,20 @@
 package com.blog.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.blog.constant.SystemEnvs;
 import com.blog.dao.BlogDAO;
 import com.blog.po.BllArticle;
-import com.blog.po.BllCommont;
-import com.blog.utils.DbAction;
-import com.blog.utils.HibernateUtils;
-import com.blog.utils.JsonHelper;
+import com.blog.utils.ElasticSearchUtils;
+import com.blog.vo.ArticleIndexResponse;
+import com.blog.vo.ArticleSearchParams;
+import com.blog.vo.ArticleStatisticResponse;
 
 /*操作Blog类
  */
@@ -27,59 +24,74 @@ public class BlogService {
 	@Autowired
 	private BlogDAO blogDAO;
 
+	public boolean addArticle(BllArticle article) {
+		boolean addDBResult = blogDAO.addArticle(article);// 新增文章到数据库
+
+		if (SystemEnvs.ENABLEELASTICSEARCH) {
+			// 如果开启了ElasticSearch，则再需要新增文章加入到elasticSearch中
+			// TODO未全部成功，需要回滚
+			boolean addESResult = ElasticSearchUtils.addDoc("bll_article", article.getId(), article, "getId",
+					"getTitle", "getContent");
+
+			return addDBResult && addESResult ? true : false;
+		} else {
+			return addDBResult;
+		}
+	}
+
+	public boolean updateArticle(BllArticle article) {
+		boolean updateDBResult = blogDAO.updateArticle(article);// 更新数据库
+
+		if (SystemEnvs.ENABLEELASTICSEARCH) {
+			// 更新内容更新到elasticSearch中
+			Map<String, String> updateParam = new HashMap<String, String>();
+			updateParam.put("title", article.getTitle());
+			updateParam.put("content", article.getContent());
+
+			boolean updateESResult = ElasticSearchUtils.updateDoc("bll_article", article.getId(), updateParam);
+
+			return updateDBResult && updateESResult ? true : false;
+		} else {
+			return updateDBResult;
+		}
+	}
+
+	public BllArticle getArticleById(String articleId) {
+		return blogDAO.getArticleById(articleId);
+	}
+
+	public boolean deleteArticleById(String articleId) {
+		boolean deleteDBResult = blogDAO.deleteArticleById(articleId);
+
+		if (SystemEnvs.ENABLEELASTICSEARCH) {
+			// 同时删除elasticSearch中记录
+			boolean deleteESResult = ElasticSearchUtils.deleteDoc("bll_article", articleId);
+
+			return deleteDBResult && deleteESResult ? true : false;
+		} else {
+			return deleteDBResult;
+		}
+	}
+
 	/**
 	 * 查询文章
 	 * 
 	 * @throws ParseException
 	 */
-	public List<BllArticle> searchBlog(String vblogType, String vTitle, String vstartDate, String vendDate,
-			String vContent, String currentUserCode) {
-		return blogDAO.searchBlog(vblogType, vTitle, vstartDate, vendDate, vContent, currentUserCode);
-	}
-
-	/**
-	 * 根据文章id，获取文章发布信息 TODO，这是给es搜索用的，待优化
-	 * 
-	 * @param articleID 文章id
-	 * @return
-	 */
-	public static ResultSet getPostInfo(String articleID) {
-		String strSql = "select CreateBy,CreateTime,ComCount,ReadCount,SuggestCount from bll_article  where id='"
-				+ articleID + "'";
-
-		ResultSet rs = DbAction.getQuery(strSql);
-		return rs;
+	public List<BllArticle> searchArticle(ArticleSearchParams articleSearchParams) {
+		return blogDAO.searchArticle(articleSearchParams);
 	}
 
 	/**
 	 * 报表统计
 	 * 
-	 * @param chartid
 	 * @param styleType
 	 * @param startDate
 	 * @param endDate
 	 * @return
 	 */
-	public ResultSet getBlogStatistics(String styleType, String startDate, String endDate) {
+	public List<ArticleStatisticResponse> getBlogStatistics(String styleType, String startDate, String endDate) {
 		return blogDAO.getBlogStatistics(styleType, startDate, endDate);
-	}
-
-	/**
-	 * 读取该文章的评论
-	 * @param articleID 文章id
-	 * @return
-	 */
-	public List<BllCommont> getDetailById(String articleID) {
-		return blogDAO.getDetailById(articleID);
-	}
-
-	/**
-	 * 统计用户下文章数量
-	 * @param userCode 用户编码
-	 * @return
-	 */
-	public int getCountByUserCode(String userCode) {
-		return blogDAO.getCountByUserCode(userCode);
 	}
 
 	/**
@@ -91,4 +103,45 @@ public class BlogService {
 		return blogDAO.getCountByUserId(userId);
 	}
 
+	/**
+	 * 返回生成分页控件需要的数据
+	 * @param url 前端点击的url
+	 * @return 总的行数
+	 */
+	public int getArticlePage(String url) {
+		return blogDAO.getArticlePage(url);
+	}
+
+	/**
+	 * 按照文章分类读取该分类下的文章
+	 * @param typeid 文章分类id
+	 * @param page 页数
+	 * @return
+	 */
+	public List<ArticleIndexResponse> getArticleByType(String typeid, String page) {
+		return blogDAO.getArticleByType(typeid, page);
+	}
+
+	/**
+	 * 对文章进行各种排序
+	 * @param byType 排序条件
+	 * @param page 页数
+	 * @return
+	 */
+	public List<ArticleIndexResponse> getArticleByOrderType(int byType, String page) {
+		return blogDAO.getArticleByOrderType(byType, page);
+	}
+
+	/**
+	 * 读取该用户的所有博客
+	 * @param userId 用户Id
+	 * @return
+	 */
+	public List<BllArticle> getArticleByCreator(String userId) {
+		return blogDAO.getArticleByCreator(userId);
+	}
+
+	public ArticleIndexResponse getDetailByIdView(String articleId) {
+		return blogDAO.getDetailByIdView(articleId);
+	}
 }

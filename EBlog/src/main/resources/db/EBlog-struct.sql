@@ -15,7 +15,7 @@ CREATE TABLE `bll_article` (
   `TypeID` varchar(60) DEFAULT NULL COMMENT '文章所属类型ID',
   `TypeName` varchar(50) DEFAULT NULL COMMENT '文章所属类型名称',
   `Title` varchar(50) DEFAULT NULL COMMENT '文章标题',
-  `Content` text COMMENT '文章内容',
+  `Content` varchar(10000) DEFAULT NULL COMMENT '文章内容',
   `ComCount` int(11) DEFAULT '0' COMMENT '文章被评论条数',
   `ReadCount` int(11) DEFAULT '0' COMMENT '文章被阅读条数',
   `SuggestCount` int(11) DEFAULT '0' COMMENT '文章被推荐次数',

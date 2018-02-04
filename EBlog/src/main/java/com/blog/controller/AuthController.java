@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.blog.po.SysMenu;
 import com.blog.service.AuthService;
 import com.blog.utils.JsonHelper;
+import com.blog.utils.SessionHelper;
 import com.blog.vo.MenuTree;
 
 /**
@@ -37,45 +38,10 @@ public class AuthController {
 
 		// 生成树形菜单
 		List<MenuTree> allMenusTreeList = authService.getAllMenus();
-
-		StringBuilder strBlderTree = new StringBuilder();
-		strBlderTree.append("[{\"id\":0,\"text\":\"菜单\",\"children\":[");
-
-		for (MenuTree menuTree : allMenusTreeList) {
-			strBlderTree.append("{");
-
-			strBlderTree.append("\"id\":");
-			strBlderTree.append(menuTree.getRoot().getId());
-			strBlderTree.append(",");
-
-			strBlderTree.append("\"text\":\"");
-			strBlderTree.append(menuTree.getRoot().getMenuName());
-			strBlderTree.append("\",");
-
-			strBlderTree.append("\"children\":[");
-			for (MenuTree menuTreeChild : menuTree.getChildren()) {
-				strBlderTree.append("{");
-
-				strBlderTree.append("\"id\":");
-				strBlderTree.append(menuTreeChild.getRoot().getId());
-				strBlderTree.append(",");
-
-				strBlderTree.append("\"text\":\"");
-				strBlderTree.append(menuTreeChild.getRoot().getMenuName());
-
-				strBlderTree.append("\"},");
-			}
-			strBlderTree.deleteCharAt(strBlderTree.length() - 1);
-
-			strBlderTree.append("]");
-			strBlderTree.append("},");
-		}
-
-		strBlderTree.deleteCharAt(strBlderTree.length() - 1);
-		strBlderTree.append("]}]");
+		String strAllMenu = JsonHelper.loadAllMenus(allMenusTreeList);
 
 		PrintWriter out = response.getWriter();
-		out.println(strBlderTree.toString());
+		out.println(strAllMenu);
 		out.close();
 	}
 
@@ -93,13 +59,13 @@ public class AuthController {
 		String roleId = request.getParameter("roleId");
 		String authIds = request.getParameter("authIds");
 
-		//todo事务
-		
+		// todo事务
+
 		// 先删除该角色下的权限
 		authService.deleteAuthByRoleId(roleId);
 
 		// 再重新加入权限
-		boolean result = authService.addRoleAuths(roleId, authIds);
+		boolean result = authService.addRoleAuths(roleId, authIds, SessionHelper.getCurrentUserId(request));
 
 		return JsonHelper.getSucessResult(result);
 	}

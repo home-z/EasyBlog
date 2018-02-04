@@ -33,4 +33,17 @@ public class StringUtils {
 		else
 			return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
 	}
+
+	/**
+	 * 判断字符串是否为null或者空字符串
+	 * @param input 待判断的字符串
+	 * @return
+	 */
+	public static boolean isNullOrEmpty(String strInput) {
+		if (strInput == null || strInput.trim().equals("")) {
+			return true;
+		}
+
+		return false;
+	}
 }

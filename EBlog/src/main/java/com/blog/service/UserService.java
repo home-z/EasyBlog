@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.blog.dao.UserDAO;
 import com.blog.po.SysUser;
 import com.blog.vo.UserSearchParams;
+import com.blog.vo.UserSearchResponse;
 
 /**
  * @author：Tim
@@ -34,7 +35,7 @@ public class UserService {
 	 * @param userSearchParams
 	 * @return
 	 */
-	public List<SysUser> searchUser(UserSearchParams userSearchParams) {
+	public List<UserSearchResponse> searchUser(UserSearchParams userSearchParams) {
 		return userDAO.searchUser(userSearchParams);
 	}
 
@@ -61,7 +62,7 @@ public class UserService {
 	 * 选出所有用户
 	 * @return
 	 */
-	public List<SysUser> getUserList() {
+	public List<UserSearchResponse> getUserList() {
 		return userDAO.getUserList();
 	}
 
@@ -70,7 +71,7 @@ public class UserService {
 	 * @param userId
 	 * @return
 	 */
-	public List<SysUser> getUserListByUserId(String userId) {
+	public List<UserSearchResponse> getUserListByUserId(String userId) {
 		return userDAO.getUserListByUserId(userId);
 	}
 
@@ -79,8 +80,8 @@ public class UserService {
 	 * @param currentUser
 	 * @return
 	 */
-	public List<SysUser> getUserCodeNotCurrent(String currentUser) {
-		return userDAO.getUserCodeNotCurrent(currentUser);
+	public List<SysUser> getUserNotCurrent(String currentUserId) {
+		return userDAO.getUserNotCurrent(currentUserId);
 	}
 
 	/**

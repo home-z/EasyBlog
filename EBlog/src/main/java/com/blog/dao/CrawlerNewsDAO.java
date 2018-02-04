@@ -10,5 +10,11 @@ import com.blog.po.BllPageinfo;
  * @description：TODO
  */
 public interface CrawlerNewsDAO {
+
+	/**
+	 * 获取用户的抓取网页
+	 * @param userId
+	 * @return
+	 */
 	List<BllPageinfo> getListCrawlerNewsByUser(String userId);
 }

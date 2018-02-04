@@ -94,6 +94,8 @@
 				success : function(data) {
 					if (data && data.success == "true") {
 						$.messager.alert("成功", data.content, "info");
+						
+						location.href = "${ctxPath}/admin/system/roles.jsp";
 					} else {
 						$.messager.alert("失败", data.content, "info");
 					}

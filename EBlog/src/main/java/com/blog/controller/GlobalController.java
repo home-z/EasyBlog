@@ -2,16 +2,11 @@ package com.blog.controller;
 
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
-import com.blog.constant.RuntimeEnvs;
-import com.blog.utils.CoreConsts;
 
 /**
  * @author：Tim
@@ -21,7 +16,7 @@ import com.blog.utils.CoreConsts;
 
 @Controller
 @RequestMapping("/Global")
-public class GlobalController {
+public class GlobalController extends BaseController {
 
 	/**
 	 * 语言切换
@@ -31,8 +26,7 @@ public class GlobalController {
 	 * @return
 	 */
 	@RequestMapping("/changeLang")
-	public String changeLang(HttpServletRequest request,
-			@RequestParam(value = "from", defaultValue = "index") String from,
+	public String changeLang(@RequestParam(value = "from", defaultValue = "index") String from,
 			@RequestParam(value = "langType", defaultValue = "zh") String langType) {
 		Locale locale = LocaleContextHolder.getLocale();// 默认
 		if (langType.equals("zh")) {
@@ -41,9 +35,6 @@ public class GlobalController {
 			locale = new Locale("en", "US");
 		}
 		request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);// session中记录当前语言，供springmvc读取切换语言
-
-		// 存储当前语种
-		RuntimeEnvs.CURRENT_LANGUAGE = langType;
 
 		if (from.equals("admin")) {
 			return "admin/admin";// 重新定位到admin.jsp页面

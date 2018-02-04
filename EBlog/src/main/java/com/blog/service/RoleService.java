@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.blog.dao.RoleDAO;
 import com.blog.po.SysRole;
 import com.blog.vo.RoleSearchParams;
+import com.blog.vo.RoleSearchResponse;
 
 /**
  * @author：Tim
@@ -21,7 +22,7 @@ public class RoleService {
 	@Autowired
 	private RoleDAO roleDAO;
 
-	public List<SysRole> searchRole(RoleSearchParams roleSearchParams) {
+	public List<RoleSearchResponse> searchRole(RoleSearchParams roleSearchParams) {
 		return roleDAO.searchRole(roleSearchParams);
 	}
 

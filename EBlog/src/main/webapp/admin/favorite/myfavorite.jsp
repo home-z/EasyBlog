@@ -42,7 +42,7 @@
 				<table cellpadding="5">
 					<tr>
 						<td>博主:</td>
-						<td><input class="easyui-combobox" id="favUser" name="favUser" data-options="valueField:'text',textField:'text',url:'${ctxPath}/User/getUserCode.do'"></input></td>
+						<td><input class="easyui-combobox" id="favUser" name="favUser" data-options="valueField:'text',textField:'text',url:'${ctxPath}/User/getUserNotCurrent.do'"></input></td>
 					</tr>
 					<tr>
 						<td>描述:</td>
@@ -360,7 +360,7 @@
 					align : 'center',
 					formatter:
 					function(value,row){
-						return "<a href='${ctxPath}/MainIndex/getArticleByCreateBy.do?user="
+						return "<a href='${ctxPath}/BlogInfo/getArticleByCreator.do?userId="
 						+ value + "' target='_blank'>"+value+"</a>" 
 					},
 					editor:{
@@ -369,7 +369,7 @@
 							valueField:'text',
 							textField:'text',
 							method:'get',
-							url:'${ctxPath}/User/getUserCode.do',
+							url:'${ctxPath}/User/getUserNotCurrent.do',
 							required:true
 								}
 				}

@@ -23,15 +23,15 @@ public class RoleUserService {
 		return roleUserDAO.getRoleUser(roleId);
 	}
 
-	public boolean addRoleUser(String roleId, String userCodes) {
-		return roleUserDAO.addRoleUser(roleId, userCodes);
+	public boolean addRoleUser(String roleId, String userIds, String creatorId) {
+		return roleUserDAO.addRoleUser(roleId, userIds, creatorId);
 	}
 
-	public boolean removeRoleUser(String roleId, String userCodes) {
-		return roleUserDAO.removeRoleUser(roleId, userCodes);
+	public boolean removeRoleUser(String roleId, String userIds) {
+		return roleUserDAO.removeRoleUser(roleId, userIds);
 	}
 
-	public boolean isExistRoleUser(String roleId, String userCode) {
-		return roleUserDAO.isExistRoleUser(roleId, userCode);
+	public boolean isExistRoleUser(String roleId, String userId) {
+		return roleUserDAO.isExistRoleUser(roleId, userId);
 	}
 }

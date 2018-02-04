@@ -3,19 +3,15 @@ package com.blog.controller;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.blog.po.BllSuggest;
-import com.blog.po.SysUser;
 import com.blog.service.SuggestService;
-import com.blog.utils.CoreConsts;
 import com.blog.utils.JsonHelper;
+import com.blog.utils.SessionHelper;
 
 /**
  * @author：Tim
@@ -24,26 +20,23 @@ import com.blog.utils.JsonHelper;
  */
 @Controller
 @RequestMapping("/suggest")
-public class SuggestController {
+public class SuggestController extends BaseController {
 	@Autowired
 	private SuggestService suggestService;
 
 	@RequestMapping("/getSuggestListByUser")
 	@ResponseBody
-	public Map<String, Object> getSuggestListByUser(HttpServletRequest request) {
-		// 获取当前登录的用户
-		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllSuggest> list = suggestService.getSuggestListByUser(currentUser.getUserCode());
+	public Map<String, Object> getSuggestListByUser() {
+		List<BllSuggest> list = suggestService.getSuggestListByUser(SessionHelper.getCurrentUserId(request));
 
 		return JsonHelper.getModelMapforGrid(list);
 	}
 
 	@RequestMapping("/deleteSuggest")
 	@ResponseBody
-	public Map<String, String> deleteSuggest(HttpServletResponse response, HttpServletRequest request) {
-		String toDeleteIds = request.getParameter("suggestIds");
+	public Map<String, String> deleteSuggest(String suggestIds) {
+		boolean result = suggestService.deleteSuggest(suggestIds);
 
-		boolean result = suggestService.deleteSuggest(toDeleteIds);
 		return JsonHelper.getSucessResult(result);
 	}
 }

@@ -26,4 +26,13 @@ public class CommentService {
 	public boolean deleteComment(String toDeleteIds) {
 		return commentDAO.deleteComment(toDeleteIds);
 	}
+
+	/**
+	 * 读取该文章的评论
+	 * @param articleID 文章id
+	 * @return
+	 */
+	public List<BllCommont> getCommentById(String articleID) {
+		return commentDAO.getCommentById(articleID);
+	}
 }

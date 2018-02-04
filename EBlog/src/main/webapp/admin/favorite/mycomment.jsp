@@ -117,7 +117,7 @@
 						align : 'center',
 						editor : 'text',
 						formatter : function(value, row, index) {
-							return "<a href='${ctxPath}/MainIndex/getDetailById.do?id="
+							return "<a href='${ctxPath}/BlogInfo/getDetailByIdView.do?id="
 								+ row.articleId
 								+ "' target='_blank'>"
 								+ value

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.blog.utils.SessionHelper;
 import com.blog.dao.RoleAuthDAO;
 import com.blog.po.SysRoleAuth;
 import com.blog.utils.HibernateUtils;
@@ -24,7 +25,7 @@ public class RoleAuthDAOImpl implements RoleAuthDAO {
 	}
 
 	@Override
-	public boolean addRoleAuths(String roleId, String authIds) {
+	public boolean addRoleAuths(String roleId, String authIds, String creatorId) {
 		String[] authIdsArray = authIds.split(",");
 
 		for (int i = 0; i < authIdsArray.length; i++) {
@@ -33,6 +34,7 @@ public class RoleAuthDAOImpl implements RoleAuthDAO {
 			sysRoleAuth.setId(UUID.randomUUID().toString());
 			sysRoleAuth.setRoleId(roleId);
 			sysRoleAuth.setMenuId(authIdsArray[i]);
+			sysRoleAuth.setCreator(creatorId);
 
 			HibernateUtils.add(sysRoleAuth);
 		}

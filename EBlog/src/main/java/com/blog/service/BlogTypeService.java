@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.blog.dao.BlogTypeDAO;
 import com.blog.po.BllArticletype;
+import com.blog.vo.TypeCountResponse;
 
 /**
  * @author：Tim
@@ -31,7 +32,7 @@ public class BlogTypeService {
 	public boolean updateBlogType(BllArticletype articletype) {
 		return blogTypeDAO.updateBlogType(articletype);
 	}
-	
+
 	/**
 	 * 根据博客类别id，获取博客类别对象
 	 * @param blogTypeId 博客类别id
@@ -61,5 +62,9 @@ public class BlogTypeService {
 	 */
 	public int getBlogCountByType(String blogTypeId) {
 		return blogTypeDAO.getBlogCountByType(blogTypeId);
+	}
+
+	public List<TypeCountResponse> getTypeCount() {
+		return blogTypeDAO.getTypeCount();
 	}
 }

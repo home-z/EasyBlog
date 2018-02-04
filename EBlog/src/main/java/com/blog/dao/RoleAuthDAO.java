@@ -12,7 +12,7 @@ public interface RoleAuthDAO {
 	 * @param roleId 角色id
 	 * @return
 	 */
-	public boolean deleteAuthByRoleId(String roleId);
+	boolean deleteAuthByRoleId(String roleId);
 
 	/**
 	 * 将权限加入到角色下
@@ -20,5 +20,5 @@ public interface RoleAuthDAO {
 	 * @param authIds 权限
 	 * @return
 	 */
-	public boolean addRoleAuths(String roleId, String authIds);
+	boolean addRoleAuths(String roleId, String authIds, String creatorId);
 }

@@ -19,7 +19,7 @@ public class CommentDAOImpl implements CommentDAO {
 	@Override
 	public List<BllCommont> getCommentListByUser(String userId) {
 		List<BllCommont> typeList = HibernateUtils.queryListParam(BllCommont.class,
-				"select * from bll_commont where person='" + userId + "'");
+				"select * from bll_commont where creator='" + userId + "'");
 
 		return typeList;
 	}
@@ -43,4 +43,12 @@ public class CommentDAOImpl implements CommentDAO {
 		return HibernateUtils.executeSql(strSqlBlder.toString());
 	}
 
+	@Override
+	public List<BllCommont> getCommentById(String articleID) {
+		// 读取该文章的评论
+		List<BllCommont> comList = HibernateUtils.queryListParam(BllCommont.class,
+				"select * from bll_commont where ArticleID='" + articleID + "' order by createtime asc");
+
+		return comList;
+	}
 }

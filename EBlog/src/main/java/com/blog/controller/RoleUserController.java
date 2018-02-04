@@ -3,9 +3,6 @@ package com.blog.controller;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.blog.po.SysUser;
 import com.blog.service.RoleUserService;
 import com.blog.utils.JsonHelper;
+import com.blog.utils.SessionHelper;
 
 /**
  * @author：Tim
@@ -23,16 +21,14 @@ import com.blog.utils.JsonHelper;
 
 @Controller
 @RequestMapping("/RoleUser")
-public class RoleUserController {
+public class RoleUserController extends BaseController {
 
 	@Autowired
 	private RoleUserService roleUserService;
 
 	@RequestMapping("/getRoleUser")
 	@ResponseBody
-	public Map<String, Object> getRoleUser(HttpServletRequest request, HttpServletResponse response) {
-		String roleId = request.getParameter("roleId");
-
+	public Map<String, Object> getRoleUser(String roleId) {
 		List<SysUser> usersList = roleUserService.getRoleUser(roleId);
 
 		return JsonHelper.getModelMapforGrid(usersList);
@@ -40,10 +36,7 @@ public class RoleUserController {
 
 	@RequestMapping("/addRoleUser")
 	@ResponseBody
-	public Map<String, String> addRoleUser(HttpServletResponse response, HttpServletRequest request) {
-		String roleId = request.getParameter("roleId");
-		String userIds = request.getParameter("userIds");
-
+	public Map<String, String> addRoleUser(String roleId, String userIds) {
 		// 判断角色中是否已经存在选择的用户
 		String[] userIdsArray = userIds.split(",");
 		for (int i = 0; i < userIdsArray.length; i++) {
@@ -52,18 +45,15 @@ public class RoleUserController {
 			}
 		}
 
-		boolean result = roleUserService.addRoleUser(roleId, userIds);
+		boolean result = roleUserService.addRoleUser(roleId, userIds, SessionHelper.getCurrentUserId(request));
 
 		return JsonHelper.getSucessResult(result);
 	}
 
 	@RequestMapping("/removeRoleUser")
 	@ResponseBody
-	public Map<String, String> removeRoleUser(HttpServletResponse response, HttpServletRequest request) {
-		String roleId = request.getParameter("roleId");
-		String userCodes = request.getParameter("userCodes");
-
-		boolean result = roleUserService.removeRoleUser(roleId, userCodes);
+	public Map<String, String> removeRoleUser(String roleId, String userIds) {
+		boolean result = roleUserService.removeRoleUser(roleId, userIds);
 
 		return JsonHelper.getSucessResult(result);
 	}

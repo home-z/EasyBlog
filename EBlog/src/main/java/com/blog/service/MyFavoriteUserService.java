@@ -21,11 +21,11 @@ public class MyFavoriteUserService {
 
 	/**
 	 * 获取当前用户关注的用户
-	 * @param userCode 当前用户编码
+	 * @param userId 当前用户id
 	 * @return
 	 */
-	public List<BllFavuser> getMyFavoriteUser(String userCode) {
-		return myFavoriteUserDAO.getMyFavoriteUser(userCode);
+	public List<BllFavuser> getMyFavoriteUser(String userId) {
+		return myFavoriteUserDAO.getMyFavoriteUser(userId);
 	}
 
 	public boolean addMyFavoriteUser(BllFavuser myFavoriteUser) {
@@ -38,5 +38,9 @@ public class MyFavoriteUserService {
 
 	public boolean deleteMyFavoriteUser(String favUserIds) {
 		return myFavoriteUserDAO.deleteMyFavoriteUser(favUserIds);
+	}
+
+	public BllFavuser getMyFavuserById(String favUserId) {
+		return myFavoriteUserDAO.getMyFavuserById(favUserId);
 	}
 }

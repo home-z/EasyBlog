@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>${artdto.title}-${artdto.createBy}-<spring:message code="blogworld"/></title>
+	<title>${artdto.title}-${artdto.creatorName}-<spring:message code="blogworld"/></title>
 	<%@include file="/common/resinculde.jsp"%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="${cssPath}/articleView.css" rel="stylesheet" type="text/css" />
@@ -24,7 +24,10 @@
 		<div id="articleInfo">
 			<p id="title">${artdto.title}</p>
 			<p>${artdto.content}</p>
-			<p id="postInfo">${artdto.createBy}&nbsp;<spring:message code="postat"/>&nbsp;${artdto.createTime}</p>
+			<p id="postInfo">${artdto.creatorName}&nbsp;<spring:message code="postat"/>&nbsp;${artdto.createTime}
+			&nbsp;<spring:message code="read"/>&nbsp;(${artdto.readCount})
+			&nbsp;<spring:message code="suggest"/>&nbsp;(${artdto.suggestCount})
+			&nbsp;<spring:message code="commit"/>&nbsp;(${artdto.comCount})</p>
 			<br />
 		</div>
 		<p><spring:message code="commitList"/></p>

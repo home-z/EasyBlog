@@ -79,11 +79,11 @@
 					success : function(data) {
 						if (data && data.success == "true") {
 							$.messager.alert("成功", data.content, "info");
+							
+							location.href = "${ctxPath}/admin/blog/blogtype.jsp";
 						} else {
 							$.messager.alert("失败", data.content, "info");
 						}
-						
-						location.href = "${ctxPath}/admin/blog/blogtype.jsp";
 					},
 					error : function() {
 						$.messager.alert("错误", "管理用户发生网络异常！", "error");

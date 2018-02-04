@@ -1,12 +1,11 @@
 package com.blog.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.List;
 
 import com.blog.po.BllArticle;
-import com.blog.po.BllCommont;
+import com.blog.vo.ArticleIndexResponse;
+import com.blog.vo.ArticleSearchParams;
+import com.blog.vo.ArticleStatisticResponse;
 
 /**
  * @author：Tim
@@ -16,42 +15,92 @@ import com.blog.po.BllCommont;
 public interface BlogDAO {
 
 	/**
-	 * 查询文章
-	 * 
-	 * @throws ParseException
+	 * 创建文章
+	 * @param article
+	 * @return
 	 */
-	public List<BllArticle> searchBlog(String vblogType, String vTitle, String vstartDate, String vendDate,
-			String vContent, String currentUserCode);
+	boolean addArticle(BllArticle article);
+
+	/**
+	 * 更新文章
+	 * @param article
+	 * @return
+	 */
+	boolean updateArticle(BllArticle article);
+
+	/**
+	 * 获取文章
+	 * @param articleId 文章id
+	 * @return
+	 */
+	BllArticle getArticleById(String articleId);
+
+	/**
+	 * 删除文章
+	 * @param articleId 文章id
+	 * @return
+	 */
+	boolean deleteArticleById(String articleId);
+
+	/**
+	 * 查询文章
+	 * @param articleSearchParams 查询参数
+	 * @return
+	 */
+	List<BllArticle> searchArticle(ArticleSearchParams articleSearchParams);
 
 	/**
 	 * 报表统计
 	 * 
-	 * @param chartid
 	 * @param styleType
 	 * @param startDate
 	 * @param endDate
 	 * @return
 	 */
-	public ResultSet getBlogStatistics(String styleType, String startDate, String endDate);
-
-	/**
-	 * 读取该文章的评论
-	 * @param articleID 文章id
-	 * @return
-	 */
-	public List<BllCommont> getDetailById(String articleID);
-
-	/**
-	 * 根据用户编码，获取该用户下的文章数量
-	 * @param userCode 用户编码
-	 * @return
-	 */
-	public int getCountByUserCode(String userCode);
+	List<ArticleStatisticResponse> getBlogStatistics(String styleType, String startDate, String endDate);
 
 	/**
 	 * 根据用户id，获取该用户下的文章数量
 	 * @param userId 用户id
 	 * @return
 	 */
-	public int getCountByUserId(String userId);
+	int getCountByUserId(String userId);
+
+	/**
+	 * 读取该用户的所有博客
+	 * @param userId 用户Id
+	 * @return
+	 */
+	List<BllArticle> getArticleByCreator(String userId);
+
+	/**
+	 * 对文章进行各种排序
+	 * @param byType 排序条件
+	 * @param page 页数
+	 * @return
+	 */
+	List<ArticleIndexResponse> getArticleByOrderType(int byType, String page);
+
+	/**
+	 * 按照文章分类读取该分类下的文章
+	 * @param typeid 文章分类id
+	 * @param page 页数
+	 * @return
+	 */
+	List<ArticleIndexResponse> getArticleByType(String typeid, String page);
+
+	/**
+	 * 返回生成分页控件需要的数据
+	 * @param url 前端点击的url
+	 * @return 总的行数
+	 */
+	int getArticlePage(String url);
+
+	/**
+	 * 根据文章id，返回文章信息
+	 * @param articleId
+	 * @return
+	 */
+	ArticleIndexResponse getDetailByIdView(String articleId);
+
 }

@@ -17,9 +17,9 @@ import com.blog.utils.HibernateUtils;
 public class MyFavoriteArticleDAOImpl implements MyFavoriteArticleDAO {
 
 	@Override
-	public List<BllFavarticle> getMyFavoriteArticle(String userCode) {
+	public List<BllFavarticle> getMyFavoriteArticle(String userId) {
 		List<BllFavarticle> list = HibernateUtils.queryListParam(BllFavarticle.class,
-				"select * from bll_favarticle where user='" + userCode + "'");
+				"select * from bll_favarticle where creator='" + userId + "'");
 
 		return list;
 	}
@@ -51,6 +51,11 @@ public class MyFavoriteArticleDAOImpl implements MyFavoriteArticleDAO {
 		strSqlBlder.append(")");
 
 		return HibernateUtils.executeSql(strSqlBlder.toString());
+	}
+
+	@Override
+	public BllFavarticle getMyFavoriteArticleById(String myFavoriteArticleId) {
+		return (BllFavarticle) HibernateUtils.findById(BllFavarticle.class, myFavoriteArticleId);
 	}
 
 }

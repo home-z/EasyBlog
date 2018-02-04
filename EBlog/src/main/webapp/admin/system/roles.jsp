@@ -171,31 +171,21 @@
 							field : 'createTime',
 							title : '创建时间',
 							width : 150,
-							align : 'center',
-							formatter : function(value, row,index) {
-								return new Date(parseInt(row.createTime)).toLocaleDateString();
-							}
+							align : 'center'
 						},
 						{
-							field : 'creator',
+							field : 'creatorName',
 							title : '创建人',
 							width : 150,
 							align : 'center'
 						},
 						{
-							field : 'modifiedTime',
+							field : 'modifyTime',
 							title : '修改时间',
 							width : 150,
-							align : 'center',
-							formatter : function(value, row,index) {
-								if (row.modifiedTime == ""|| row.modifiedTime == null) {
-									return "未修改";
-								} else {
-									return new Date(parseInt(row.modifiedTime)).toLocaleDateString();
-								}
-							}
+							align : 'center'
 						}, {
-							field : 'modifiedtor',
+							field : 'modifierName',
 							title : '修改人',
 							width : 150,
 							align : 'center'

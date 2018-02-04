@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.transform.Transformers;
 
 /**
  * hibernate方式操作数据库。配置文件在hibernate.cfg.xml中
@@ -17,7 +18,6 @@ import org.hibernate.cfg.Configuration;
  * @author tim
  *
  */
-@SuppressWarnings("deprecation")
 public class HibernateUtils {
 
 	private static SessionFactory sessionFactory;// 1、创建SessionFactory
@@ -142,7 +142,7 @@ public class HibernateUtils {
 	}
 
 	/**
-	 * 根据查询某个实体集合
+	 * 根据查询某个实体集合，实体对应PO，针对返回单表结果
 	 * 
 	 * @param clazz 实体
 	 * @param sql sql语句
@@ -169,6 +169,36 @@ public class HibernateUtils {
 				session.close();
 			}
 		}
+		return list;
+	}
+
+	/**
+	 * 执行sql，得到某个实体集合，实体对应自定义VO，针对多表联合查询返回结果
+	 * @param clazz 实体
+	 * @param sql sql语句
+	 * @param param sql语句参数
+	 * @return 实体的集合
+	 */
+	public static <T> List<T> queryListParamBean(Class clazz, String sql, Object... param) {
+		List<T> list = new ArrayList<T>();
+		Session session = null;
+		try {
+			session = getSession();
+			Query query = session.createSQLQuery(sql).setResultTransformer(Transformers.aliasToBean(clazz));
+			if (param != null) {
+				for (int i = 0; i < param.length; i++) {
+					query.setParameter(i, param[i]);
+				}
+			}
+			list = query.list();// 返回list
+		} catch (Exception ex) {
+			System.out.println(ex.toString());
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+
 		return list;
 	}
 

@@ -60,15 +60,15 @@
 		}
 		
 		var selectedRoleId = checkedRole[0].id;//角色只能选择一个
-		var selectedUserCodes = [];//获取选择的用户编码
+		var selectedUserIds = [];//获取选择的用户id
 		for (var i = 0; i < checkedUsers.length; i++) {
-			selectedUserCodes.push(checkedUsers[i].userCode);//获取用户编码
+			selectedUserIds.push(checkedUsers[i].id);//获取用户id
 		}
 		
 		//将选择的多个用户加入到一个角色中
 		var param = {
 				"roleId" : selectedRoleId,
-				"userCodes" : selectedUserCodes.join(",")
+				"userIds" : selectedUserIds.join(",")
 			};
 		
 		$.ajax({
@@ -110,21 +110,21 @@
 		$.messager.confirm('确认', '确定移除？', function(r) {
 			if (r) {
 				var selectedRoleId = checkedRole[0].id;//角色只能选择一个
-				var selectedRoleUserCodes = [];//获取选择的用户编码
+				var selectedRoleUserIds = [];//获取选择的用户编码
 				for (var i = 0; i < checkedRoleUsers.length; i++) {
 					if ((selectedRoleId=="0" && checkedRoleUsers[i].id=="0")||(selectedRoleId=="1" && checkedRoleUsers[i].id=="1")) {
 						$.messager.alert('提醒', '不能移除系统预置账号！');
 						
 						return;
 					}else{
-						selectedRoleUserCodes.push(checkedRoleUsers[i].userCode);//获取用户编码
+						selectedRoleUserIds.push(checkedRoleUsers[i].id);//获取用户编码
 					}
 				}
 				
 				//从选择的一个角色中，移除多个用户
 				var param = {
 						"roleId" : selectedRoleId,
-						"userCodes" : selectedRoleUserCodes.join(",")
+						"userIds" : selectedRoleUserIds.join(",")
 					};
 				
 				$.ajax({

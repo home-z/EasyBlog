@@ -19,7 +19,7 @@ public class MyFavoriteUserDAOImpl implements MyFavoriteUserDAO {
 	@Override
 	public List<BllFavuser> getMyFavoriteUser(String userCode) {
 		List<BllFavuser> list = HibernateUtils.queryListParam(BllFavuser.class,
-				"select * from bll_favuser where user='" + userCode + "'");
+				"select * from bll_favuser where creator='" + userCode + "'");
 
 		return list;
 	}
@@ -51,6 +51,11 @@ public class MyFavoriteUserDAOImpl implements MyFavoriteUserDAO {
 		strSqlBlder.append(")");
 
 		return HibernateUtils.executeSql(strSqlBlder.toString());
+	}
+
+	@Override
+	public BllFavuser getMyFavuserById(String favUserId) {
+		return (BllFavuser) HibernateUtils.findById(BllFavuser.class, favUserId);
 	}
 
 }

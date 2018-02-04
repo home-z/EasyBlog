@@ -19,7 +19,7 @@ public class CrawlerNewsDAOImpl implements CrawlerNewsDAO {
 	@Override
 	public List<BllPageinfo> getListCrawlerNewsByUser(String userId) {
 		List<BllPageinfo> list = HibernateUtils.queryListParam(BllPageinfo.class,
-				"select * from bll_pageinfo where CreateBy='" + userId + "'");
+				"select * from bll_pageinfo where Creator='" + userId + "'");
 
 		return list;
 	}

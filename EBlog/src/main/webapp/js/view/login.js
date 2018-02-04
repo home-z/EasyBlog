@@ -56,6 +56,7 @@ $(document).ready(function() {
 				success : function(data) {
 					if (data && data.success == "true") {
 						$("#exMsg").html($("#txtUserCode").val() +'&nbsp;'+ localResource["loginSuccess"]);
+						
 						window.location.href = "../admin/admin.jsp";// 跳转到管理页
 					} else {
 						$("#exMsg").html(localResource["loginFail"]);

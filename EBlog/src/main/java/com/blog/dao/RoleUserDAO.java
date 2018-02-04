@@ -21,24 +21,25 @@ public interface RoleUserDAO {
 	/**
 	 * 增加用户到角色下
 	 * @param roleId 角色id
-	 * @param userCodes 用户编码
+	 * @param userIds 用户id集合
+	 * @param creatorId 创建人id
 	 * @return
 	 */
-	public boolean addRoleUser(String roleId, String userCodes);
+	public boolean addRoleUser(String roleId, String userIds, String creatorId);
 
 	/**
 	 * 从角色下移除用户
 	 * @param roleId 角色id
-	 * @param userCodes 用户编码
+	 * @param userIds 用户id集合
 	 * @return
 	 */
-	public boolean removeRoleUser(String roleId, String userCodes);
+	public boolean removeRoleUser(String roleId, String userIds);
 
 	/**
 	 * 判断角色下用户是否存在
 	 * @param roleId 角色id
-	 * @param usercode 用户编码
+	 * @param userid 用户id
 	 * @return
 	 */
-	public boolean isExistRoleUser(String roleId, String userCode);
+	public boolean isExistRoleUser(String roleId, String userid);
 }

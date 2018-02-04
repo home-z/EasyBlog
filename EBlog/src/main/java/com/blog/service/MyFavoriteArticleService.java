@@ -23,21 +23,25 @@ public class MyFavoriteArticleService {
 
 	/**
 	 * 读取当前用户关注的文章
-	 * @param userCode 当前用户编码
+	 * @param userId 当前用户id
 	 * @return
 	 */
-	public List<BllFavarticle> getMyFavoriteArticle(String userCode) {
-		return myFavoriteArticleDAO.getMyFavoriteArticle(userCode);
+	public List<BllFavarticle> getMyFavoriteArticle(String userId) {
+		return myFavoriteArticleDAO.getMyFavoriteArticle(userId);
+	}
+
+	public BllFavarticle getMyFavoriteArticleById(String myFavoriteArticleId) {
+		return myFavoriteArticleDAO.getMyFavoriteArticleById(myFavoriteArticleId);
 	}
 
 	public boolean addMyFavoriteArticle(BllFavarticle favArticle) {
 		return myFavoriteArticleDAO.addMyFavoriteArticle(favArticle);
 	}
-	
+
 	public boolean updateMyFavoriteArticle(BllFavarticle favArticle) {
 		return myFavoriteArticleDAO.updateMyFavoriteArticle(favArticle);
 	}
-	
+
 	public boolean deleteMyFavoriteArticle(String favArticleIdIds) {
 		return myFavoriteArticleDAO.deleteMyFavoriteArticle(favArticleIdIds);
 	}

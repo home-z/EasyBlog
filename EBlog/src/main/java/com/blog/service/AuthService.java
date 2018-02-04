@@ -31,8 +31,8 @@ public class AuthService {
 		return roleAuthDAO.deleteAuthByRoleId(roleId);
 	}
 
-	public boolean addRoleAuths(String roleId, String authIds) {
-		return roleAuthDAO.addRoleAuths(roleId, authIds);
+	public boolean addRoleAuths(String roleId, String authIds, String creatorId) {
+		return roleAuthDAO.addRoleAuths(roleId, authIds, creatorId);
 	}
 
 	public List<SysMenu> getMenuByRoleId(String roleId) {
@@ -74,7 +74,7 @@ public class AuthService {
 		for (SysMenu app : menus) {
 			MenuTree menuTree = new MenuTree(app);
 
-			if (app.getParentID().equals("menu0")) {// 目前是二级菜单，存着子菜单。一级菜单为总的根
+			if (app.getParentID().equals("0")) {// 目前是二级菜单，存着子菜单。一级菜单为总的根
 				menuTrees.add(menuTree);
 			} else {
 				MenuTree parent = temp.get(app.getParentID());// 通过parentid找到父节点

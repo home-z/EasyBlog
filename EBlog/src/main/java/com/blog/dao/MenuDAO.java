@@ -30,4 +30,5 @@ public interface MenuDAO {
 	 * @return
 	 */
 	public List<SysMenu> getAllMenus();
+
 }

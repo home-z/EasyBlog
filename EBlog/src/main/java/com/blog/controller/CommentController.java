@@ -3,18 +3,15 @@ package com.blog.controller;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.blog.utils.SessionHelper;
 import com.blog.po.BllCommont;
-import com.blog.po.SysUser;
 import com.blog.service.CommentService;
-import com.blog.utils.CoreConsts;
 import com.blog.utils.JsonHelper;
 
 /**
@@ -24,27 +21,28 @@ import com.blog.utils.JsonHelper;
  */
 @Controller
 @RequestMapping("/comment")
-public class CommentController {
+public class CommentController extends BaseController {
+
+	private static Logger logger = Logger.getLogger(CommentController.class);
 
 	@Autowired
 	private CommentService commentService;
 
 	@RequestMapping("/getCommentListByUser")
 	@ResponseBody
-	public Map<String, Object> getCommentListByUser(HttpServletRequest request) {
-		// 获取当前登录的用户
-		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllCommont> list = commentService.getCommentListByUser(currentUser.getUserCode());
+	public Map<String, Object> getCommentListByUser() {
+		List<BllCommont> list = commentService.getCommentListByUser(SessionHelper.getCurrentUserId(request));
 
 		return JsonHelper.getModelMapforGrid(list);
 	}
 
 	@RequestMapping("/deleteComment")
 	@ResponseBody
-	public Map<String, String> deleteComment(HttpServletResponse response, HttpServletRequest request) {
-		String toDeleteIds = request.getParameter("commentIds");
+	public Map<String, String> deleteComment(String commentIds) {
+		boolean result = commentService.deleteComment(commentIds);
 
-		boolean result = commentService.deleteComment(toDeleteIds);
+		logger.info("删除评论：" + commentIds);
+
 		return JsonHelper.getSucessResult(result);
 	}
 }

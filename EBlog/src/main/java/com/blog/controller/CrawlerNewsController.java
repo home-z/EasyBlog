@@ -3,37 +3,32 @@ package com.blog.controller;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.blog.utils.SessionHelper;
 import com.blog.po.BllPageinfo;
-import com.blog.po.SysUser;
 import com.blog.service.CrawlerNewsService;
-import com.blog.utils.CoreConsts;
 import com.blog.utils.JsonHelper;
 
 /**
  * @author：Tim
  * @date：2018年1月16日 下午10:33:36
- * @description：TODO
+ * @description：抓取的网页
  */
 @Controller
 @RequestMapping("/crawlerNews")
-public class CrawlerNewsController {
+public class CrawlerNewsController extends BaseController {
 
 	@Autowired
 	private CrawlerNewsService CrawlerNewsService;
 
 	@RequestMapping("/getListCrawlerNewsByUser")
 	@ResponseBody
-	public Map<String, Object> getListCrawlerNewsByUser(HttpServletRequest request) {
-		// 获取当前登录的用户
-		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllPageinfo> list = CrawlerNewsService.getListCrawlerNewsByUser(currentUser.getUserCode());
+	public Map<String, Object> getListCrawlerNewsByUser() {
+		List<BllPageinfo> list = CrawlerNewsService.getListCrawlerNewsByUser(SessionHelper.getCurrentUserId(request));
 
 		return JsonHelper.getModelMapforGrid(list);
 	}

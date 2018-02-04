@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.blog.po.SysRole;
 import com.blog.vo.RoleSearchParams;
+import com.blog.vo.RoleSearchResponse;
 
 /**
  * @author：Tim
@@ -17,7 +18,7 @@ public interface RoleDAO {
 	 * @param roleSearchParams 查找角色参数
 	 * @return
 	 */
-	public List<SysRole> searchRole(RoleSearchParams roleSearchParams);
+	public List<RoleSearchResponse> searchRole(RoleSearchParams roleSearchParams);
 
 	/**
 	 * 删除角色
@@ -53,7 +54,7 @@ public interface RoleDAO {
 	 * @return
 	 */
 	public int getCountByRoleId(String roleId);
-	
+
 	/**
 	 * 通过角色id，获取角色对象
 	 * @param roleId 角色id

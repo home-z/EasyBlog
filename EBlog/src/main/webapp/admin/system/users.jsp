@@ -112,35 +112,6 @@
 			$.messager.alert('提醒', '请选择需要删除的用户！', 'warning');
 		}
 	}
-	
-	//判断用户是否发表了文章
-	function isPostArticleByUserCode(userCode) {
-		var posted=false;
-		var param = {
-				"userCode" : userCode
-			};
-		$.ajax({
-			type : 'GET',
-			contentType : 'application/json',
-			url : '${ctxPath}/User/isPostArticleByUserCode.do',
-			dataType : 'json',
-			data : param,
-			success : function(data) {
-				if(data){
-					if (data.success == "true") {
-						posted = true;
-					} else {
-						posted = false;
-					}
-				}
-			},
-			error : function() {
-				$.messager.alert("错误", "判断用户是否发表了文章发生网络异常！", "error");
-			}
-		})
-		
-		return posted;
-	}
 
 	//导出用户到excel中
 	function exportUser() {
@@ -219,7 +190,7 @@
 							width : 100,
 							align : 'center',
 							formatter : function(value, row,index) {
-								return "<a href='${ctxPath}/User/editUser.do?userId="
+								return "<a href='${ctxPath}/User/getDetailByUserId.do?userId="
 										+ row.id
 										+ "'>"
 										+ row.userCode
@@ -245,7 +216,7 @@
 							align : 'center'
 						},
 						{
-							field : 'creator',
+							field : 'creatorName',
 							title : '创建人',
 							width : 150,
 							align : 'center'
@@ -256,7 +227,7 @@
 							width : 150,
 							align : 'center'
 						}, {
-							field : 'modifiedtor',
+							field : 'modifierName',
 							title : '修改人',
 							width : 150,
 							align : 'center'
@@ -265,9 +236,9 @@
 			
 			$('#btnSearch').click(function() {
 				$('#usersDataGrid').datagrid('load', {
-					vuserCode : $("#userCode").val(),
-					vuserName : $("#userName").val(),
-					vemail : $("#email").val()
+					userCode : $("#userCode").val(),
+					userName : $("#userName").val(),
+					email : $("#email").val()
 				});
 				
 				$('#searchUserWin').window('close');

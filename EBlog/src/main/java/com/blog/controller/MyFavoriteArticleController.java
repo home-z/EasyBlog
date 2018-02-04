@@ -1,57 +1,45 @@
 package com.blog.controller;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.blog.utils.SessionHelper;
 import com.blog.po.BllFavarticle;
-import com.blog.po.SysUser;
 import com.blog.service.MyFavoriteArticleService;
-import com.blog.utils.CoreConsts;
-import com.blog.utils.HibernateUtils;
 import com.blog.utils.JsonHelper;
 
 @Controller
 @RequestMapping("/FavoriteArticle")
-public class MyFavoriteArticleController {
+public class MyFavoriteArticleController extends BaseController {
 
 	@Autowired
 	private MyFavoriteArticleService myFavoriteArticleService;
 
 	@RequestMapping("/getMyFavoriteArticle")
 	@ResponseBody
-	public Map<String, Object> getMyFavoriteArticle(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		// 获取当前登录的用户
-		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-		List<BllFavarticle> list = myFavoriteArticleService.getMyFavoriteArticle(currentUser.getUserCode());
+	public Map<String, Object> getMyFavoriteArticle() {
+		List<BllFavarticle> list = myFavoriteArticleService
+				.getMyFavoriteArticle(SessionHelper.getCurrentUserId(request));
 
 		return JsonHelper.getModelMapforGrid(list);
 	}
 
 	@RequestMapping("/addMyFavoriteArticle")
 	@ResponseBody
-	public Map<String, String> addMyFavoriteArticle(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		// 获取当前登录的用户
-		SysUser currentUser = (SysUser) request.getSession().getAttribute(CoreConsts.ExecuteContextKeys.CURRENT_USER);
-
+	public Map<String, String> addMyFavoriteArticle(String articleTitle, String articleUrl, String describle) {
 		BllFavarticle favArticle = new BllFavarticle();
 
 		favArticle.setId(UUID.randomUUID().toString());
-		favArticle.setCreator(currentUser.getId());
-		favArticle.setArticleTitle(request.getParameter("articleTitle"));
-		favArticle.setArticleUrl(request.getParameter("articleUrl"));
-		favArticle.setDescrible(request.getParameter("describle"));
+		favArticle.setCreator(SessionHelper.getCurrentUserId(request));
+		favArticle.setArticleTitle(articleTitle);
+		favArticle.setArticleUrl(articleUrl);
+		favArticle.setDescrible(describle);
 
 		myFavoriteArticleService.addMyFavoriteArticle(favArticle);
 
@@ -60,12 +48,14 @@ public class MyFavoriteArticleController {
 
 	@RequestMapping("/updateMyFavoriteArticle")
 	@ResponseBody
-	public Map<String, String> updateMyFavoriteArticle(HttpServletResponse response, HttpServletRequest request) {
-		BllFavarticle favArticle = (BllFavarticle) HibernateUtils.findById(BllFavarticle.class,
-				request.getParameter("id"));
-		favArticle.setArticleTitle(request.getParameter("articleTitle"));
-		favArticle.setArticleUrl(request.getParameter("articleUrl"));
-		favArticle.setDescrible(request.getParameter("describle"));
+	public Map<String, String> updateMyFavoriteArticle(String id, String articleTitle, String articleUrl,
+			String describle) {
+		BllFavarticle favArticle = myFavoriteArticleService.getMyFavoriteArticleById(id);
+
+		favArticle.setArticleTitle(articleTitle);
+		favArticle.setArticleUrl(articleUrl);
+		favArticle.setDescrible(describle);
+		favArticle.setModifier(SessionHelper.getCurrentUserId(request));
 
 		myFavoriteArticleService.updateMyFavoriteArticle(favArticle);
 
@@ -74,9 +64,7 @@ public class MyFavoriteArticleController {
 
 	@RequestMapping("/deleteMyFavoriteArticle")
 	@ResponseBody
-	public Map<String, String> deleteMyFavoriteArticle(HttpServletResponse response, HttpServletRequest request) {
-		String favArticleIdIds = request.getParameter("favArticleIdIds");
-
+	public Map<String, String> deleteMyFavoriteArticle(String favArticleIdIds) {
 		boolean result = myFavoriteArticleService.deleteMyFavoriteArticle(favArticleIdIds);
 		return JsonHelper.getSucessResult(result);
 	}

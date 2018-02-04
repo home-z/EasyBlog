@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.blog.po.SysUser;
 import com.blog.vo.UserSearchParams;
+import com.blog.vo.UserSearchResponse;
 
 /**
  * @author：Tim
@@ -17,21 +18,21 @@ public interface UserDAO {
 	 * @param userId 用户id
 	 * @return
 	 */
-	public SysUser getUserById(String userId);
+	SysUser getUserById(String userId);
 
 	/**
 	 * 根据条件搜索用户
 	 * @param userSearchParams 搜索用户参数
 	 * @return
 	 */
-	public List<SysUser> searchUser(UserSearchParams userSearchParams);
+	List<UserSearchResponse> searchUser(UserSearchParams userSearchParams);
 
 	/**
 	 * 根据用户编码判断用户是否存在
 	 * @param userCode 用户编码
 	 * @return
 	 */
-	public boolean isUserCodeExist(String userCode);
+	boolean isUserCodeExist(String userCode);
 
 	/**
 	 * 根据用户编码和用户密码，校验用户
@@ -39,52 +40,51 @@ public interface UserDAO {
 	 * @param userPassWord 用户密码
 	 * @return
 	 */
-	public SysUser login(String userCode, String userPassWord);
+	SysUser login(String userCode, String userPassWord);
 
 	/**
 	 * 选出所有用户
 	 * @return
 	 */
-	public List<SysUser> getUserList();
+	List<UserSearchResponse> getUserList();
 
 	/**
 	 * 根据用户id选出所有用户
 	 * @param userId 用户id
 	 * @return
 	 */
-	public List<SysUser> getUserListByUserId(String userId);
+	List<UserSearchResponse> getUserListByUserId(String userId);
 
 	/**
 	 * 获取非当前用户的其他用户信息
-	 * @param currentUser
 	 * @return
 	 */
-	public List<SysUser> getUserCodeNotCurrent(String currentUser);
+	List<SysUser> getUserNotCurrent(String currentUserId);
 
 	/**
 	 * 保存用户
 	 * @param user
 	 * @return
 	 */
-	public boolean addUser(SysUser user);
+	boolean addUser(SysUser user);
 
 	/**
 	 * 更新用户
 	 * @param user
 	 * @return
 	 */
-	public boolean updateUser(SysUser user);
+	boolean updateUser(SysUser user);
 
 	/**
 	 * 根据id删除用户
-	 * @param getdeleteRowsJson
+	 * @param userId 用户id集合
 	 * @return
 	 */
-	public boolean deleteUser(String userId);
+	boolean deleteUser(String userId);
 
 	/**
 	 * 选出所有有头像的用户
 	 * @return
 	 */
-	public List<SysUser> getUserHasPhotoList();
+	List<SysUser> getUserHasPhotoList();
 }

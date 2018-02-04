@@ -21,21 +21,23 @@ public class RoleUserDAOImpl implements RoleUserDAO {
 	@Override
 	public List<SysUser> getRoleUser(String roleId) {
 		List<SysUser> userList = HibernateUtils.queryListParam(SysUser.class,
-				"select u.* from sys_user u inner join sys_userrole l on u.usercode=l.usercode where l.roleid='"
-						+ roleId + "'");
+				"select u.* from sys_user u inner join sys_userrole l on u.id=l.userid where l.roleid='" + roleId
+						+ "'");
 
 		return userList;
 	}
 
 	@Override
-	public boolean addRoleUser(String roleId, String userCodes) {
-		String[] userCodesArray = userCodes.split(",");
+	public boolean addRoleUser(String roleId, String userIds, String creatorId) {
+		String[] userIdsArray = userIds.split(",");
 
-		for (int i = 0; i < userCodesArray.length; i++) {
+		for (int i = 0; i < userIdsArray.length; i++) {
 			SysUserRole sysUserRole = new SysUserRole();
+
 			sysUserRole.setId(UUID.randomUUID().toString());
 			sysUserRole.setRoleId(roleId);
-			sysUserRole.setUserId(userCodesArray[i]);
+			sysUserRole.setUserId(userIdsArray[i]);
+			sysUserRole.setCreator(creatorId);
 
 			HibernateUtils.add(sysUserRole);
 		}
@@ -44,11 +46,11 @@ public class RoleUserDAOImpl implements RoleUserDAO {
 	}
 
 	@Override
-	public boolean removeRoleUser(String roleId, String userCodes) {
-		String[] userCodesArray = userCodes.split(",");
+	public boolean removeRoleUser(String roleId, String userIds) {
+		String[] userIdsArray = userIds.split(",");
 
-		for (int i = 0; i < userCodesArray.length; i++) {
-			String strSql = "delete from sys_userrole where roleid='" + roleId + "' and usercode='" + userCodesArray[i]
+		for (int i = 0; i < userIdsArray.length; i++) {
+			String strSql = "delete from sys_userrole where roleid='" + roleId + "' and userid='" + userIdsArray[i]
 					+ "'";
 
 			HibernateUtils.executeSql(strSql);
@@ -58,16 +60,11 @@ public class RoleUserDAOImpl implements RoleUserDAO {
 	}
 
 	@Override
-	public boolean isExistRoleUser(String roleId, String userCode) {
-		String strSql = " select count(*) from sys_userrole l where l.roleid='" + roleId + "' and usercode='" + userCode
+	public boolean isExistRoleUser(String roleId, String userid) {
+		String strSql = " select count(*) from sys_userrole l where l.roleid='" + roleId + "' and l.userid='" + userid
 				+ "'";
 
-		int count = HibernateUtils.queryOne(strSql);
-		if (count > 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return HibernateUtils.queryOne(strSql) > 0 ? true : false;
 	}
 
 }
