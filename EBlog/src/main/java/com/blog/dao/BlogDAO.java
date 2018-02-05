@@ -103,4 +103,32 @@ public interface BlogDAO {
 	 */
 	ArticleIndexResponse getDetailByIdView(String articleId);
 
+	/**
+	 * 文章被浏览，则该文章的阅读次数加1
+	 * @param articleId
+	 * @return
+	 */
+	boolean addReadCount(String articleId);
+
+	/**
+	 * 文章被推荐，则该文章的推荐次数加1
+	 * @param articleId
+	 * @return
+	 */
+	boolean addSuggestCount(String articleId);
+
+	/**
+	 * 用户删除推荐，则该文章的推荐次数减1
+	 * @param articleId
+	 * @return
+	 */
+	boolean reduceSuggestCount(String articleId);
+
+	/**
+	 * 新增评论，则该文章的评论数量加1
+	 * @param articleId
+	 * @return
+	 */
+	boolean addComCount(String articleId);
+
 }

@@ -27,7 +27,7 @@ public class BlogService {
 	public boolean addArticle(BllArticle article) {
 		boolean addDBResult = blogDAO.addArticle(article);// 新增文章到数据库
 
-		if (SystemEnvs.ENABLEELASTICSEARCH) {
+		if (SystemEnvs.getEnableES()) {
 			// 如果开启了ElasticSearch，则再需要新增文章加入到elasticSearch中
 			// TODO未全部成功，需要回滚
 			boolean addESResult = ElasticSearchUtils.addDoc("bll_article", article.getId(), article, "getId",
@@ -42,7 +42,7 @@ public class BlogService {
 	public boolean updateArticle(BllArticle article) {
 		boolean updateDBResult = blogDAO.updateArticle(article);// 更新数据库
 
-		if (SystemEnvs.ENABLEELASTICSEARCH) {
+		if (SystemEnvs.getEnableES()) {
 			// 更新内容更新到elasticSearch中
 			Map<String, String> updateParam = new HashMap<String, String>();
 			updateParam.put("title", article.getTitle());
@@ -63,7 +63,7 @@ public class BlogService {
 	public boolean deleteArticleById(String articleId) {
 		boolean deleteDBResult = blogDAO.deleteArticleById(articleId);
 
-		if (SystemEnvs.ENABLEELASTICSEARCH) {
+		if (SystemEnvs.getEnableES()) {
 			// 同时删除elasticSearch中记录
 			boolean deleteESResult = ElasticSearchUtils.deleteDoc("bll_article", articleId);
 
@@ -144,4 +144,9 @@ public class BlogService {
 	public ArticleIndexResponse getDetailByIdView(String articleId) {
 		return blogDAO.getDetailByIdView(articleId);
 	}
+
+	public boolean addReadCount(String articleId) {
+		return blogDAO.addReadCount(articleId);
+	}
+
 }

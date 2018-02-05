@@ -49,7 +49,7 @@
 								if (data && data.success == "true") {
 									$.messager.alert("成功", "推荐删除成功！", "info");
 								} else {
-									$.messager.alert("失败", data.content);
+									$.messager.alert("推荐删除失败!");
 								}
 								$('#suggestDataGrid').datagrid('reload');//重新刷新
 							},

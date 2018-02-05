@@ -50,7 +50,6 @@
 		</div>
 	</div>
 	<table id="blogListDataGrid"></table>
-	</div>
 	<script type="text/javascript">
 		//弹出搜索框
 		function showSearchWin() {

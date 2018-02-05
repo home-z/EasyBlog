@@ -54,7 +54,7 @@ public class LoginByPhotoController extends BaseController {
 
 			System.out.println(similarty);
 			// 相似度大于或等于阈值，则认为匹配成功，登录通过
-			if (similarty >= SystemEnvs.SIMILARTY) {
+			if (similarty >= SystemEnvs.getSimilarty()) {
 				// 根据用户角色，获取用户的权限菜单
 				List<MenuTree> menus = authService.getMenuTree(SysUser.getId());
 

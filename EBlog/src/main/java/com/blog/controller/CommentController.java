@@ -2,6 +2,7 @@ package com.blog.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,22 @@ public class CommentController extends BaseController {
 		boolean result = commentService.deleteComment(commentIds);
 
 		logger.info("删除评论：" + commentIds);
+
+		return JsonHelper.getSucessResult(result);
+	}
+
+	@RequestMapping("/addComment")
+	@ResponseBody
+	public Map<String, String> addComment(String articleId, String articleTitle, String comContent) {
+		BllCommont commont = new BllCommont();
+
+		commont.setId(UUID.randomUUID().toString());
+		commont.setArticleId(articleId);
+		commont.setArticleTitle(articleTitle);
+		commont.setComContent(comContent);
+		commont.setCreator(SessionHelper.getCurrentUserId(request));
+
+		boolean result = commentService.addComment(commont);
 
 		return JsonHelper.getSucessResult(result);
 	}

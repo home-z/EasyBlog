@@ -2,6 +2,7 @@ package com.blog.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import com.blog.utils.SessionHelper;
 @Controller
 @RequestMapping("/suggest")
 public class SuggestController extends BaseController {
+
 	@Autowired
 	private SuggestService suggestService;
 
@@ -36,6 +38,25 @@ public class SuggestController extends BaseController {
 	@ResponseBody
 	public Map<String, String> deleteSuggest(String suggestIds) {
 		boolean result = suggestService.deleteSuggest(suggestIds);
+
+		return JsonHelper.getSucessResult(result);
+	}
+
+	@RequestMapping("/addSuggest")
+	@ResponseBody
+	public Map<String, String> addSuggest(String articleId, String articleTitle) {
+		if (suggestService.isExistSuggest(articleId, SessionHelper.getCurrentUserId(request))) {
+			return JsonHelper.getSucessResult(false, "你已经推荐了该文章，不能重复推荐！");
+		}
+
+		BllSuggest suggest = new BllSuggest();
+
+		suggest.setId(UUID.randomUUID().toString());
+		suggest.setCreator(SessionHelper.getCurrentUserId(request));
+		suggest.setArticleId(articleId);
+		suggest.setArticleTitle(articleTitle);
+
+		boolean result = suggestService.addSuggest(suggest);
 
 		return JsonHelper.getSucessResult(result);
 	}

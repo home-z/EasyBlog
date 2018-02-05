@@ -10,7 +10,12 @@ import com.blog.po.BllSuggest;
  * @description：TODO
  */
 public interface SuggestDAO {
+
 	List<BllSuggest> getSuggestListByUser(String userId);
 
 	boolean deleteSuggest(String toDeleteIds);
+
+	boolean addSuggest(BllSuggest suggest);
+
+	boolean isExistSuggest(String articleId, String creatorId);
 }

@@ -30,8 +30,8 @@ public class BlogESController {
 	@RequestMapping("/searchBlog")
 	@ResponseBody
 	public Map<String, Object> searchBlog(String keyword) {
-		//未开启搜索功能
-		if (!SystemEnvs.ENABLEELASTICSEARCH) {
+		// 未开启搜索功能
+		if (!SystemEnvs.getEnableES()) {
 			Map<String, Object> mapResutl = new HashMap<>();
 			mapResutl.put("enableES", false);
 

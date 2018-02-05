@@ -3,6 +3,7 @@ package com.blog.dao;
 import java.util.List;
 
 import com.blog.po.BllCommont;
+import com.blog.vo.CommentRequest;
 
 /**
  * @author：Tim
@@ -31,5 +32,19 @@ public interface CommentDAO {
 	 * @return
 	 */
 	List<BllCommont> getCommentById(String articleID);
+
+	/**
+	 * 新增评论
+	 * @param commont
+	 * @return
+	 */
+	boolean addComment(BllCommont commont);
+
+	/**
+	 * 获取文章评论即评论人姓名
+	 * @param articleID
+	 * @return
+	 */
+	List<CommentRequest> getCommentRequestById(String articleID);
 
 }

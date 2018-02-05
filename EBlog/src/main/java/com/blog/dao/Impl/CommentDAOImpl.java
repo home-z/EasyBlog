@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.blog.dao.CommentDAO;
 import com.blog.po.BllCommont;
 import com.blog.utils.HibernateUtils;
+import com.blog.vo.CommentRequest;
 
 /**
  * @author：Tim
@@ -50,5 +51,20 @@ public class CommentDAOImpl implements CommentDAO {
 				"select * from bll_commont where ArticleID='" + articleID + "' order by createtime asc");
 
 		return comList;
+	}
+
+	@Override
+	public boolean addComment(BllCommont commont) {
+		return HibernateUtils.add(commont);
+	}
+
+	@Override
+	public List<CommentRequest> getCommentRequestById(String articleID) {
+		String strSql = "select a.CreateTime,a.Creator,a.ComContent,b.UserName CreatorName from bll_commont a inner join sys_user b on a.creator=b.id where a.articleid='"
+				+ articleID + "'";
+
+		List<CommentRequest> list = HibernateUtils.queryListParamBean(CommentRequest.class, strSql);
+
+		return list;
 	}
 }

@@ -15,7 +15,6 @@ import org.springframework.web.servlet.support.RequestContext;
 
 import com.blog.constant.SystemEnvs;
 import com.blog.po.BllArticle;
-import com.blog.po.BllCommont;
 import com.blog.service.BlogService;
 import com.blog.service.CommentService;
 import com.blog.utils.ArticleUtils;
@@ -26,6 +25,7 @@ import com.blog.vo.ArticleIndexResponse;
 import com.blog.vo.ArticleSearchParams;
 import com.blog.vo.ArticleStatisticResponse;
 import com.blog.vo.ArticleUpdateRequest;
+import com.blog.vo.CommentRequest;
 
 @Controller
 @RequestMapping("/BlogInfo")
@@ -40,7 +40,7 @@ public class BlogInfoController extends BaseController {
 	@Autowired
 	private CommentService commentService;
 
-	int pCount = SystemEnvs.PAGESIZE;// 每页显示记录数目
+	int pCount = SystemEnvs.getPageSize();// 每页显示记录数目
 
 	@RequestMapping("/searchBlog")
 	@ResponseBody // 将返回值ResultInfo实体转化为json
@@ -251,8 +251,11 @@ public class BlogInfoController extends BaseController {
 		model.addAttribute("artdto", articleIndexResponse);
 
 		// 读取该文章的评论
-		List<BllCommont> comList = commentService.getCommentById(id);
+		List<CommentRequest> comList = commentService.getCommentRequestById(id);
 		model.addAttribute("comList", comList);
+
+		// 该篇文章阅读数加1
+		blogService.addReadCount(id);
 
 		return "blog/article/articleView";// 跳转到该用户文章浏览页
 	}
@@ -265,4 +268,5 @@ public class BlogInfoController extends BaseController {
 
 		return "blog/article/articleViewlistuser";// 跳转到该用户页面，显示该用户所有文章
 	}
+
 }

@@ -21,7 +21,7 @@ import com.blog.vo.ArticleStatisticResponse;
 @Repository
 public class BlogDAOImpl implements BlogDAO {
 
-	int pCount = SystemEnvs.PAGESIZE;// 每页显示记录数目
+	int pCount = SystemEnvs.getPageSize();// 每页显示记录数目
 
 	@Override
 	public BllArticle getArticleById(String articleId) {
@@ -201,5 +201,46 @@ public class BlogDAOImpl implements BlogDAO {
 	@Override
 	public boolean updateArticle(BllArticle article) {
 		return HibernateUtils.update(article);
+	}
+
+	@Override
+	public boolean addReadCount(String articleId) {
+		String strSql = "update bll_article set ReadCount=ReadCount+1 where id='" + articleId + "'";
+
+		return HibernateUtils.executeSql(strSql);
+	}
+
+	@Override
+	public boolean addSuggestCount(String articleId) {
+		String strSql = "update bll_article set SuggestCount=SuggestCount+1 where id='" + articleId + "'";
+
+		return HibernateUtils.executeSql(strSql);
+	}
+
+	@Override
+	public boolean reduceSuggestCount(String toDeleteIds) {
+		String[] toDeleteIdsArray = toDeleteIds.split(",");
+
+		StringBuilder strSqlBlder = new StringBuilder();
+		strSqlBlder.append(
+				"update bll_article set SuggestCount=SuggestCount-1 where id in (select articleId from bll_suggest where id in (");
+
+		for (int i = 0; i < toDeleteIdsArray.length; i++) {
+			strSqlBlder.append("'");
+			strSqlBlder.append(toDeleteIdsArray[i]);
+			strSqlBlder.append("'");
+			strSqlBlder.append(",");
+		}
+		strSqlBlder.deleteCharAt(strSqlBlder.length() - 1);
+		strSqlBlder.append("))");
+
+		return HibernateUtils.executeSql(strSqlBlder.toString());
+	}
+
+	@Override
+	public boolean addComCount(String articleId) {
+		String strSql = "update bll_article set ComCount=ComCount+1 where id='" + articleId + "'";
+
+		return HibernateUtils.executeSql(strSql);
 	}
 }

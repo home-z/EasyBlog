@@ -43,4 +43,17 @@ public class SuggestDAOImpl implements SuggestDAO {
 		return HibernateUtils.executeSql(strSqlBlder.toString());
 	}
 
+	@Override
+	public boolean addSuggest(BllSuggest suggest) {
+		return HibernateUtils.add(suggest);
+	}
+
+	@Override
+	public boolean isExistSuggest(String articleId, String creatorId) {
+		String strSql = "select count(*) from bll_suggest where creator='" + creatorId + "' and articleID='" + articleId
+				+ "'";
+
+		return HibernateUtils.queryOne(strSql) == 0 ? false : true;
+	}
+
 }
