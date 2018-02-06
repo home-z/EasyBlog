@@ -23,24 +23,24 @@ INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`ParentID`,`Index`) VAL
 INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`ParentID`,`Index`) VALUES('4','0','系统管理','0',4);
 
 		-- 二级菜单-博客管理
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('5','0','博客类别管理','/admin/blog/blogtype.jsp','1',5);
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('6','0','博客内容管理','/admin/blog/blog.jsp','1',6);
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('7','0','新建博客','/admin/blog/bloginfo.jsp','1',7);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('5','0','博客类别管理','/adminRoute/articleType.do','1',5);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('6','0','博客内容管理','/adminRoute/article.do','1',6);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('7','0','新建博客','/adminRoute/articleInfo.do','1',7);
 
 		-- 二级菜单-收藏管理
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('8','0','我的关注','/admin/favorite/myfavorite.jsp','2',8);
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('9','0','我的评论','/admin/favorite/mycomment.jsp','2',9);
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('10','0','我的推荐','/admin/favorite/mysuggests.jsp','2',10);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('8','0','我的关注','/adminRoute/myfavorite.do','2',8);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('9','0','我的评论','/adminRoute/mycomment.do','2',9);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('10','0','我的推荐','/adminRoute/mysuggests.do','2',10);
 
 		-- 二级菜单-新闻抓取管理
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('11','0','抓取设置','/admin/crawler/crawlsetting.jsp','3',11);
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('12','0','我的抓取','/admin/crawler/crawlnews.jsp','3',12);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('11','0','抓取设置','/adminRoute/crawlsetting.do','3',11);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('12','0','我的抓取','/adminRoute/crawlnews.do','3',12);
 
 		-- 二级菜单-系统管理
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('13','0','用户管理','/admin/system/users.jsp','4',13);
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('14','0','角色管理','/admin/system/roles.jsp','4',14);
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('15','0','用户角色管理','/admin/system/userroles.jsp','4',15);
-INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('16','0','角色权限管理','/admin/system/rolesauth.jsp','4',16);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('13','0','用户管理','/adminRoute/users.do','4',13);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('14','0','角色管理','/adminRoute/roles.do','4',14);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('15','0','用户角色管理','/adminRoute/userroles.do','4',15);
+INSERT INTO `eblog`.`sys_menu`(`ID`,`Creator`,`MenuName`,`URL`,`ParentID`,`Index`) VALUES('16','0','角色权限管理','/adminRoute/rolesauth.do','4',16);
 
 
 -- 角色权限

@@ -7,7 +7,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title><spring:message code="blogworld"/>-<spring:message code="management"/></title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link href="${jsPath}/jquery-easyui/themes/metro-blue/easyui.css" rel="stylesheet" type="text/css"  id="swicth-style" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
@@ -205,6 +204,9 @@
 		}
 		
 		$(document).ready(function() {
+			//启动后，加载欢迎页面
+			openMenu('/adminRoute/welcome.do','<spring:message code="welcome"/>')
+			
 			tabCloseEvent();
 			
 			//切换皮肤
@@ -239,7 +241,7 @@
 					<td style="height: 35px;width: 30%;"></td>
 					<td style="font-size: 14px;width: 60%;">
 						<span style="color: #E6EAD5;"  id="currentuser"><spring:message code="welcomeyou"/>：${Current_User.userName}</span> 
-						<a style="color: #fff; text-decoration: none" href="${ctxPath}/index.jsp"><spring:message code="index"/></a> 
+						<a style="color: #fff; text-decoration: none" href="${ctxPath}/indexRoute/index.do"><spring:message code="index"/></a> 
 						<a style="color: #fff; text-decoration: none" href="${ctxPath}/Login/logout.do"><spring:message code="logout"/></a>
 						<span style="color: #E6EAD5;"><spring:message code="changeTheme"/>：</span>
 						<select id="uiSkinNav" class="easyui-combobox" style="width:100px;">
@@ -271,7 +273,7 @@
 	</div>
 	<div region="center">
 		<div id="tabContainer" class="easyui-tabs" fit="true" border="false" plain="true">
-			<div title="<spring:message code="welcome"/>" href="${ctxPath}/admin/welcome.jsp"></div>
+			<!-- 这里是tab页签 -->
 		</div>
 	</div>
 	<div region="south" style="overflow: hidden;">
