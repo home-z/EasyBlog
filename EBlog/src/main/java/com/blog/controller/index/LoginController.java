@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.index;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.blog.vo.MenuTree;
+import com.blog.controller.admin.BaseController;
 import com.blog.po.SysUser;
 import com.blog.service.AuthService;
 import com.blog.service.UserService;

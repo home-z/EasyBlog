@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.admin;
 
 import java.util.List;
 import java.util.Map;
@@ -21,13 +21,18 @@ import com.blog.utils.JsonHelper;
  * @description：TODO
  */
 @Controller
-@RequestMapping("/crawlerTask")
+@RequestMapping("/admin/crawlerTask")
 public class CrawlerTaskController extends BaseController {
 
 	private static Logger logger = Logger.getLogger(CrawlerTaskController.class);
 
 	@Autowired
 	private CrawlerTaskService crawlerTaskService;
+
+	@RequestMapping("/index")
+	public String crawlsetting() {
+		return "/admin/crawler/crawlsetting";
+	}
 
 	@RequestMapping("/getListCrawlerTaskByUser")
 	@ResponseBody

@@ -6,7 +6,6 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>我的关注</title>
 		<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-		<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 		<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 		<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 		<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
@@ -42,7 +41,7 @@
 				<table cellpadding="5">
 					<tr>
 						<td>博主:</td>
-						<td><input class="easyui-combobox" id="favUser" name="favUser" data-options="valueField:'text',textField:'text',url:'${ctxPath}/User/getUserNotCurrent.do'"></input></td>
+						<td><input class="easyui-combobox" id="favUser" name="favUser" data-options="valueField:'text',textField:'text',url:'${ctxPath}/admin/user/getUserNotCurrent.do'"></input></td>
 					</tr>
 					<tr>
 						<td>描述:</td>
@@ -129,7 +128,7 @@
 						$.ajax({
 							type : 'GET',
 							contentType : 'application/json',
-							url : '${ctxPath}/FavoriteArticle/deleteMyFavoriteArticle.do',
+							url : '${ctxPath}/admin/favoriteArticle/deleteMyFavoriteArticle.do',
 							dataType : 'json',
 							data : param,
 							success : function(data) {
@@ -205,9 +204,9 @@
 				//根据是否有id，判断是新增还是修改
 				var strUrl = "";
 				if ($("#favuserId").val() != null && $("#favuserId").val() != "") {
-					strUrl = '${ctxPath}/FavoriteUser/updateMyFavoriteUser.do';
+					strUrl = '${ctxPath}/admin/favoriteUser/updateMyFavoriteUser.do';
 				} else {
-					strUrl = '${ctxPath}/FavoriteUser/addMyFavoriteUser.do';
+					strUrl = '${ctxPath}/admin/favoriteUser/addMyFavoriteUser.do';
 				}
 				
 				$.ajax({
@@ -250,7 +249,7 @@
 						$.ajax({
 							type : 'GET',
 							contentType : 'application/json',
-							url : '${ctxPath}/FavoriteUser/deleteMyFavoriteUser.do',
+							url : '${ctxPath}/admin/favoriteUser/deleteMyFavoriteUser.do',
 							dataType : 'json',
 							data : param,
 							success : function(data) {
@@ -289,9 +288,9 @@
 				//根据是否有id，判断是新增还是修改
 				var strUrl = "";
 				if ($("#articleId").val() != null && $("#articleId").val() != "") {
-					strUrl = '${ctxPath}/FavoriteArticle/updateMyFavoriteArticle.do';
+					strUrl = '${ctxPath}/admin/favoriteArticle/updateMyFavoriteArticle.do';
 				} else {
-					strUrl = '${ctxPath}/FavoriteArticle/addMyFavoriteArticle.do';
+					strUrl = '${ctxPath}/admin/favoriteArticle/addMyFavoriteArticle.do';
 				}
 				
 				$.ajax({
@@ -341,7 +340,7 @@
 		
 		$(document).ready(function() {
 			$('#favUserDataGrid').datagrid({
-				url : '${ctxPath}/FavoriteUser/getMyFavoriteUser.do',
+				url : '${ctxPath}/admin/favoriteUser/getMyFavoriteUser.do',
 				toolbar : '#tb',
 				fitColumns : true,
 				fit : true,
@@ -360,18 +359,18 @@
 					align : 'center',
 					formatter:
 					function(value,row){
-						return "<a href='${ctxPath}/BlogInfo/getArticleByCreator.do?userId="
+						return "<a href='${ctxPath}/main/getArticleByCreateBy.do?userId="
 						+ value + "' target='_blank'>"+value+"</a>" 
 					},
 					editor:{
 						type:'combobox',
 						options:{
-							valueField:'text',
+							valueField:'id',
 							textField:'text',
 							method:'get',
-							url:'${ctxPath}/User/getUserNotCurrent.do',
+							url:'${ctxPath}/admin/user/getUserNotCurrent.do',
 							required:true
-								}
+						}
 				}
 				}, {
 					field : 'describle',
@@ -383,7 +382,7 @@
 			});
 			
 			$('#favArticleDataGrid').datagrid({
-				url : '${ctxPath}/FavoriteArticle/getMyFavoriteArticle.do',
+				url : '${ctxPath}/admin/favoriteArticle/getMyFavoriteArticle.do',
 				toolbar : '#tbArticle',
 				fitColumns : true,
 				fit : true,

@@ -72,7 +72,7 @@
 				type : 'POST',
 				dataType : 'json',
 				data : $.param(param),
-				url : '${ctxPath}/BlogInfo/getBlogStatistics.do',
+				url : '${ctxPath}/admin/static/getBlogStatistics.do',
 				success : function(data, textStatus) {
 					var opt1 = MyECharts.ChartOptionTemplates.Bar('<spring:message code="blogCount"/>','<spring:message code="blogpage"/>', eval(data.data));
 					MyECharts.RenderChart(opt1, 'blogPost');

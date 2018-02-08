@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.admin;
 
 import java.util.List;
 import java.util.Map;
@@ -26,12 +26,22 @@ import com.blog.vo.RoleSearchResponse;
  */
 
 @Controller
-@RequestMapping("/Role")
+@RequestMapping("/admin/role")
 public class RoleController extends BaseController {
 	private static Logger logger = Logger.getLogger(RoleController.class);
 
 	@Autowired
 	private RoleService roleService;
+
+	@RequestMapping("/index")
+	public String index() {
+		return "/admin/system/roles";
+	}
+
+	@RequestMapping("/add")
+	public String add() {
+		return "admin/system/rolesEdit";
+	}
 
 	/**
 	 * 搜索角色

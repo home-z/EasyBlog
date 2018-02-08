@@ -92,7 +92,7 @@ $(document).ready(function() {
 		var params=new FormData($("#registerform")[0]);//使用FormData接收数据
 		$.ajax({
 			type : 'POST',
-			url : getContextPath()+'/User/registerUser.do',
+			url : getContextPath()+'/admin/user/registerUser.do',
 			data : params,
 			dataType : 'json',
 			processData : false,//使用FormData这个必须加上

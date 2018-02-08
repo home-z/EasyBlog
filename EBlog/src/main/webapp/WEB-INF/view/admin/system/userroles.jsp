@@ -7,7 +7,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>用户角色管理</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
@@ -34,14 +33,6 @@
 	</div>
 </body>
 <script type="text/javascript">
-	//检测是否已经登录
-	function checkLogin() {
-		<c:choose>
-			<c:when test="${empty Current_User}">
-				location.href = "${ctxPath}/admin/login.jsp";
-			</c:when>
-		</c:choose>
-	}
 	
 	//增加用户到角色中
 	function addRoleUser(){
@@ -74,7 +65,7 @@
 		$.ajax({
 			type : 'GET',
 			contentType : 'application/json',
-			url : '${ctxPath}/RoleUser/addRoleUser.do',
+			url : '${ctxPath}/admin/roleUser/addRoleUser.do',
 			dataType : 'json',
 			data : param,
 			success : function(data) {
@@ -130,7 +121,7 @@
 				$.ajax({
 					type : 'GET',
 					contentType : 'application/json',
-					url : '${ctxPath}/RoleUser/removeRoleUser.do',
+					url : '${ctxPath}/admin/roleUser/removeRoleUser.do',
 					dataType : 'json',
 					data : param,
 					success : function(data) {
@@ -152,7 +143,7 @@
 	//加载选中角色下用户列表
 	function getRoleUsers(roleId) {
 		$('#roleUsersDataGrid').datagrid({
-			url : '${ctxPath}/RoleUser/getRoleUser.do?roleId=' + roleId,
+			url : '${ctxPath}/admin/roleUser/getRoleUser.do?roleId=' + roleId,
 			rownumbers : true,
 			fitColumns : true,
 			fit : true,
@@ -177,10 +168,9 @@
 	
 	$(document).ready(
 		function() {
-			checkLogin();
 			//加载角色列表
 			$('#rolesDataGrid').datagrid({
-				url : '${ctxPath}/Role/searchRole.do',
+				url : '${ctxPath}/admin/role/searchRole.do',
 				rownumbers : true,
 				fitColumns : true,
 				fit : true,
@@ -202,7 +192,7 @@
 			
 			//加载用户列表
 			$('#usersDataGrid').datagrid({
-				url : '${ctxPath}/User/searchUser.do',
+				url : '${ctxPath}/admin/user/searchUser.do',
 				rownumbers : true,
 				fitColumns : true,
 				fit : true,

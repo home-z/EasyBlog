@@ -6,7 +6,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>文章内容管理</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
  id="swicth-style" />
@@ -23,7 +22,7 @@
 			<tr>
 				<td>文章类型：</td>
 				<td><input class="easyui-combobox" id="comblogType" data-options="
-								url:'${ctxPath}/BlogType/getBlogTypeByUser.do',
+								url:'${ctxPath}/admin/blogType/getBlogTypeByUser.do',
 								width:100,
 								method:'get',
 								valueField:'id',
@@ -76,15 +75,6 @@
 			$("#txtContent").val("");
 		}
 		
-		//检测是否已经登录
-		function checkLogin() {
-			<c:choose>
-			<c:when test="${empty Current_User}">
-			location.href = "${ctxPath}/admin/login.jsp";
-			</c:when>
-			</c:choose>
-		}
-		
 		//分页
 		function pagerFilter(data) {
 			if (typeof data.length == 'number' && typeof data.splice == 'function') { // is array
@@ -127,9 +117,8 @@
 		});
 		
 		$(document).ready(function() {
-			checkLogin();
 			$('#blogListDataGrid').datagrid({
-				url : '${ctxPath}/BlogInfo/searchBlog.do',
+				url : '${ctxPath}/admin/blogInfo/searchBlog.do',
 				width : 700,
 				height : 400,
 				singleSelect : true,
@@ -146,7 +135,7 @@
 					title : '标题',
 					width : 500,
 					formatter : function(value,row,index) {
-							return  "<a href=\"${ctxPath}/BlogInfo/getDetailById.do?blogid=" + row.id
+							return  "<a href=\"${ctxPath}/admin/blogInfo/getDetailById.do?blogid=" + row.id
 							+ "\">" + value + "</a>";
 						}
 					}, 

@@ -46,9 +46,9 @@
 												<p id="logTitle" style="height: 10px; width: 230px; font-size: 25px;color:#E33E06;"><spring:message code="blogworld"/>-<spring:message code="login"/></p>
 											</td>
 											<td align="right" valign="top">
-												<a href="${ctxPath}/indexRoute/register.do"><spring:message code="registNow"/></a>
+												<a href="${ctxPath}/main/register.do"><spring:message code="registNow"/></a>
 												&nbsp;&nbsp;
-												<a href="${ctxPath}/indexRoute/index.do"><spring:message code="goToIndex"/></a>
+												<a href="${ctxPath}/main/index.do"><spring:message code="goToIndex"/></a>
 											</td>
 										</tr>
 									</tbody>

@@ -205,7 +205,7 @@
 		
 		$(document).ready(function() {
 			//启动后，加载欢迎页面
-			openMenu('/adminRoute/welcome.do','<spring:message code="welcome"/>')
+			openMenu('/admin/static/index.do','<spring:message code="welcome"/>')
 			
 			tabCloseEvent();
 			
@@ -241,7 +241,7 @@
 					<td style="height: 35px;width: 30%;"></td>
 					<td style="font-size: 14px;width: 60%;">
 						<span style="color: #E6EAD5;"  id="currentuser"><spring:message code="welcomeyou"/>：${Current_User.userName}</span> 
-						<a style="color: #fff; text-decoration: none" href="${ctxPath}/indexRoute/index.do"><spring:message code="index"/></a> 
+						<a style="color: #fff; text-decoration: none" href="${ctxPath}/main/index.do"><spring:message code="index"/></a> 
 						<a style="color: #fff; text-decoration: none" href="${ctxPath}/Login/logout.do"><spring:message code="logout"/></a>
 						<span style="color: #E6EAD5;"><spring:message code="changeTheme"/>：</span>
 						<select id="uiSkinNav" class="easyui-combobox" style="width:100px;">

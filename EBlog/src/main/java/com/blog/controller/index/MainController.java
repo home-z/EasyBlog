@@ -1,10 +1,8 @@
-package com.blog.controller;
+package com.blog.controller.index;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,130 +12,54 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
 import com.blog.constant.SystemEnvs;
+import com.blog.controller.admin.BaseController;
 import com.blog.po.BllArticle;
 import com.blog.service.BlogService;
+import com.blog.service.BlogTypeService;
 import com.blog.service.CommentService;
 import com.blog.utils.ArticleUtils;
 import com.blog.utils.JsonHelper;
-import com.blog.utils.SessionHelper;
-import com.blog.vo.ArticleAddRequest;
 import com.blog.vo.ArticleIndexResponse;
-import com.blog.vo.ArticleSearchParams;
-import com.blog.vo.ArticleStatisticResponse;
-import com.blog.vo.ArticleUpdateRequest;
 import com.blog.vo.CommentRequest;
+import com.blog.vo.TypeCountResponse;
+
+/**
+ * @author：Tim
+ * @date：2018年2月5日 下午3:18:42
+ * @description：用于首页（即不需要登录）跳转
+ */
 
 @Controller
-@RequestMapping("/BlogInfo")
-public class BlogInfoController extends BaseController {
+@RequestMapping("/main")
+public class MainController extends BaseController {
 
-	private static Logger logger = Logger.getLogger(BlogInfoController.class);
+	int pCount = SystemEnvs.getPageSize();// 每页显示记录数目
 
-	// spring注解，表示需要自动装配，根据在spingmvc-confog.xml中配置的包，根据类型找对应的bean，bean需要用@注解
 	@Autowired
 	private BlogService blogService;
 
 	@Autowired
 	private CommentService commentService;
 
-	int pCount = SystemEnvs.getPageSize();// 每页显示记录数目
+	@Autowired
+	private BlogTypeService blogTypeService;
 
-	@RequestMapping("/searchBlog")
-	@ResponseBody // 将返回值ResultInfo实体转化为json
-	public Map<String, Object> searchArticle(ArticleSearchParams articleSearchParams) {
-		articleSearchParams.setUserId(SessionHelper.getCurrentUserId(request));
-		List<BllArticle> blogs = blogService.searchArticle(articleSearchParams);
-
-		return JsonHelper.getModelMapforGrid(blogs);
+	/**
+	 * 开始页面
+	 * @return
+	 */
+	@RequestMapping("/index")
+	public String index() {
+		return "index";
 	}
 
-	// 通过文章id，读取文章信息
-	@RequestMapping("/getDetailById")
-	public String getDetailById(Model model, @RequestParam(value = "blogid", required = true) String blogid) {
-		// 读取文章详细内容
-		BllArticle article = blogService.getArticleById(blogid);
-		model.addAttribute("articleDTO", article);
-
-		return "admin/blog/bloginfo";
-	}
-
-	@RequestMapping("/saveBlog")
-	@ResponseBody
-	public Map<String, String> saveBlog(ArticleAddRequest articleAdd) {
-		BllArticle article = new BllArticle();
-
-		article.setId(UUID.randomUUID().toString());
-		article.setTitle(articleAdd.getTitle());
-		article.setTypeId(articleAdd.getBlogTypeId());
-		article.setTypeName(articleAdd.getBlogTypeName());
-		article.setContent(articleAdd.getContent());
-		article.setCreator(SessionHelper.getCurrentUserId(request));
-
-		boolean result = blogService.addArticle(article);
-
-		return JsonHelper.getSucessResult(result);
-	}
-
-	@RequestMapping("/updateBlog")
-	@ResponseBody
-	public Map<String, String> updateBlog(ArticleUpdateRequest articleUpdate) {
-		BllArticle article = blogService.getArticleById(articleUpdate.getBlogid());
-
-		article.setTitle(articleUpdate.getTitle());
-		article.setTypeId(articleUpdate.getBlogTypeId());
-		article.setTypeName(articleUpdate.getBlogTypeName());
-		article.setContent(articleUpdate.getContent());
-		article.setModifier(SessionHelper.getCurrentUserId(request));
-
-		boolean result = blogService.updateArticle(article);
-
-		return JsonHelper.getSucessResult(result);
-	}
-
-	@RequestMapping("/deleteBlog")
-	@ResponseBody
-	public Map<String, String> deleteBlog(String blogid) {
-		boolean result = blogService.deleteArticleById(blogid);
-
-		logger.info("删除文章。" + blogid);
-
-		return JsonHelper.getSucessResult(result);
-	}
-
-	@RequestMapping("/getBlogStatistics")
-	@ResponseBody // 将返回值ResultInfo实体转化为json
-	public Map<String, Object> getBlogStatistics(String styleType, String startDate, String endDate) {
-		RequestContext requestContext = new RequestContext(request);// 读取多语资源
-
-		StringBuffer strBlogPost = new StringBuffer();
-		strBlogPost.append("[");
-		String strPost = "";
-
-		List<ArticleStatisticResponse> lStatisticResponses = blogService.getBlogStatistics(styleType, startDate,
-				endDate);
-
-		for (ArticleStatisticResponse articleStatisticResponse : lStatisticResponses) {
-			strBlogPost.append("{");
-			strBlogPost.append("\"group\":");
-			strBlogPost.append("\"");
-			strBlogPost.append(requestContext.getMessage("blog"));
-			strBlogPost.append("\",");
-			strBlogPost.append("\"name\":");
-			strBlogPost.append("\"" + articleStatisticResponse.getPostDate() + "\",");
-			strBlogPost.append("\"value\":");
-			strBlogPost.append("\"" + articleStatisticResponse.getPostCount() + "\"");
-			strBlogPost.append("},");
-		}
-
-		if (strBlogPost.length() > 1) {
-			strPost = strBlogPost.substring(0, strBlogPost.length() - 1);
-		} else {
-			strPost = strBlogPost.toString();
-		}
-
-		strPost = strPost + "]";
-
-		return JsonHelper.getModel(strPost);
+	/**
+	 * 注册页面
+	 * @return
+	 */
+	@RequestMapping("/register")
+	public String register() {
+		return "admin/register";
 	}
 
 	// 生成分页按钮
@@ -267,6 +189,33 @@ public class BlogInfoController extends BaseController {
 		model.addAttribute("dto", newList);
 
 		return "blog/article/articleViewlistuser";// 跳转到该用户页面，显示该用户所有文章
+	}
+
+	// 获取分类及每个分类下的文章数量
+	@RequestMapping("/getCategory")
+	@ResponseBody
+	public Map<String, Object> getCategory() {
+		StringBuffer strBCategory = new StringBuffer();
+		strBCategory.append("<ul>");
+
+		List<TypeCountResponse> lstTypeCount = blogTypeService.getTypeCount();
+		for (TypeCountResponse typeCountResponse : lstTypeCount) {
+			strBCategory.append("<li><a onClick='addTypeMenu(\"");
+			strBCategory.append(typeCountResponse.getTypeName());
+			strBCategory.append("\",\"");
+			strBCategory.append(typeCountResponse.getTypeId());
+			strBCategory.append("\")");
+			strBCategory.append("' href=\"#\" >");
+			strBCategory.append(typeCountResponse.getTypeName());
+			strBCategory.append("(");
+			strBCategory.append(typeCountResponse.getTypeCount());
+			strBCategory.append(")");
+			strBCategory.append("</a></li>");
+		}
+
+		strBCategory.append("</ul>");
+
+		return JsonHelper.getModel(strBCategory.toString());
 	}
 
 }

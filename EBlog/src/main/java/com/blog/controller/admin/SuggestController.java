@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.admin;
 
 import java.util.List;
 import java.util.Map;
@@ -20,11 +20,16 @@ import com.blog.utils.SessionHelper;
  * @description：推荐控制器
  */
 @Controller
-@RequestMapping("/suggest")
+@RequestMapping("/admin/suggest")
 public class SuggestController extends BaseController {
 
 	@Autowired
 	private SuggestService suggestService;
+
+	@RequestMapping("/index")
+	public String mysuggests() {
+		return "/admin/favorite/mysuggests";
+	}
 
 	@RequestMapping("/getSuggestListByUser")
 	@ResponseBody

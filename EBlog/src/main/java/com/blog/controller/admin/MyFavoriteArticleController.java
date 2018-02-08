@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.admin;
 
 import java.util.List;
 import java.util.Map;
@@ -15,11 +15,16 @@ import com.blog.service.MyFavoriteArticleService;
 import com.blog.utils.JsonHelper;
 
 @Controller
-@RequestMapping("/FavoriteArticle")
+@RequestMapping("/admin/favoriteArticle")
 public class MyFavoriteArticleController extends BaseController {
 
 	@Autowired
 	private MyFavoriteArticleService myFavoriteArticleService;
+
+	@RequestMapping("/index")
+	public String myfavorite() {
+		return "/admin/favorite/myfavorite";
+	}
 
 	@RequestMapping("/getMyFavoriteArticle")
 	@ResponseBody

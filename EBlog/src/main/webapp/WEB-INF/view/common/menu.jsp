@@ -12,7 +12,7 @@
 				$("#loginInfo").html("<a href='${ctxPath}/Login/loginpage.do'><spring:message code='login'/></a>");//未登录情况
 			</c:when>
 			<c:otherwise>
-				$("#loginInfo").html("<a href='${ctxPath}/adminRoute/admin.do'>${Current_User.userName}</a> <a href='${ctxPath}/Login/logout.do'><spring:message code='logout'/></a>");
+				$("#loginInfo").html("<a href='${ctxPath}/admin/index.do'>${Current_User.userName}</a> <a href='${ctxPath}/Login/logout.do'><spring:message code='logout'/></a>");
 			</c:otherwise>
 		</c:choose>
 	}
@@ -76,7 +76,7 @@
                     <a href="${ctxPath}/Global/changeLang.do?from=index&langType=en" >English</a>
                  </td>
 				<td style="text-align: right">
-					<span id="loginInfo"></span>&nbsp; <a href="${ctxPath}/indexRoute/register.do"><spring:message code="register"/></a>
+					<span id="loginInfo"></span>&nbsp; <a href="${ctxPath}/main/register.do"><spring:message code="register"/></a>
 				</td>
 			</tr>
 		</table>

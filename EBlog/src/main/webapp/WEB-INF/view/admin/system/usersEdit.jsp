@@ -6,7 +6,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>系统用户管理</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
  id="swicth-style" />
@@ -17,7 +16,7 @@
 </head>
 <body>
 	<div id="tb" style="height: auto">
-		<a href="${ctxPath}/admin/system/users.jsp" class="easyui-linkbutton" data-options="iconCls:'icon-blur',plain:true">列表</a> <a <c:choose><c:when test="${empty userDTO}">style="display: none;"</c:when>
+		<a href="${ctxPath}/admin/user/index.do" class="easyui-linkbutton" data-options="iconCls:'icon-blur',plain:true">列表</a> <a <c:choose><c:when test="${empty userDTO}">style="display: none;"</c:when>
 		   </c:choose> href="javascript:void(0)" class="easyui-linkbutton"
 			data-options="iconCls:'icon-remove',plain:true" onclick="deleteUser()">刪除</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="save()">保存</a> <a href="javascript:void(0)" class="easyui-linkbutton"
 			data-options="iconCls:'icon-undo',plain:true" onclick="clearForm()">重置</a>
@@ -50,15 +49,6 @@
 	</form>
 </body>
 <script type="text/javascript">
-	//检测是否已经登录
-	function checkLogin() {
-		<c:choose>
-		<c:when test="${empty Current_User}">
-		location.href = "${ctxPath}/admin/login.jsp";
-		</c:when>
-		</c:choose>
-	}
-
 	$.extend($.fn.validatebox.defaults.rules, {
 		equals : {
 			validator : function(value, param) {
@@ -126,9 +116,9 @@
 			var params = new FormData($("#userForm")[0]);//使用FormData接收数据
 			var strUrl = "";
 			if ($("#userId").val() != null && $("#userId").val() != "") {
-				strUrl = getContextPath() + '/User/updateUser.do';
+				strUrl = getContextPath() + '/admin/user/updateUser.do';
 			} else {
-				strUrl = getContextPath() + '/User/registerUser.do';
+				strUrl = getContextPath() + '/admin/user/registerUser.do';
 			}
 
 			$.ajax({
@@ -142,7 +132,7 @@
 					if (data && data.success == "true") {
 						$.messager.alert("成功", data.content, "info");
 						
-						location.href = "${ctxPath}/admin/system/users.jsp";
+						location.href = "${ctxPath}/admin/user/index.do";
 					} else {
 						$.messager.alert("失败", data.content, "info");
 					}
@@ -176,7 +166,7 @@
 					$.ajax({
 						type : 'GET',
 						contentType : 'application/json',
-						url : '${ctxPath}/User/deleteUser.do',
+						url : '${ctxPath}/admin/user/deleteUser.do',
 						dataType : 'json',
 						data : param,
 						success : function(data) {
@@ -186,7 +176,7 @@
 								$.messager.alert("失败", "用户删除失败！");
 							}
 							
-							location.href = "${ctxPath}/admin/system/users.jsp";
+							location.href = "${ctxPath}/admin/user/index.do";
 						},
 						error : function() {
 							$.messager.alert("错误", "删除用户发生网络异常！", "error");
@@ -201,7 +191,6 @@
 	}
 
 	$(document).ready(function() {
-		checkLogin();
 		$("#currentUserId").val("${Current_User.id}");//获取当前登录用户id
 	});
 </script>

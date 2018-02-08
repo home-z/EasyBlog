@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.admin;
 
 import java.util.List;
 import java.util.Map;
@@ -21,13 +21,18 @@ import com.blog.utils.JsonHelper;
  * @description：评论控制器
  */
 @Controller
-@RequestMapping("/comment")
+@RequestMapping("/admin/comment")
 public class CommentController extends BaseController {
 
 	private static Logger logger = Logger.getLogger(CommentController.class);
 
 	@Autowired
 	private CommentService commentService;
+
+	@RequestMapping("/index")
+	public String mycomment() {
+		return "/admin/favorite/mycomment";
+	}
 
 	@RequestMapping("/getCommentListByUser")
 	@ResponseBody

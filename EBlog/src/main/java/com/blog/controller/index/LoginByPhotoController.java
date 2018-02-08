@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.index;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -17,6 +17,7 @@ import sun.misc.BASE64Encoder;
 
 import com.blog.vo.MenuTree;
 import com.blog.constant.SystemEnvs;
+import com.blog.controller.admin.BaseController;
 import com.blog.po.SysUser;
 import com.blog.service.AuthService;
 import com.blog.service.UserService;

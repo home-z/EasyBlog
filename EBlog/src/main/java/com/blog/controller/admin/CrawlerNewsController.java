@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.admin;
 
 import java.util.List;
 import java.util.Map;
@@ -19,11 +19,16 @@ import com.blog.utils.JsonHelper;
  * @description：抓取的网页
  */
 @Controller
-@RequestMapping("/crawlerNews")
+@RequestMapping("/admin/crawlerNews")
 public class CrawlerNewsController extends BaseController {
 
 	@Autowired
 	private CrawlerNewsService CrawlerNewsService;
+
+	@RequestMapping("/index")
+	public String crawlnews() {
+		return "/admin/crawler/crawlnews";
+	}
 
 	@RequestMapping("/getListCrawlerNewsByUser")
 	@ResponseBody

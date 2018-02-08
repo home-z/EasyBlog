@@ -7,7 +7,7 @@ function getCategory() {
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
-		url : getContextPath() + '/BlogType/getCategory.do',
+		url : getContextPath() + '/main/getCategory.do',
 		dataType : 'json',
 		success : function(data) {
 			if (data && data.success == "true") {
@@ -29,7 +29,7 @@ function getPageFilter(action) {
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
-		url : getContextPath() + '/BlogInfo/getArticlePage.do?action=' + action,
+		url : getContextPath() + '/main/getArticlePage.do?action=' + action,
 		dataType : 'json',
 		success : function(data) {
 			if (data && data.success == "true") {
@@ -67,9 +67,9 @@ function getArticle(url) {
 //调用的控制器方法 
 //首页：getallArticle； 热读：getArticleRead； 热评：getArticleCommit；推荐：getArticleSuggest；
 function getArticleByMenu(method) {
-	getPageFilter("/BlogInfo/" + method + ".do");// 生成底部的分页
+	getPageFilter("/main/" + method + ".do");// 生成底部的分页
 	aPageChange();// 分页切换
-	getArticle(getContextPath() + "/BlogInfo/" + method + ".do?page=1");
+	getArticle(getContextPath() + "/main/" + method + ".do?page=1");
 }
 
 // 分页切换
@@ -93,9 +93,9 @@ function aPageChange() {
 // 点击分类
 function getArticleType(typeid) {
 	// 生成分页
-	getPageFilter("/BlogInfo/getArticleByType.do?typeid=" + typeid);// 生成底部的分页
+	getPageFilter("/main/getArticleByType.do?typeid=" + typeid);// 生成底部的分页
 	aPageChange();
-	getArticle(getContextPath() + '/BlogInfo/getArticleByType.do?typeid=' + typeid + '&page=1');
+	getArticle(getContextPath() + '/main/getArticleByType.do?typeid=' + typeid + '&page=1');
 }
 
 // 点击右侧分类，则增加对应分类菜单
@@ -164,7 +164,7 @@ function appendArticle(dataSource) {
 	var strAllArticle = "";
 	$.each(dataSource, function(i, item) {
 		strAllArticle += "<div>";
-		strAllArticle += "<a href='" + getContextPath() + "/BlogInfo/getDetailByIdView.do?id=";
+		strAllArticle += "<a href='" + getContextPath() + "/main/getDetailByIdView.do?id=";
 		strAllArticle += item.id;
 		strAllArticle += "' target='_blank'>";
 		strAllArticle += item.title;
@@ -173,7 +173,7 @@ function appendArticle(dataSource) {
 		strAllArticle += item.content;
 		strAllArticle += "</p>";
 		strAllArticle += "<p id='postInfo'>";
-		strAllArticle += "<a style='text-decoration:none' href='" + getContextPath() + "/BlogInfo/getArticleByCreateBy.do?userId=";
+		strAllArticle += "<a style='text-decoration:none' href='" + getContextPath() + "/main/getArticleByCreateBy.do?userId=";
 		strAllArticle += item.creator;
 		strAllArticle += "' target='_blank'>";
 		strAllArticle += item.creatorName;

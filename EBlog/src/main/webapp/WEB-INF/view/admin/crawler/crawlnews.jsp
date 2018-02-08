@@ -6,7 +6,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>我的抓取</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
@@ -56,7 +55,7 @@
 	
 	$(document).ready(function() {
 		$('#newdataGrid').datagrid({
-			url : '${ctxPath}/crawlerNews/getListCrawlerNewsByUser.do',
+			url : '${ctxPath}/admin/crawlerNews/getListCrawlerNewsByUser.do',
 			toolbar : '#toolbar',
 			rownumbers : true,
 			pagination : true,

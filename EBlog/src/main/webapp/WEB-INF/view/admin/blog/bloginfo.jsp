@@ -6,7 +6,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>文章新建/编辑</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
  id="swicth-style" />
@@ -21,7 +20,7 @@
 </head>
 <body>
 	<div id="tb" style="height: auto">
-		<a href="${ctxPath}/admin/blog/blog.jsp" class="easyui-linkbutton" data-options="iconCls:'icon-blur',plain:true">列表</a> 
+		<a href="${ctxPath}/admin/blogInfo/index.do" class="easyui-linkbutton" data-options="iconCls:'icon-blur',plain:true">列表</a> 
 		<a <c:choose><c:when test="${empty articleDTO}">style="display: none;"</c:when> </c:choose> href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteArticle()">刪除</a> 
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="saveArticle()">保存</a> 
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="clearForm()">重置</a>
@@ -120,13 +119,13 @@
 				$.ajax({
 					type : 'POST',
 					dataType : 'json',
-					url : '${ctxPath}/BlogInfo/saveBlog.do', //新增信息
+					url : '${ctxPath}/admin/blogInfo/saveBlog.do', //新增信息
 					data : $.param(param),
 					success : function(data) {
 						if (data && data.success == "true") {
 							$.messager.alert('成功', '新增成功！');
 							
-							location.href = "${ctxPath}/admin/blog/blog.jsp";
+							location.href = "${ctxPath}/admin/blogInfo/index.do";
 						} else {
 							$.messager.alert('失败', '新增失败！');
 						}
@@ -146,13 +145,13 @@
 				$.ajax({
 					type : 'POST',
 					dataType : 'json',
-					url : '${ctxPath}/BlogInfo/updateBlog.do', //更新信息
+					url : '${ctxPath}/admin/blogInfo/updateBlog.do', //更新信息
 					data : $.param(param),
 					success : function(data) {
 						if (data && data.success == "true") {
 							$.messager.alert('成功', '更新成功！');
 							
-							location.href = "${ctxPath}/admin/blog/blog.jsp";
+							location.href = "${ctxPath}/admin/blogInfo/index.do";
 						} else {
 							$.messager.alert('失败', '更新失败！');
 						}
@@ -179,13 +178,13 @@
 					$.ajax({
 						type : 'POST',
 						dataType : "json",
-						url : "${ctxPath}/BlogInfo/deleteBlog.do",
+						url : "${ctxPath}/admin/blogInfo/deleteBlog.do",
 						data : $.param(param),
 						success : function(data) {
 							if (data&& data.success == "true") {
 								$.messager.alert('成功','删除成功！');
 								
-								location.href = "${ctxPath}/admin/blog/blog.jsp";
+								location.href = "${ctxPath}/admin/blogInfo/index.do";
 							} else {
 								$.messager.alert('失败','删除失败！');
 							}
@@ -200,7 +199,7 @@
 	
 	$(document).ready(function() {
 	    $('#comblogType').combobox({
-	        url:'${ctxPath}/BlogType/getBlogTypeByUser.do',
+	        url:'${ctxPath}/admin/blogType/getBlogTypeByUser.do',
 	        valueField:'id',
 	        textField:'text'
 	    });

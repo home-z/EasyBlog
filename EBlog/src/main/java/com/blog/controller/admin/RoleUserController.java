@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.admin;
 
 import java.util.List;
 import java.util.Map;
@@ -20,11 +20,16 @@ import com.blog.utils.SessionHelper;
  */
 
 @Controller
-@RequestMapping("/RoleUser")
+@RequestMapping("/admin/roleUser")
 public class RoleUserController extends BaseController {
 
 	@Autowired
 	private RoleUserService roleUserService;
+
+	@RequestMapping("/index")
+	public String userroles() {
+		return "/admin/system/userroles";
+	}
 
 	@RequestMapping("/getRoleUser")
 	@ResponseBody

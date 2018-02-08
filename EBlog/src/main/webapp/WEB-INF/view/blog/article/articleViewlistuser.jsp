@@ -22,7 +22,7 @@
 	</div>
 	<div id="articleInfo">
 		<c:forEach items="${dto}" var="item">
-			<a href="${ctxPath}/BlogInfo/getDetailByIdView.do?id=${item.id}" target="_blank">${item.title}</a>
+			<a href="${ctxPath}/main/getDetailByIdView.do?id=${item.id}" target="_blank">${item.title}</a>
 			<p>${item.content}</p>
 			<p id="postInfo">${item.creator}&nbsp;<spring:message code="postat"/>&nbsp;${item.createTime}&nbsp;<spring:message code="commit"/>(${item.comCount})</p>
 			<hr>

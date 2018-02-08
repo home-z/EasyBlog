@@ -8,7 +8,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>系统用户管理</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
@@ -20,7 +19,7 @@
 	<div style="height: 100%; width: 100%;">
 		<div id="tb" style="height: auto">
 		<!-- <fmt:message key="add"/> 尝试解决多语 -->
-			<a href="usersEdit.jsp" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"><spring:message code="add"/></a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteUser()">刪除</a> <a href="javascript:void(0)" class="easyui-linkbutton"
+			<a href="${ctxPath}/admin/user/add.do" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"><spring:message code="add"/></a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteUser()">刪除</a> <a href="javascript:void(0)" class="easyui-linkbutton"
 				data-options="iconCls:'icon-search',plain:true" onclick="showSearchWin()">查找</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-downlevel',plain:true" onclick="exportUser()">导出</a>
 		</div>
 		<table id="usersDataGrid"></table>
@@ -47,14 +46,6 @@
 	</div>
 </body>
 <script type="text/javascript">
-	//检测是否已经登录
-	function checkLogin() {
-		<c:choose>
-			<c:when test="${empty Current_User}">
-				location.href = "${ctxPath}/admin/login.jsp";
-			</c:when>
-		</c:choose>
-	}
 
 	//弹出搜索框
 	function showSearchWin() {
@@ -90,7 +81,7 @@
 					$.ajax({
 						type : 'GET',
 						contentType : 'application/json',
-						url : '${ctxPath}/User/deleteUser.do',
+						url : '${ctxPath}/admin/user/deleteUser.do',
 						dataType : 'json',
 						data : param,
 						success : function(data) {
@@ -123,12 +114,12 @@
 			}
 			
 			//调用导出。用户id以“,”分割
-			window.location.href="${ctxPath}/User/exportUser.do?userId=" + selectedIds.join(",");
+			window.location.href="${ctxPath}/admin/user/exportUser.do?userId=" + selectedIds.join(",");
 		} else {
 			$.messager.confirm('确认', '未选择要导出的记录，则会导出全部记录。确定导出全部记录？',
 					function(r) {
 						if (r) {
-							window.location.href="${ctxPath}/User/exportAllUser.do";
+							window.location.href="${ctxPath}/admin/user/exportAllUser.do";
 						}
 			});
 		}
@@ -169,10 +160,9 @@
 
 	$(document).ready(
 		function() {
-			checkLogin();
 			$("#currentUserId").val("${Current_User.id}");//获取当前登录用户id
 			$('#usersDataGrid').datagrid({
-				url : '${ctxPath}/User/searchUser.do',
+				url : '${ctxPath}/admin/user/searchUser.do',
 				toolbar : '#tb',
 				rownumbers : true,
 				pagination : true,
@@ -190,7 +180,7 @@
 							width : 100,
 							align : 'center',
 							formatter : function(value, row,index) {
-								return "<a href='${ctxPath}/User/getDetailByUserId.do?userId="
+								return "<a href='${ctxPath}/admin/user/getDetailByUserId.do?userId="
 										+ row.id
 										+ "'>"
 										+ row.userCode

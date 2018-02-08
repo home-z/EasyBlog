@@ -6,7 +6,6 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>博客类别管理</title>
 		<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-		<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 		<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 		<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 		<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
@@ -18,7 +17,7 @@
 	<body>
 		<div style="height: 100%; width: 100%;">
 			<div id="tb" style="height: auto">
-				<a href="blogTypeEdit.jsp" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</a> 
+				<a href="${ctxPath}/admin/blogType/add.do" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</a> 
 				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteBlogType()">刪除</a> 
 			</div>
 			<table id="typeDataGrid"></table>
@@ -43,7 +42,7 @@
 						$.ajax({
 							type : 'GET',
 							contentType : 'application/json',
-							url : '${ctxPath}/BlogType/deleteBlogType.do',
+							url : '${ctxPath}/admin/blogType/deleteBlogType.do',
 							dataType : 'json',
 							data : param,
 							success : function(data) {
@@ -99,7 +98,7 @@
 		
 		$(document).ready(function() {
 			$('#typeDataGrid').datagrid({
-				url : '${ctxPath}/BlogType/getBlogTypeListByUser.do',
+				url : '${ctxPath}/admin/blogType/getBlogTypeListByUser.do',
 				toolbar : '#tb',
 				rownumbers : true,
 				pagination : true,
@@ -118,7 +117,7 @@
 						align : 'center',
 						editor : 'text',
 						formatter : function(value, row,index) {
-							return "<a href='${ctxPath}/BlogType/editBlogType.do?blogTypeId="
+							return "<a href='${ctxPath}/admin/blogType/editBlogType.do?blogTypeId="
 								+ row.id
 								+ "'>"
 								+ row.typeName

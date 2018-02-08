@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.admin;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +40,7 @@ import com.blog.vo.UserSearchParams;
 import com.blog.vo.UserSearchResponse;
 
 @Controller
-@RequestMapping("/User")
+@RequestMapping("/admin/user")
 public class UserController extends BaseController {
 
 	private static Logger logger = Logger.getLogger(UserController.class);
@@ -50,6 +50,16 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private BlogService blogService;
+
+	@RequestMapping("/index")
+	public String index() {
+		return "/admin/system/users";
+	}
+	
+	@RequestMapping("/add")
+	public String add() {
+		return "admin/system/usersEdit";
+	}
 
 	/**
 	 * 搜索用户。用户管理界面默认进入调用该方法

@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.admin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,11 +25,16 @@ import com.blog.vo.MenuTree;
  * @description：角色权限
  */
 @Controller
-@RequestMapping("/RoleAuth")
+@RequestMapping("/admin/roleAuth")
 public class AuthController {
 
 	@Autowired
 	private AuthService authService;
+
+	@RequestMapping("/index")
+	public String rolesauth() {
+		return "/admin/system/rolesauth";
+	}
 
 	@RequestMapping("/loadAllMenus")
 	@ResponseBody

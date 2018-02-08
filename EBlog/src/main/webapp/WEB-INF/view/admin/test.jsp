@@ -6,7 +6,7 @@
 <title>上传图片</title>
 </head>
 <body>
-	<form action="${ctxPath}/EBlog/User/upload.do" method="post" enctype="multipart/form-data">
+	<form action="${ctxPath}/EBlog/admin/user/upload.do" method="post" enctype="multipart/form-data">
 		<input type="file" name="file" /> <input type="submit" value="Submit" />
 	</form>
 </body>

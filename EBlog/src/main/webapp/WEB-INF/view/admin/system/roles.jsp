@@ -7,7 +7,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>角色管理</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
@@ -18,7 +17,7 @@
 <body>
 	<div style="height: 100%; width: 100%;">
 		<div id="tb" style="height: auto">
-			<a href="${ctxPath}/admin/system/rolesEdit.jsp" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"><spring:message code="add"/></a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteRole()">刪除</a> <a href="javascript:void(0)" class="easyui-linkbutton"
+			<a href="${ctxPath}/admin/role/add.do" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"><spring:message code="add"/></a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteRole()">刪除</a> <a href="javascript:void(0)" class="easyui-linkbutton"
 				data-options="iconCls:'icon-search',plain:true" onclick="showSearchWin()">查找</a>
 		</div>
 		<table id="rolesDataGrid"></table>
@@ -37,15 +36,6 @@
 	</div>
 </body>
 <script type="text/javascript">
-	//检测是否已经登录
-	function checkLogin() {
-		<c:choose>
-			<c:when test="${empty Current_User}">
-				location.href = "${ctxPath}/admin/login.jsp";
-			</c:when>
-		</c:choose>
-	}
-
 	//弹出搜索框
 	function showSearchWin() {
 		$('#searchRoleWin').window('open');
@@ -76,7 +66,7 @@
 					$.ajax({
 						type : 'GET',
 						contentType : 'application/json',
-						url : '${ctxPath}/Role/deleteRole.do',
+						url : '${ctxPath}/admin/role/deleteRole.do',
 						dataType : 'json',
 						data : param,
 						success : function(data) {
@@ -140,9 +130,8 @@
 
 	$(document).ready(
 		function() {
-			checkLogin();
 			$('#rolesDataGrid').datagrid({
-				url : '${ctxPath}/Role/searchRole.do',
+				url : '${ctxPath}/admin/role/searchRole.do',
 				toolbar : '#tb',
 				rownumbers : true,
 				pagination : true,
@@ -160,7 +149,7 @@
 							width : 100,
 							align : 'center',
 							formatter : function(value, row,index) {
-								return "<a href='${ctxPath}/Role/editRole.do?roleId="
+								return "<a href='${ctxPath}/admin/role/editRole.do?roleId="
 										+ row.id
 										+ "'>"
 										+ row.roleName

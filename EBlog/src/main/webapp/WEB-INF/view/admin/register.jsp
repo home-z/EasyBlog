@@ -18,7 +18,7 @@
 			</td>
 			<td align="right" valign="top">
 				<a href="${ctxPath}/Login/loginpage.do">立即登录</a> 
-				<a href="${ctxPath}/indexRoute/index.do">回到主页</a>
+				<a href="${ctxPath}/main/index.do">回到主页</a>
 			</td>						
 		</tr>
 		<tr>

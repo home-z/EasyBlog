@@ -6,7 +6,6 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>我的推荐</title>
 		<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-		<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 		<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 		<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 		<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
@@ -42,7 +41,7 @@
 						$.ajax({
 							type : 'GET',
 							contentType : 'application/json',
-							url : '${ctxPath}/suggest/deleteSuggest.do',
+							url : '${ctxPath}/admin/suggest/deleteSuggest.do',
 							dataType : 'json',
 							data : param,
 							success : function(data) {
@@ -98,7 +97,7 @@
 		
 		$(document).ready(function() {
 			$('#suggestDataGrid').datagrid({
-				url : '${ctxPath}/suggest/getSuggestListByUser.do',
+				url : '${ctxPath}/admin/suggest/getSuggestListByUser.do',
 				toolbar : '#tb',
 				rownumbers : true,
 				pagination : true,
@@ -117,7 +116,7 @@
 						align : 'center',
 						editor : 'text',
 						formatter : function(value, row, index) {
-							return "<a href='${ctxPath}/BlogInfo/getDetailByIdView.do?id="
+							return "<a href='${ctxPath}/main/getDetailByIdView.do?id="
 								+ row.articleId
 								+ "' target='_blank'>"
 								+ value

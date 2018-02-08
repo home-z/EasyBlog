@@ -35,9 +35,14 @@
 		<property name="defaultLocale" value="zh_CN" />
 	</bean>
 
-	<!-- 国际化拦截器 -->
 	<mvc:interceptors>
+		<!-- 国际化拦截器 -->
 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+		<!-- 登录检查拦截器 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/admin/**" />
+			<bean class="com.blog.interceptor.LoginInterceptor" />
+		</mvc:interceptor>
 	</mvc:interceptors>
 
 </beans>  

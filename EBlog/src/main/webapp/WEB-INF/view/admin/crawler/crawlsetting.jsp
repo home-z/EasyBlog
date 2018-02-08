@@ -6,7 +6,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>抓取任务</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
@@ -61,7 +60,7 @@
 					$.ajax({
 						type : 'GET',
 						contentType : 'application/json',
-						url : '${ctxPath}/crawlerTask/removeCrawTask.do',
+						url : '${ctxPath}/admin/crawlerTask/removeCrawTask.do',
 						dataType : 'json',
 						data : param,
 						success : function(data) {
@@ -155,9 +154,9 @@
 			//根据是否有id，判断是新增还是修改
 			var strUrl = "";
 			if ($("#crawTaskId").val() != null && $("#crawTaskId").val() != "") {
-				strUrl = '${ctxPath}/crawlerTask/updateCrawlerTask.do';
+				strUrl = '${ctxPath}/admin/crawlerTask/updateCrawlerTask.do';
 			} else {
-				strUrl = '${ctxPath}/crawlerTask/addCrawlerTask.do';
+				strUrl = '${ctxPath}/admin/crawlerTask/addCrawlerTask.do';
 			}
 			
 			$.ajax({
@@ -185,7 +184,7 @@
 	
 	$(document).ready(function() {
 		$('#crawTaskdataGrid').datagrid({
-			url : '${ctxPath}/crawlerTask/getListCrawlerTaskByUser.do',
+			url : '${ctxPath}/admin/crawlerTask/getListCrawlerTaskByUser.do',
 			toolbar : '#toolbar',
 			rownumbers : true,
 			pagination : true,

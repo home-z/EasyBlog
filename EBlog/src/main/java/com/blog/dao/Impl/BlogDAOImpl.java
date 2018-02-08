@@ -73,7 +73,7 @@ public class BlogDAOImpl implements BlogDAO {
 		// 按照用户查询
 		strBulder.append(" Creator ='");
 		strBulder.append(articleSearchParams.getUserId());
-		strBulder.append("'");
+		strBulder.append("' order by b.CreateTime desc");
 
 		lstBlogs = HibernateUtils.queryListParam(BllArticle.class, strBulder.toString());
 

@@ -57,7 +57,7 @@ $(document).ready(function() {
 					if (data && data.success == "true") {
 						$("#exMsg").html($("#txtUserCode").val() +'&nbsp;'+ localResource["loginSuccess"]);
 						
-						window.location.href = getContextPath()+"/adminRoute/admin.do";// 跳转到管理页
+						window.location.href = getContextPath()+"/admin/index.do";// 跳转到管理页
 					} else {
 						$("#exMsg").html(localResource["loginFail"]);
 					}

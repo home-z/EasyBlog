@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.index;
 
 import java.util.HashMap;
 import java.util.List;

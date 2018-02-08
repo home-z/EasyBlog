@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.admin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,7 +19,6 @@ import com.blog.po.BllArticletype;
 import com.blog.service.BlogTypeService;
 import com.blog.utils.JsonHelper;
 import com.blog.vo.ArticleTypeAddRequest;
-import com.blog.vo.TypeCountResponse;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,13 +28,31 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2018年1月13日-下午6:19:38
  */
 @Controller
-@RequestMapping("/BlogType")
+@RequestMapping("/admin/blogType")
 public class BlogTypeController extends BaseController {
 
 	private static Logger logger = Logger.getLogger(BlogTypeController.class);
 
 	@Autowired
 	private BlogTypeService blogTypeService;
+
+	/**
+	 * 进入首页
+	 * @return
+	 */
+	@RequestMapping("/index")
+	public String index() {
+		return "/admin/blog/blogtype";
+	}
+
+	/**
+	 * 进入新增页
+	 * @return
+	 */
+	@RequestMapping("/add")
+	public String add() {
+		return "admin/blog/blogTypeEdit";
+	}
 
 	/**
 	 * 获取用户下的博客分类
@@ -89,7 +106,7 @@ public class BlogTypeController extends BaseController {
 
 		blogTypeService.addBlogType(articletype);
 
-		return JsonHelper.getSucessResult(true, "保存成功！");
+		return JsonHelper.getSucessResult(true, "新增成功！");
 	}
 
 	@RequestMapping("/editBlogType")
@@ -110,7 +127,7 @@ public class BlogTypeController extends BaseController {
 
 		blogTypeService.updateBlogType(articletype);
 
-		return JsonHelper.getSucessResult(true);
+		return JsonHelper.getSucessResult(true, "修改成功！");
 	}
 
 	@RequestMapping("/deleteBlogType")
@@ -127,33 +144,7 @@ public class BlogTypeController extends BaseController {
 		boolean result = blogTypeService.deleteBlogType(blogTypeIds);
 		logger.info("删除文章类别。" + blogTypeIds);
 
-		return JsonHelper.getSucessResult(result);
+		return JsonHelper.getSucessResult(result, "删除成功！");
 	}
 
-	// 获取分类及每个分类下的文章数量
-	@RequestMapping("/getCategory")
-	@ResponseBody
-	public Map<String, Object> getCategory() {
-		StringBuffer strBCategory = new StringBuffer();
-		strBCategory.append("<ul>");
-
-		List<TypeCountResponse> lstTypeCount = blogTypeService.getTypeCount();
-		for (TypeCountResponse typeCountResponse : lstTypeCount) {
-			strBCategory.append("<li><a onClick='addTypeMenu(\"");
-			strBCategory.append(typeCountResponse.getTypeName());
-			strBCategory.append("\",\"");
-			strBCategory.append(typeCountResponse.getTypeId());
-			strBCategory.append("\")");
-			strBCategory.append("' href=\"#\" >");
-			strBCategory.append(typeCountResponse.getTypeName());
-			strBCategory.append("(");
-			strBCategory.append(typeCountResponse.getTypeCount());
-			strBCategory.append(")");
-			strBCategory.append("</a></li>");
-		}
-
-		strBCategory.append("</ul>");
-
-		return JsonHelper.getModel(strBCategory.toString());
-	}
 }

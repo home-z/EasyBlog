@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.controller.index;
 
 import java.util.Locale;
 
@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import com.blog.controller.admin.BaseController;
 
 /**
  * @author：Tim

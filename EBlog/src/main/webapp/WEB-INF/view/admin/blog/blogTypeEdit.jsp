@@ -7,7 +7,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>博客类别管理</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
  id="swicth-style" />
@@ -18,7 +17,7 @@
 </head>
 <body>
 	<div id="tb" style="height: auto">
-		<a href="${ctxPath}/admin/blog/blogtype.jsp" class="easyui-linkbutton" data-options="iconCls:'icon-blur',plain:true">列表</a> 
+		<a href="${ctxPath}/admin/blogType/index.do" class="easyui-linkbutton" data-options="iconCls:'icon-blur',plain:true">列表</a> 
 		<a <c:choose><c:when test="${empty blogTypeDTO}">style="display: none;"</c:when> </c:choose> href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteBlogType()">刪除</a> 
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="saveBlogType()">保存</a> 
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="clearForm()">重置</a>
@@ -64,9 +63,9 @@
 				//根据是否有id，判断是新增还是修改
 				var strUrl = "";
 				if ($("#blogTypeId").val() != null && $("#blogTypeId").val() != "") {
-					strUrl = '${ctxPath}/BlogType/updateBlogType.do';
+					strUrl = '${ctxPath}/admin/blogType/updateBlogType.do';
 				} else {
-					strUrl = '${ctxPath}/BlogType/addBlogType.do';
+					strUrl = '${ctxPath}/admin/blogType/addBlogType.do';
 				}
 				
 				$.ajax({
@@ -80,7 +79,7 @@
 						if (data && data.success == "true") {
 							$.messager.alert("成功", data.content, "info");
 							
-							location.href = "${ctxPath}/admin/blog/blogtype.jsp";
+							location.href = "${ctxPath}/admin/blogType/index.do";
 						} else {
 							$.messager.alert("失败", data.content, "info");
 						}
@@ -105,17 +104,17 @@
 						$.ajax({
 							type : 'GET',
 							contentType : 'application/json',
-							url : '${ctxPath}/BlogType/deleteBlogType.do',
+							url : '${ctxPath}/admin/blogType/deleteBlogType.do',
 							dataType : 'json',
 							data : param,
 							success : function(data) {
 								if (data && data.success == "true") {
-									$.messager.alert("成功", "博客类别删除成功！", "info");
+									$.messager.alert("成功", data.content, "info");
 								} else {
 									$.messager.alert("失败", data.content);
 								}
 								
-								location.href = "${ctxPath}/admin/blog/blogtype.jsp";
+								location.href = "${ctxPath}/admin/blogType/index.do";
 							},
 							error : function() {
 								$.messager.alert("错误", "删除博客类别发生网络异常！", "error");

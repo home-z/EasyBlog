@@ -7,7 +7,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>角色权限管理</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<%@include file="/WEB-INF/view/common/checklogin.jsp"%>
 	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
 	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
@@ -31,14 +30,6 @@
 	</div>
 </body>
 <script type="text/javascript">
-	//检测是否已经登录
-	function checkLogin() {
-		<c:choose>
-			<c:when test="${empty Current_User}">
-				location.href = "${ctxPath}/admin/login.jsp";
-			</c:when>
-		</c:choose>
-	}
 	
 	//还原到提交前
 	function cancel(){
@@ -82,7 +73,7 @@
 			$.ajax({
 				type : 'GET',
 				contentType : 'application/json',
-				url : '${ctxPath}/RoleAuth/addRoleAuths.do',
+				url : '${ctxPath}/admin/roleAuth/addRoleAuths.do',
 				dataType : 'json',
 				data : param,
 				success : function(data) {
@@ -115,7 +106,7 @@
 		$.ajax({
 			type : 'GET',
 			contentType : 'application/json',
-			url : '${ctxPath}/RoleAuth/getMenuByRoleId.do',
+			url : '${ctxPath}/admin/roleAuth/getMenuByRoleId.do',
 			dataType : 'json',
 			data : param,
 			success : function(data) {
@@ -139,10 +130,9 @@
 	
 	$(document).ready(
 		function() {
-			checkLogin();
 			//加载角色列表
 			$('#rolesDataGrid').datagrid({
-				url : '${ctxPath}/Role/searchRole.do',
+				url : '${ctxPath}/admin/role/searchRole.do',
 				rownumbers : true,
 				fitColumns : true,
 				fit : true,
@@ -164,7 +154,7 @@
 			
 			//加载权限
 			$('#roleAuthDataTree').tree({
-				url:'${ctxPath}/RoleAuth/loadAllMenus.do',
+				url:'${ctxPath}/admin/roleAuth/loadAllMenus.do',
 				checkbox : true,
 				animate : true,
 				lines : true

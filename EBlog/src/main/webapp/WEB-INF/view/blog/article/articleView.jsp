@@ -64,7 +64,7 @@
 					#${status.count}
 					<spring:message code="floor" />
 					&nbsp;${item.createTime}
-					&nbsp;<a href="${ctxPath}/BlogInfo/getArticleByCreateBy.do?userId=${item.creator}" target='_blank'>${item.creatorName}</a>
+					&nbsp;<a href="${ctxPath}/main/getArticleByCreateBy.do?userId=${item.creator}" target='_blank'>${item.creatorName}</a>
 				</p>
 				<p>${item.comContent}</p>
 				<hr style="border: 1px dotted #E4DDDD" />
@@ -83,7 +83,7 @@
 				$.ajax({
 					type : 'POST',
 					dataType : 'json',
-					url : '${ctxPath}/suggest/addSuggest.do', //新增信息
+					url : '${ctxPath}/admin/suggest/addSuggest.do', //新增信息
 					data : $.param(param),
 					success : function(data) {
 						if (data && data.success == "true") {
@@ -116,7 +116,7 @@
 			$.ajax({
 				type : 'POST',
 				dataType : 'json',
-				url : '${ctxPath}/comment/addComment.do', //新增信息
+				url : '${ctxPath}/admin/comment/addComment.do', //新增信息
 				data : $.param(param),
 				success : function(data) {
 					if (data && data.success == "true") {
