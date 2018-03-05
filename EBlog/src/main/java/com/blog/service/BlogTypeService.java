@@ -67,4 +67,8 @@ public class BlogTypeService {
 	public List<TypeCountResponse> getTypeCount() {
 		return blogTypeDAO.getTypeCount();
 	}
+
+	public List<TypeCountResponse> getTypeCount(String userId) {
+		return blogTypeDAO.getTypeCount(userId);
+	}
 }

@@ -27,3 +27,12 @@
 hr {
 	color: #c0c0c0;
 }
+
+#content {
+	margin-right: 5px;
+}
+
+#leftArticle {
+	width: 80%;
+	float: left;
+}

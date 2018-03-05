@@ -33,6 +33,13 @@ public interface BlogTypeDAO {
 	List<TypeCountResponse> getTypeCount();
 
 	/**
+	 * 获取指定用户下的文章分类，以及每个分类下的文章总数
+	 * @param userId 用户ID
+	 * @return
+	 */
+	List<TypeCountResponse> getTypeCount(String userId);
+
+	/**
 	 * 删除博客类别
 	 * @param blogTypeIds 博客类别id集合
 	 * @return

@@ -113,9 +113,11 @@ public class BlogDAOImpl implements BlogDAO {
 	}
 
 	@Override
-	public List<BllArticle> getArticleByCreator(String userId) {
-		List<BllArticle> list = HibernateUtils.queryListParam(BllArticle.class,
-				"select * from bll_article where creator='" + userId + "' order by CreateTime desc");
+	public List<ArticleIndexResponse> getArticleByCreator(String userId) {
+		String strSql = "select a.ID,a.Title,a.Content,a.CreateTime,a.Creator,a.ReadCount,a.SuggestCount,a.ComCount,b.UserName CreatorName from bll_article a inner join sys_user b on a.creator=b.id where a.creator='"
+				+ userId + "' order by CreateTime desc";
+
+		List<ArticleIndexResponse> list = HibernateUtils.queryListParamBean(ArticleIndexResponse.class, strSql);
 
 		return list;
 	}
@@ -210,37 +212,4 @@ public class BlogDAOImpl implements BlogDAO {
 		return HibernateUtils.executeSql(strSql);
 	}
 
-	@Override
-	public boolean addSuggestCount(String articleId) {
-		String strSql = "update bll_article set SuggestCount=SuggestCount+1 where id='" + articleId + "'";
-
-		return HibernateUtils.executeSql(strSql);
-	}
-
-	@Override
-	public boolean reduceSuggestCount(String toDeleteIds) {
-		String[] toDeleteIdsArray = toDeleteIds.split(",");
-
-		StringBuilder strSqlBlder = new StringBuilder();
-		strSqlBlder.append(
-				"update bll_article set SuggestCount=SuggestCount-1 where id in (select articleId from bll_suggest where id in (");
-
-		for (int i = 0; i < toDeleteIdsArray.length; i++) {
-			strSqlBlder.append("'");
-			strSqlBlder.append(toDeleteIdsArray[i]);
-			strSqlBlder.append("'");
-			strSqlBlder.append(",");
-		}
-		strSqlBlder.deleteCharAt(strSqlBlder.length() - 1);
-		strSqlBlder.append("))");
-
-		return HibernateUtils.executeSql(strSqlBlder.toString());
-	}
-
-	@Override
-	public boolean addComCount(String articleId) {
-		String strSql = "update bll_article set ComCount=ComCount+1 where id='" + articleId + "'";
-
-		return HibernateUtils.executeSql(strSql);
-	}
 }

@@ -137,7 +137,7 @@ public class BlogService {
 	 * @param userId 用户Id
 	 * @return
 	 */
-	public List<BllArticle> getArticleByCreator(String userId) {
+	public List<ArticleIndexResponse> getArticleByCreator(String userId) {
 		return blogDAO.getArticleByCreator(userId);
 	}
 

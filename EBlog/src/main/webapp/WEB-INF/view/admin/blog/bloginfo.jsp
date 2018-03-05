@@ -6,12 +6,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>文章新建/编辑</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
- id="swicth-style" />
-	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
-	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/local/easyui-lang-zh_CN.js" type="text/javascript"></script>
+	<%@include file="/WEB-INF/view/common/adminResource.jsp"%>
+	
 	<link href="${jsPath}/kindeditor/themes/default/default.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="${jsPath}/kindeditor/plugins/code/prettify.css" />
 	<script src="${jsPath}/kindeditor/kindeditor-min.js" type="text/javascript"></script>

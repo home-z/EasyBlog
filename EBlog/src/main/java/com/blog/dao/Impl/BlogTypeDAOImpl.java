@@ -46,7 +46,7 @@ public class BlogTypeDAOImpl implements BlogTypeDAO {
 
 	@Override
 	public List<TypeCountResponse> getTypeCount() {
-		String strSql = "select b.id typeId,b.typename typeName,count(typeid) typeCount from bll_article a right join bll_articletype b on a.typeid=b.id group by b.id,b.typename order by typeCount desc";
+		String strSql = "select b.id typeId,b.typename typeName,count(typeid) typeCount from bll_article a right join bll_articletype b on a.typeid=b.id group by b.id,b.typename having typeCount>0 order by typeCount desc";
 
 		return HibernateUtils.queryListParamBean(TypeCountResponse.class, strSql);
 	}
@@ -71,6 +71,14 @@ public class BlogTypeDAOImpl implements BlogTypeDAO {
 	@Override
 	public boolean updateBlogType(BllArticletype articletype) {
 		return HibernateUtils.update(articletype);
+	}
+
+	@Override
+	public List<TypeCountResponse> getTypeCount(String userId) {
+		String strSql = "select b.id typeId,b.typename typeName,count(typeid) typeCount from bll_article a right join bll_articletype b on a.typeid=b.id  where b.creator='"
+				+ userId + "' group by b.id,b.typename having typeCount>0 order by typeCount desc";
+
+		return HibernateUtils.queryListParamBean(TypeCountResponse.class, strSql);
 	}
 
 }

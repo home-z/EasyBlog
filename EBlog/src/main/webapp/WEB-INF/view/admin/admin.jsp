@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/tld/spring.tld" prefix="spring" %>
+
 <%@include file="/WEB-INF/view/common/context.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -7,12 +7,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title><spring:message code="blogworld"/>-<spring:message code="management"/></title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
-	<link href="${jsPath}/jquery-easyui/themes/metro-blue/easyui.css" rel="stylesheet" type="text/css"  id="swicth-style" />
-	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
-	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/local/easyui-lang-${sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']}.js" type="text/javascript"></script>
-	<script src="${jsPath}/tools/jquery.cookie.js" type="text/javascript"></script>
+	<%@include file="/WEB-INF/view/common/adminResource.jsp"%>
 	<script type="text/javascript">
 		//点击菜单，打开页面，以tab形式打开。如果已经打开，则选中该tab
 		function openMenu(url, title) {

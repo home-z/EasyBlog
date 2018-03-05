@@ -1,25 +1,11 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="/WEB-INF/tld/c.tld"%>
 <link href="${cssPath}/gotoTop.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${jsPath}/tools/gotoTop.js"></script>
 <script type="text/javascript">
 	// 定义菜单栏离页面顶部的距离，默认为100    
 	var divOffsetTop = 100;
-	//获取已经登录的用户名称
-	function getCurrentUserName() {
-		<c:choose>
-			<c:when test="${empty Current_User}">
-				$("#loginInfo").html("<a href='${ctxPath}/Login/loginpage.do'><spring:message code='login'/></a>");//未登录情况
-			</c:when>
-			<c:otherwise>
-				$("#loginInfo").html("<a href='${ctxPath}/admin/index.do'>${Current_User.userName}</a> <a href='${ctxPath}/Login/logout.do'><spring:message code='logout'/></a>");
-			</c:otherwise>
-		</c:choose>
-	}
 
 	$(document).ready(function() {
-		getCurrentUserName();
-
 		//点击菜单，加载背景	
 		var subNav_change = function(target) {
 			var subNav_active = $(".adv_active");
@@ -76,7 +62,16 @@
                     <a href="${ctxPath}/Global/changeLang.do?from=index&langType=en" >English</a>
                  </td>
 				<td style="text-align: right">
-					<span id="loginInfo"></span>&nbsp; <a href="${ctxPath}/main/register.do"><spring:message code="register"/></a>
+					<c:choose>
+						<c:when test="${empty Current_User}">
+							<a href='${ctxPath}/Login/loginpage.do'><spring:message code='login'/></a>
+						</c:when>
+						<c:otherwise>
+							<a href='${ctxPath}/admin/index.do'>${Current_User.userName}</a> 
+							<a href='${ctxPath}/Login/logout.do'><spring:message code='logout'/></a>
+						</c:otherwise>
+					</c:choose>
+					&nbsp; <a href="${ctxPath}/main/register.do"><spring:message code="register"/></a>
 				</td>
 			</tr>
 		</table>

@@ -27,13 +27,6 @@ public interface CommentDAO {
 	boolean deleteComment(String toDeleteIds);
 
 	/**
-	 * 读取该文章的评论
-	 * @param articleID 文章id
-	 * @return
-	 */
-	List<BllCommont> getCommentById(String articleID);
-
-	/**
 	 * 新增评论
 	 * @param commont
 	 * @return
@@ -41,7 +34,7 @@ public interface CommentDAO {
 	boolean addComment(BllCommont commont);
 
 	/**
-	 * 获取文章评论即评论人姓名
+	 * 获取文章评论
 	 * @param articleID
 	 * @return
 	 */

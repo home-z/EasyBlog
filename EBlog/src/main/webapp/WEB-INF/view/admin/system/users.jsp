@@ -1,6 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/tld/spring.tld" prefix="spring" %>
-<%@ taglib uri="/WEB-INF/tld/fmt.tld" prefix="fmt" %>
 <%@include file="/WEB-INF/view/common/context.jsp"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -8,17 +6,11 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>系统用户管理</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
-	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
-	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/local/easyui-lang-${sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']==null?'zh_CN':sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']}.js" type="text/javascript"></script>
-	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
- id="swicth-style" />
+	<%@include file="/WEB-INF/view/common/adminResource.jsp"%>
 </head>
 <body>
 	<div style="height: 100%; width: 100%;">
 		<div id="tb" style="height: auto">
-		<!-- <fmt:message key="add"/> 尝试解决多语 -->
 			<a href="${ctxPath}/admin/user/add.do" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"><spring:message code="add"/></a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deleteUser()">刪除</a> <a href="javascript:void(0)" class="easyui-linkbutton"
 				data-options="iconCls:'icon-search',plain:true" onclick="showSearchWin()">查找</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-downlevel',plain:true" onclick="exportUser()">导出</a>
 		</div>

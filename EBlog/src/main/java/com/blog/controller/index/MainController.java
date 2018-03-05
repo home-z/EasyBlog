@@ -14,9 +14,11 @@ import org.springframework.web.servlet.support.RequestContext;
 import com.blog.constant.SystemEnvs;
 import com.blog.controller.admin.BaseController;
 import com.blog.po.BllArticle;
+import com.blog.po.SysUser;
 import com.blog.service.BlogService;
 import com.blog.service.BlogTypeService;
 import com.blog.service.CommentService;
+import com.blog.service.UserService;
 import com.blog.utils.ArticleUtils;
 import com.blog.utils.JsonHelper;
 import com.blog.vo.ArticleIndexResponse;
@@ -43,6 +45,9 @@ public class MainController extends BaseController {
 
 	@Autowired
 	private BlogTypeService blogTypeService;
+
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * 开始页面
@@ -176,6 +181,10 @@ public class MainController extends BaseController {
 		List<CommentRequest> comList = commentService.getCommentRequestById(id);
 		model.addAttribute("comList", comList);
 
+		// 当前选择的博主用户信息
+		SysUser selectedUser = userService.getUserById(articleIndexResponse.getCreator());
+		model.addAttribute("selectedUser", selectedUser);
+
 		// 该篇文章阅读数加1
 		blogService.addReadCount(id);
 
@@ -185,8 +194,14 @@ public class MainController extends BaseController {
 	// 读取该用户的所有博客
 	@RequestMapping("/getArticleByCreateBy")
 	public String getArticleByCreateBy(Model model, @RequestParam(value = "userId", required = true) String userId) {
-		List<BllArticle> newList = ArticleUtils.removeArtilceHtml(blogService.getArticleByCreator(userId));
+		// 当前用户博客信息
+		List<ArticleIndexResponse> newList = ArticleUtils
+				.removeArticleIndexResponseHtml(blogService.getArticleByCreator(userId));
 		model.addAttribute("dto", newList);
+
+		// 当前选择的博主用户信息
+		SysUser selectedUser = userService.getUserById(userId);
+		model.addAttribute("selectedUser", selectedUser);
 
 		return "blog/article/articleViewlistuser";// 跳转到该用户页面，显示该用户所有文章
 	}
@@ -199,6 +214,32 @@ public class MainController extends BaseController {
 		strBCategory.append("<ul>");
 
 		List<TypeCountResponse> lstTypeCount = blogTypeService.getTypeCount();
+		for (TypeCountResponse typeCountResponse : lstTypeCount) {
+			strBCategory.append("<li><a onClick='addTypeMenu(\"");
+			strBCategory.append(typeCountResponse.getTypeName());
+			strBCategory.append("\",\"");
+			strBCategory.append(typeCountResponse.getTypeId());
+			strBCategory.append("\")");
+			strBCategory.append("' href=\"#\" >");
+			strBCategory.append(typeCountResponse.getTypeName());
+			strBCategory.append("(");
+			strBCategory.append(typeCountResponse.getTypeCount());
+			strBCategory.append(")");
+			strBCategory.append("</a></li>");
+		}
+
+		strBCategory.append("</ul>");
+
+		return JsonHelper.getModel(strBCategory.toString());
+	}
+
+	@RequestMapping("/getCategoryByUser")
+	@ResponseBody
+	public Map<String, Object> getCategoryByUser(String userId) {
+		StringBuffer strBCategory = new StringBuffer();
+		strBCategory.append("<ul>");
+
+		List<TypeCountResponse> lstTypeCount = blogTypeService.getTypeCount(userId);
 		for (TypeCountResponse typeCountResponse : lstTypeCount) {
 			strBCategory.append("<li><a onClick='addTypeMenu(\"");
 			strBCategory.append(typeCountResponse.getTypeName());

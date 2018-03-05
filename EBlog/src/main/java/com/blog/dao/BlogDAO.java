@@ -71,7 +71,7 @@ public interface BlogDAO {
 	 * @param userId 用户Id
 	 * @return
 	 */
-	List<BllArticle> getArticleByCreator(String userId);
+	List<ArticleIndexResponse> getArticleByCreator(String userId);
 
 	/**
 	 * 对文章进行各种排序
@@ -109,26 +109,5 @@ public interface BlogDAO {
 	 * @return
 	 */
 	boolean addReadCount(String articleId);
-
-	/**
-	 * 文章被推荐，则该文章的推荐次数加1
-	 * @param articleId
-	 * @return
-	 */
-	boolean addSuggestCount(String articleId);
-
-	/**
-	 * 用户删除推荐，则该文章的推荐次数减1
-	 * @param articleId
-	 * @return
-	 */
-	boolean reduceSuggestCount(String articleId);
-
-	/**
-	 * 新增评论，则该文章的评论数量加1
-	 * @param articleId
-	 * @return
-	 */
-	boolean addComCount(String articleId);
 
 }

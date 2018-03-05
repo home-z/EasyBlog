@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/tld/spring.tld" prefix="spring" %>
 <%@include file="/WEB-INF/view/common/context.jsp"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -7,12 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>角色管理</title>
 	<%@include file="/WEB-INF/view/common/resinculde.jsp"%>
-	<link href="${cssPath}/admin.css" rel="stylesheet" type="text/css" />
-	<link href="${jsPath}/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
-	<script src="${jsPath}/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="${jsPath}/jquery-easyui/local/easyui-lang-${sessionScope['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']}.js" type="text/javascript"></script>
-	<link rel="stylesheet" type="text/css" href="${jsPath}/jquery-easyui/themes/${cookie.easyuiTheme.value==null?'metro-blue':cookie.easyuiTheme.value}/easyui.css"  
- id="swicth-style" />
+	<%@include file="/WEB-INF/view/common/adminResource.jsp"%>
 </head>
 <body>
 	<div style="height: 100%; width: 100%;">

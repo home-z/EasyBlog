@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.blog.dao.BlogDAO;
 import com.blog.dao.CommentDAO;
 import com.blog.po.BllCommont;
 import com.blog.vo.CommentRequest;
@@ -21,37 +20,23 @@ public class CommentService {
 	@Autowired
 	private CommentDAO commentDAO;
 
-	@Autowired
-	private BlogDAO blogDAO;
-
 	public List<BllCommont> getCommentListByUser(String userId) {
 		return commentDAO.getCommentListByUser(userId);
 	}
 
+	// 获取文章评论
+	public List<CommentRequest> getCommentRequestById(String articleID) {
+		return commentDAO.getCommentRequestById(articleID);
+	}
+
+	// 增加评论，该文章的评论次数加1，数据库使用触发器实现
+	public boolean addComment(BllCommont commont) {
+		return commentDAO.addComment(commont);
+	}
+
+	// 删除评论，评论对应的文章评论数量减1，数据库触发器实现
 	public boolean deleteComment(String toDeleteIds) {
 		return commentDAO.deleteComment(toDeleteIds);
 	}
 
-	/**
-	 * 读取该文章的评论
-	 * @param articleID 文章id
-	 * @return
-	 */
-	public List<BllCommont> getCommentById(String articleID) {
-		return commentDAO.getCommentById(articleID);
-	}
-
-	public boolean addComment(BllCommont commont) {
-		// 增加记录
-		boolean addRecord = commentDAO.addComment(commont);
-
-		// 该文章的评论次数加1
-		boolean addCount = blogDAO.addComCount(commont.getArticleId());
-
-		return addRecord && addCount ? true : false;
-	}
-
-	public List<CommentRequest> getCommentRequestById(String articleID) {
-		return commentDAO.getCommentRequestById(articleID);
-	}
 }
