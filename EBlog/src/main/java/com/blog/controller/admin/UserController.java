@@ -272,7 +272,7 @@ public class UserController extends BaseController {
 		cellTxtStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("text"));
 		titleTxtStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("text"));
 		titleTxtStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);// 创建一个居中格式
-
+		
 		HSSFFont font = wb.createFont();
 		font.setColor(HSSFColor.BLUE.index);
 		font.setBoldweight((short) 1);

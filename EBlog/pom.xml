@@ -5,10 +5,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<dependencies>
+		<!--会报包冲突，需要使用provided，表示由容器提供该jar包 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
 		<dependency>
@@ -73,6 +75,7 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.elasticsearch</groupId>
@@ -103,6 +106,33 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.2</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet/jsp-api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.13.0-GA</version>
 		</dependency>
 	</dependencies>
 </project>
