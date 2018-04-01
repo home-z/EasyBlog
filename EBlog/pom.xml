@@ -5,13 +5,15 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<dependencies>
-		<!--会报包冲突，需要使用provided，表示由容器提供该jar包 -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-			<scope>provided</scope>
-		</dependency>
+		<!--javax.servlet-api.jar 是servlet 3.0 版本之后，servlet.jar 是servlet 3.0 版本之前的。
+		ServletContext接口中没有我需要的addListener()方法。经各方资料查询，我将jar 包更换为 javax.servlet-api 便解决了这个问题 
+		<dependency> 
+			<groupId>javax.servlet</groupId> 
+			<artifactId>javax.servlet-api</artifactId> 
+			<version>3.1.0</version> 
+			<scope>provided</scope> 
+		</dependency> -->
+		
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -71,6 +73,8 @@
 			<artifactId>standard</artifactId>
 			<version>1.1.2</version>
 		</dependency>
+
+		<!--会报包冲突，需要使用provided，表示由容器提供该jar包 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
