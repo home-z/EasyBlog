@@ -1,19 +1,31 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.tim</groupId>
-	<artifactId>EBlog</artifactId>
+	<artifactId>eblog</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
-		<!--javax.servlet-api.jar 是servlet 3.0 版本之后，servlet.jar 是servlet 3.0 版本之前的。
-		ServletContext接口中没有我需要的addListener()方法。经各方资料查询，我将jar 包更换为 javax.servlet-api 便解决了这个问题 
-		<dependency> 
-			<groupId>javax.servlet</groupId> 
-			<artifactId>javax.servlet-api</artifactId> 
-			<version>3.1.0</version> 
-			<scope>provided</scope> 
-		</dependency> -->
-		
+		<!--javax.servlet-api.jar 是servlet 3.0 版本之后，servlet.jar 是servlet 3.0 版本之前的。 
+			ServletContext接口中没有我需要的addListener()方法。经各方资料查询，我将jar 包更换为 javax.servlet-api 
+			便解决了这个问题 <dependency> <groupId>javax.servlet</groupId> <artifactId>javax.servlet-api</artifactId> 
+			<version>3.1.0</version> <scope>provided</scope> </dependency> -->
+
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -31,10 +43,12 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>3.3.2.GA</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
 			<version>2.4</version>
+			<classifier>jdk15</classifier>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>

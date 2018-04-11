@@ -1,7 +1,7 @@
 -- 1、创建库
-drop database if exists EBlog; -- 直接删除数据库，不提醒
-create database EBlog; -- 创建数据库 
-use EBlog; -- 选择数据库
+drop database if exists eblog; -- 直接删除数据库，不提醒
+create database eblog; -- 创建数据库 
+use eblog; -- 选择数据库
 
 
 -- 2、创建表
@@ -280,7 +280,7 @@ for each row
 	update bll_article set SuggestCount=SuggestCount-1 where id=old.ArticleID;
 	
 
---4、初始化数据
+-- 4、初始化数据
 -- 用户
 INSERT INTO `eblog`.`sys_user`(`ID`,`Creator`,`UserCode`,`UserPassword`,`UserName`,`Email`) VALUES ('0','0','admin','e10adc3949ba59abbe56e057f20f883e','系统管理员','yufeijob@163.com');
 INSERT INTO `eblog`.`sys_user`(`ID`,`Creator`,`UserCode`,`UserPassword`,`UserName`,`Email`) VALUES ('1','0','user','e10adc3949ba59abbe56e057f20f883e','使用人','yangtze_yufei@163.com');
